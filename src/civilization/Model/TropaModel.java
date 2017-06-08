@@ -31,7 +31,14 @@ public class TropaModel {
     private int calculaDistancia(Tropa tropaAliada, Posicao destino){
         Posicao posicaoAtual = tropaAliada.getPosicao();
         
-        return 0; 
+        int posY = Math.abs(posicaoAtual.getY() - destino.getY());
+        int posX = Math.abs(posicaoAtual.getX() - destino.getX());
+        
+        return posY + posX; 
+    }
+    
+    private int calculaRetalicao(){
+        return 0;
     }
     
     
