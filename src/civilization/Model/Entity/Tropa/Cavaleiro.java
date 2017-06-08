@@ -9,6 +9,12 @@ package civilization.Model.Entity.Tropa;
  *
  * @author filipe
  */
-public class Cavaleiro {
+public class Cavaleiro extends Tropa{
+    
+    public Cavaleiro() {
+        super(17, 4, 5, 1);
+    }
+    
+    
     
 }

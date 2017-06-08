@@ -20,8 +20,7 @@ public class Tropa {
     private int diatanciaAtaque;
     private Posicao posicao;
 
-    public Tropa(int id, int vida, int velocidadeMovimento, int forca, int diatanciaAtaque) {
-        this.id = id;
+    public Tropa(int vida, int velocidadeMovimento, int forca, int diatanciaAtaque) {
         this.vida = vida;
         this.velocidadeMovimento = velocidadeMovimento;
         this.forca = forca;

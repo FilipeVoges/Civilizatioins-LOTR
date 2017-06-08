@@ -9,6 +9,11 @@ package civilization.Model.Entity.Tropa;
  *
  * @author filipe
  */
-public class Arqueiro {
+public class Arqueiro extends Tropa{
+
+    public Arqueiro() {
+        super(15, 2, 4, 5);
+    }
+    
     
 }

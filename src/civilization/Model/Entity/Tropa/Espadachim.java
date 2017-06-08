@@ -9,6 +9,10 @@ package civilization.Model.Entity.Tropa;
  *
  * @author filipe
  */
-public class Espadachim {
+public class Espadachim extends Tropa{
+    
+    public Espadachim() {
+        super(15, 1, 7, 1);
+    }
     
 }
