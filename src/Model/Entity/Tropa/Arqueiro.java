@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization.Model.Entity.Tropa;
+package Model.Entity.Tropa;
 
 /**
  *
  * @author filipe
  */
-public class Espadachim extends Tropa{
-    
-    public Espadachim() {
-        super(15, 1, 7, 1);
+public class Arqueiro extends Tropa{
+
+    public Arqueiro() {
+        super(15, 2, 4, 5);
     }
+    
     
 }

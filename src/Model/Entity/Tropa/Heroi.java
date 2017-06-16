@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization.Model.Entity.Construcao;
+package Model.Entity.Tropa;
 
 /**
  *
  * @author filipe
  */
-public class Principal {
+public class Heroi {
     
 }

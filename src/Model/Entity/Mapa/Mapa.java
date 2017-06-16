@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization.Model.Entity.Tropa;
+package Model.Entity.Mapa;
 
 /**
  *
  * @author filipe
  */
-public class Arqueiro extends Tropa{
-
-    public Arqueiro() {
-        super(15, 2, 4, 5);
-    }
-    
+public class Mapa {
     
 }

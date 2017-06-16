@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization.Model.Entity.Tropa;
+package Model.Entity.Tropa;
 
-import civilization.Model.Entity.Mapa.Posicao;
+import Model.Entity.Mapa.Posicao;
 
 /**
  *
@@ -73,6 +73,19 @@ public class Tropa {
 
     public void setPosicao(Posicao posicao) {
         this.posicao = posicao;
+    }
+	
+	private int calculaDistancia(Tropa tropaAliada, Posicao destino){
+        Posicao posicaoAtual = tropaAliada.getPosicao();
+        
+        int posY = Math.abs(posicaoAtual.getY() - destino.getY());
+        int posX = Math.abs(posicaoAtual.getX() - destino.getX());
+        
+        return posY + posX; 
+    }
+    
+    private int calculaRetalicao(){
+        return 0;
     }
     
 }

@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization;
+package Model.Entity.Tropa;
 
 /**
  *
  * @author filipe
  */
-public class Civilization {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class Espadachim extends Tropa{
+    
+    public Espadachim() {
+        super(15, 1, 7, 1);
     }
     
 }
