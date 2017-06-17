@@ -15,6 +15,6 @@ public class Quartel extends Construcao{
     private String simbolo = "♖";
 
     public Quartel(Posicao pos) {
-        super("♖", pos);
+        super("♖", pos, 3, 100);
     }
 }

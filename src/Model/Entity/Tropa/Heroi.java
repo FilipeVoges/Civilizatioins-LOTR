@@ -5,6 +5,8 @@
  */
 package Model.Entity.Tropa;
 
+import Model.Entity.Gollum.Anel;
+
 /**
  *
  * @author filipe
@@ -12,13 +14,45 @@ package Model.Entity.Tropa;
 public class Heroi extends Tropa{
     private String simboloNormal = "✩";
     private String simboloAnel = "✮";
-    
+    private Anel anel;
+    private int acertosCharada;
+    private boolean duelando;
+
+
     private enum tipoHeroi{
         NORMAL, ULTRA;
     }
     
     public Heroi(){
-        super(25, 1, 10, 1,"✩");
+        super(25, 1, 10, 1, 5, "✩");
+        this.anel = null;
+        this.acertosCharada = 0;
+        this.duelando = false;
+    }
+    
+    public Anel perdeAnel() {
+        this.anel = null;
+        return new Anel();
+    }
+
+    public void pegaAnel(Anel anel) {
+        this.anel = anel;
+    }
+
+    public int getAcertosCharada() {
+        return acertosCharada;
+    }
+
+    public void setAcertosCharada(int acertosCharada) {
+        this.acertosCharada = acertosCharada;
+    }
+
+    public boolean isDuelando() {
+        return duelando;
+    }
+
+    public void setDuelando(boolean duelando) {
+        this.duelando = duelando;
     }
 }
 

@@ -15,6 +15,6 @@ public class Estabulo extends Construcao{
     private String simbolo = "♞";
     
     public Estabulo(Posicao pos){
-        super("♞", pos);
+        super("♞", pos, 2, 70);
     }
 }

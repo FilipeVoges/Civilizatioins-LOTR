@@ -15,6 +15,6 @@ public class Principal extends Construcao{
     private String Simbolo = "⌂";
 
     public Principal(Posicao pos) {
-        super("⌂", pos);
+        super("⌂", pos, 1, 50);
     }
 }

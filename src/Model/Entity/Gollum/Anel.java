@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Tropa;
+package Model.Entity.Gollum;
 
 /**
  *
- * @author filipe
+ * @author ASUS-DEV
  */
-public class Cavaleiro extends Tropa{
+public class Anel {
     
-    private String simbolo = "♘";
+    public Anel(){
+        
+    }
     
-    public Cavaleiro() {
-        super(20, 3, 5, 1, 3, "♘");
-    }   
 }

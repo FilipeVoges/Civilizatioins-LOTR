@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Tropa;
+package Controller;
 
 /**
  *
- * @author filipe
+ * @author ASUS-DEV
  */
-public class Cavaleiro extends Tropa{
+public class JogadorController {
     
-    private String simbolo = "♘";
-    
-    public Cavaleiro() {
-        super(20, 3, 5, 1, 3, "♘");
-    }   
 }

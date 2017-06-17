@@ -14,6 +14,6 @@ import Model.Entity.Mapa.Posicao;
 public class Arqueiro extends Tropa{
     private String simbolo = "➵";
     public Arqueiro() {
-        super(15, 1, 3, 5, "➵");
+        super(15, 1, 3, 5, 2, "➵");
     }   
 }

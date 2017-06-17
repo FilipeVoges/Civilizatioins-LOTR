@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package Controller;
 
 import Model.Entity.Construcao.Arquearia;
 import Model.Entity.Construcao.Construcao;
@@ -11,99 +11,76 @@ import Model.Entity.Construcao.Estabulo;
 import Model.Entity.Construcao.Principal;
 import Model.Entity.Construcao.Quartel;
 import Model.Entity.Gollum.Gollum;
+import Model.Entity.Mapa.Mapa;
 import Model.Entity.Mapa.Posicao;
 import Model.Entity.Tropa.Arqueiro;
 import Model.Entity.Tropa.Cavaleiro;
 import Model.Entity.Tropa.Espadachim;
 import Model.Entity.Tropa.Heroi;
 import Model.Entity.Tropa.Tropa;
-import java.awt.BorderLayout;
-import java.awt.Color;
+import View.MapaView;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  *
  * @author ASUS-DEV
  */
-public class Mapa extends JPanel{
-    private int tamX;
-    private int tamY;
+public class MapaController {
+ 
+    private MapaView mapaView;
+    private Mapa mapa;
+    private ArrayList<Posicao> posJogadores;
     
-    private final JTable mapa;
-    private final JScrollPane mapaContainer;
-    
-    
-    //constructor
-    public Mapa(int tX, int tY){
-         
-        this.tamX = tamX;
-        this.tamY = tamY;
-        
-        //mapa
-        mapa = new JTable(tX,tY);
-	mapa.setBackground(Color.GREEN.darker().darker());
-	mapa.setForeground(Color.WHITE);
-        mapa.setTableHeader(null);	//Esconde o cabeçalho da tabela
-        mapa.setEnabled(false);	// Impede de selecionar e editar campos
-        //mapa.setGridColor(Color.WHITE);// cor da grade da tabela
-        
-        mapa.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cliqueNoMapa(e);
-            }
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
-
-        mapaContainer = new JScrollPane(mapa);
-        this.add(mapaContainer, BorderLayout.CENTER);
-        
-	// table.setShowGrid(false);	//Mostra as linhas e colunas da tabela
+    public void iniciaPosicoes(Mapa mapa){
+        this.mapa = mapa;
+        posJogadores = new ArrayList<>();
+        posJogadores.add(new Posicao(mapa.getTamX() -2 , 1));
+        posJogadores.add(new Posicao(1, mapa.getTamY() -2));
+        posJogadores.add(new Posicao(mapa.getTamX() -2, mapa.getTamY() -2));
+        posJogadores.add(new Posicao(1, 1));
     }
      
-    //Setter
-    public void setValorPosicao(Posicao pos, Object item){
-        mapa.setValueAt(item, pos.getX(), pos.getY());
+    /***************************************************************************/
+    public void iniciaJogo(int qtdeJogadores){
+        for(int i = 0; i< qtdeJogadores; i++){
+            
+            //posicina edificio principal
+            Posicao temp = posJogadores.get(i);
+            mapaView.setaValorPosicao(temp.getX(), temp.getY(), new Principal(new Posicao(temp.getX(), temp.getY())));
+            System.out.println(temp.getX() + " " + temp.getY());
+            
+            //posiciona Arquearia
+            if(temp.getX() > 2) temp.setX(temp.getX() - 2);
+            else temp.setX(temp.getX() + 2);     
+            mapaView.setaValorPosicao(temp.getX(), temp.getY(), new Arquearia(new Posicao(temp.getX(), temp.getY())));
+            
+            //posiciona Estabulo
+            if(temp.getY() > 2) temp.setY(temp.getY() - 2);
+            else temp.setY(temp.getY() + 2);     
+            mapaView.setaValorPosicao(temp.getX(), temp.getY(), new Estabulo(new Posicao(temp.getX(), temp.getY())));
+            
+            //posiciona Quartel
+            if(temp.getX() > 4 )temp.setX(temp.getX() + 2);
+            else temp.setX(temp.getX() - 2); 
+            mapaView.setaValorPosicao(temp.getX(), temp.getY(), new Quartel(new Posicao(temp.getX(), temp.getY())));
+        }
     }
     
-    //Getter
-    public Object getValorPosicao(Posicao pos){
-       return mapa.getValueAt(pos.getX(), pos.getY());
-    }
-    
-   // listener de clique no mapa
-    void cliqueNoMapa(MouseEvent e){
-        int row = mapa.rowAtPoint(e.getPoint());
-        int col = mapa.columnAtPoint(e.getPoint());
+ 
+    /***************************************************************************/
+    public void cliqueNoMapa(int row, int col){
+        
         if(row >= 0 && col >=0){
             //System.out.println("Posicao clicada " + row + " " + col);
-            Object o = mapa.getValueAt(row, col);
+            Object o = mapaView.pegaValorPosicao(row, col);
             if(o != null){
                 if(o.getClass().getSuperclass() == Construcao.class){
-                    cliqueConstrucao(o);
+                     cliqueConstrucao(o);
                 }
                 else if(o.getClass().getSuperclass() == Tropa.class){
-                    cliqueTropa(o);
+                     cliqueTropa(o);
                 }
                 else if(o.getClass() == Gollum.class){
                     JOptionPane.showMessageDialog(null, "Meu precioso!!", "Gollum", 0);
@@ -111,8 +88,9 @@ public class Mapa extends JPanel{
             }           
         }
     }
-    
+
     //clique em uma construcao
+    /***************************************************************************/
     private void cliqueConstrucao(Object o){
         Construcao c = (Construcao) o;
         String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
@@ -152,7 +130,9 @@ public class Mapa extends JPanel{
         }
     }
     
+    
     //clique em uma tropa
+    /***************************************************************************/
     private void cliqueTropa(Object o){
         Tropa t = (Tropa)o;
         String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
@@ -179,37 +159,42 @@ public class Mapa extends JPanel{
             break;
         }
     }
+   
     
+    /***************************************************************************/
     private Posicao posicaoLivreMaisProxima(Posicao atual){
         Posicao retorno = null;
-        if(mapa.getValueAt(atual.getX() + 1, atual.getY() + 1) == null){
+        if(mapaView.pegaValorPosicao(atual.getX() + 1, atual.getY() + 1) == null){
             retorno =new Posicao(atual.getX() + 1, atual.getY() + 1);
-        }else if(mapa.getValueAt(atual.getX() + 1, atual.getY()) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX() + 1, atual.getY()) == null){
             retorno =new Posicao(atual.getX() + 1, atual.getY());
-        }else if(mapa.getValueAt(atual.getX() + 1, atual.getY() - 1) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX() + 1, atual.getY() - 1) == null){
             retorno =new Posicao(atual.getX() + 1, atual.getY() - 1);
-        }else if(mapa.getValueAt(atual.getX(), atual.getY() - 1) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX(), atual.getY() - 1) == null){
             retorno =new Posicao(atual.getX(), atual.getY() - 1);
-        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY() - 1) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX() - 1, atual.getY() - 1) == null){
             retorno =new Posicao(atual.getX() - 1, atual.getY() - 1);
-        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY()) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX() - 1, atual.getY()) == null){
             retorno =new Posicao(atual.getX() - 1, atual.getY());
-        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY()+ 1) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX() - 1, atual.getY()+ 1) == null){
             retorno =new Posicao(atual.getX() - 1, atual.getY()+ 1);
-        }else if(mapa.getValueAt(atual.getX(), atual.getY() + 1) == null){
+        }else if(mapaView.pegaValorPosicao(atual.getX(), atual.getY() + 1) == null){
             retorno =new Posicao(atual.getX(), atual.getY() + 1);
         }
         return retorno;
     }
     
-    //Limpar Mapa
-    public void limpar(){
-        for(int i = 0; i< tamX; i++){
-            for(int j = 0; j< tamY; j++){
-                mapa.setValueAt(null, i, j);
-            }
-        }
+    
+     //Setter
+    /***************************************************************************/
+    public void setValorPosicao(Posicao pos, Object item){
+        mapaView.setaValorPosicao( pos.getX(), pos.getY(), item);
     }
     
-    
+    //Getter
+    /***************************************************************************/
+    public Object getValorPosicao(Posicao pos){
+       return mapaView.pegaValorPosicao(pos.getX(), pos.getY());
+    }
+   
 }

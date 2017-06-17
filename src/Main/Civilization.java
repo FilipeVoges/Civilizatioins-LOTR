@@ -5,6 +5,7 @@
  */
 package Main;
 
+import Model.Entity.Mapa.Mapa;
 import View.TelaPrincipal;
 import javax.swing.JFrame;
 
@@ -20,7 +21,7 @@ public class Civilization {
     public static void main(String[] args) {
         // TODO code application logic here
         java.awt.EventQueue.invokeLater(() -> {
-            JFrame tela = new TelaPrincipal(25,25);
+            JFrame tela = new TelaPrincipal(new Mapa(25, 25));
             tela.setVisible(true);
         });           
     }

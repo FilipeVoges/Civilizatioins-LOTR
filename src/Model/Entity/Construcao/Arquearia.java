@@ -15,7 +15,7 @@ public class Arquearia extends Construcao {
     private String simbolo = "◎";
 
     public Arquearia(Posicao pos) {
-        super("◎", pos);
+        super("◎", pos, 1, 50);
     }
     
 }
