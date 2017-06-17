@@ -5,7 +5,8 @@
  */
 package Main;
 
-import civilization.view.Mapa;
+import View.TelaPrincipal;
+import javax.swing.JFrame;
 
 /**
  *
@@ -18,7 +19,10 @@ public class Civilization {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new Mapa(20, 25);
+        java.awt.EventQueue.invokeLater(() -> {
+            JFrame tela = new TelaPrincipal(25,25);
+            tela.setVisible(true);
+        });           
     }
     
 }

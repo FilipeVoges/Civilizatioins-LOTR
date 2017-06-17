@@ -17,65 +17,40 @@ public class Tropa {
     private int vida;
     private int velocidadeMovimento;
     private int forca;
-    private int diatanciaAtaque;
+    private int distanciaAtaque;
     private Posicao posicao;
+    private String simbolo;
 
-    public Tropa(int vida, int velocidadeMovimento, int forca, int diatanciaAtaque) {
+    public Tropa(int vida, int velocidadeMovimento, int forca, int distanciaAtaque, String simbolo) {
         this.vida = vida;
         this.velocidadeMovimento = velocidadeMovimento;
         this.forca = forca;
-        this.diatanciaAtaque = diatanciaAtaque;
+        this.distanciaAtaque = distanciaAtaque;
+        this.simbolo = simbolo;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public int getVida() {
         return vida;
-    }
-
-    public void setVida(int vida) {
-        this.vida = vida;
     }
 
     public int getVelocidadeMovimento() {
         return velocidadeMovimento;
     }
 
-    public void setVelocidadeMovimento(int velocidadeMovimento) {
-        this.velocidadeMovimento = velocidadeMovimento;
-    }
-
     public int getForca() {
         return forca;
     }
 
-    public void setForca(int forca) {
-        this.forca = forca;
-    }
-
-    public int getDiatanciaAtaque() {
-        return diatanciaAtaque;
-    }
-
-    public void setDiatanciaAtaque(int diatanciaAtaque) {
-        this.diatanciaAtaque = diatanciaAtaque;
+    public int getDistanciaAtaque() {
+        return distanciaAtaque;
     }
 
     public Posicao getPosicao() {
         return posicao;
     }
-
-    public void setPosicao(Posicao posicao) {
-        this.posicao = posicao;
-    }
 	
-	private int calculaDistancia(Tropa tropaAliada, Posicao destino){
+      
+    private int calculaDistancia(Tropa tropaAliada, Posicao destino){
         Posicao posicaoAtual = tropaAliada.getPosicao();
         
         int posY = Math.abs(posicaoAtual.getY() - destino.getY());
@@ -84,8 +59,18 @@ public class Tropa {
         return posY + posX; 
     }
     
-    private int calculaRetalicao(){
+    private int calculaDano(Tropa tropaAtacante){
+        return (int) Math.round(tropaAtacante.getForca() * Math.random());
+    }
+    
+    private int calculaRetalicao(Tropa tropaAtacante){
+        //return (int) Math.round((getForca() + getVida())  * Math.random());
         return 0;
+    }
+    
+    @Override
+    public String toString(){
+        return simbolo;
     }
     
 }

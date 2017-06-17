@@ -9,6 +9,11 @@ package Model.Entity.Construcao;
  *
  * @author filipe
  */
-public class Arquearia {
+public class Arquearia extends Construcao {
+    private String simbolo = "◎";
+
+    public Arquearia() {
+        super("◎");
+    }
     
 }

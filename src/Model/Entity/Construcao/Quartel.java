@@ -9,6 +9,10 @@ package Model.Entity.Construcao;
  *
  * @author filipe
  */
-public class Quartel {
-    
+public class Quartel extends Construcao{
+    private String simbolo = "♖";
+
+    public Quartel() {
+        super("♖");
+    }
 }

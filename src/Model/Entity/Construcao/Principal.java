@@ -9,6 +9,10 @@ package Model.Entity.Construcao;
  *
  * @author filipe
  */
-public class Principal {
-    
+public class Principal extends Construcao{
+    private String Simbolo = "⌂";
+
+    public Principal() {
+        super("⌂");
+    }
 }

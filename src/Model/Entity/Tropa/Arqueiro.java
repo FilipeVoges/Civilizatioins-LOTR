@@ -10,9 +10,9 @@ package Model.Entity.Tropa;
  * @author filipe
  */
 public class Arqueiro extends Tropa{
-
+    private String simbolo = "➵";
     public Arqueiro() {
-        super(15, 2, 4, 5);
+        super(15, 1, 3, 5, "➵");
     }
     
     

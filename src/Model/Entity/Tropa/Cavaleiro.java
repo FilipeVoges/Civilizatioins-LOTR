@@ -11,10 +11,9 @@ package Model.Entity.Tropa;
  */
 public class Cavaleiro extends Tropa{
     
+    private String simbolo = "♘";
+    
     public Cavaleiro() {
-        super(17, 4, 5, 1);
-    }
-    
-    
-    
+        super(20, 3, 5, 1, "♘");
+    }   
 }

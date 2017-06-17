@@ -9,6 +9,10 @@ package Model.Entity.Construcao;
  *
  * @author filipe
  */
-public class Estabulo {
+public class Estabulo extends Construcao{
+    private String simbolo = "♞";
     
+    public Estabulo(){
+        super("♞");
+    }
 }

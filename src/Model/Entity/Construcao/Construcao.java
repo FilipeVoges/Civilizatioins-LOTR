@@ -3,12 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civilization.Model.Entity.Construcao;
+package Model.Entity.Construcao;
 
 /**
  *
  * @author filipe
  */
 public class Construcao {
+    private final String simbolo;
+    
+    public Construcao(String simbolo){
+        this.simbolo = simbolo;
+    }
+    
+    @Override
+    public String toString(){
+        return simbolo;
+    }
     
 }

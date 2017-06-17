@@ -9,6 +9,17 @@ package Model.Entity.Tropa;
  *
  * @author filipe
  */
-public class Heroi {
+public class Heroi extends Tropa{
+    private String simboloNormal = "✩";
+    private String simboloAnel = "✮";
     
+    private enum tipoHeroi{
+        NORMAL, ULTRA;
+    }
+    
+    public Heroi(){
+        super(25, 1, 10, 1,"✩");
+    }
 }
+
+
