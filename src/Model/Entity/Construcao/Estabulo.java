@@ -5,6 +5,8 @@
  */
 package Model.Entity.Construcao;
 
+import Model.Entity.Mapa.Posicao;
+
 /**
  *
  * @author filipe
@@ -12,7 +14,7 @@ package Model.Entity.Construcao;
 public class Estabulo extends Construcao{
     private String simbolo = "♞";
     
-    public Estabulo(){
-        super("♞");
+    public Estabulo(Posicao pos){
+        super("♞", pos);
     }
 }

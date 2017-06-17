@@ -34,8 +34,8 @@ public class Mapa extends JPanel{
     private int tamX;
     private int tamY;
     
-    private JTable mapa;
-    private JScrollPane mapaContainer;
+    private final JTable mapa;
+    private final JScrollPane mapaContainer;
     
     
     //constructor
@@ -96,22 +96,110 @@ public class Mapa extends JPanel{
         int row = mapa.rowAtPoint(e.getPoint());
         int col = mapa.columnAtPoint(e.getPoint());
         if(row >= 0 && col >=0){
-            System.out.println("Posicao clicada " + row + " " + col);
+            //System.out.println("Posicao clicada " + row + " " + col);
             Object o = mapa.getValueAt(row, col);
-            if(o!=null){
-                if(o.getClass() == Arquearia.class) JOptionPane.showMessageDialog(null, "Arquearia");
-                else if(o.getClass() == Principal.class) JOptionPane.showMessageDialog(null, "Principal");
-                else if(o.getClass() == Estabulo.class) JOptionPane.showMessageDialog(null, "Estabulo");
-                else if(o.getClass() == Quartel.class) JOptionPane.showMessageDialog(null, "Quartel");
-                else if(o.getClass() == Arqueiro.class) JOptionPane.showMessageDialog(null, "Arqueiro");
-                else if(o.getClass() == Cavaleiro.class) JOptionPane.showMessageDialog(null, "Cavaleiro");
-                else if(o.getClass() == Espadachim.class) JOptionPane.showMessageDialog(null, "Espadachim");
-                else if(o.getClass() == Heroi.class) JOptionPane.showMessageDialog(null, "Heroi");
-                else if(o.getClass() == Gollum.class) JOptionPane.showMessageDialog(null, "Gollum");
-                
-            }
-               
+            if(o != null){
+                if(o.getClass().getSuperclass() == Construcao.class){
+                    cliqueConstrucao(o);
+                }
+                else if(o.getClass().getSuperclass() == Tropa.class){
+                    cliqueTropa(o);
+                }
+                else if(o.getClass() == Gollum.class){
+                    JOptionPane.showMessageDialog(null, "Meu precioso!!", "Gollum", 0);
+                }                 
+            }           
         }
+    }
+    
+    //clique em uma construcao
+    private void cliqueConstrucao(Object o){
+        Construcao c = (Construcao) o;
+        String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
+                    
+        int response = JOptionPane.showOptionDialog(
+            null, 
+            "Vida: " + c.getVida()+ "\n Selecione o que você deseja fazer", 
+            o.getClass().getSimpleName(),
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.PLAIN_MESSAGE,
+            null, 
+            options, 
+            options[0]
+        );
+        
+        switch(response){
+            case 0://nova tropa
+                Posicao posTropa = posicaoLivreMaisProxima(c.getPosicao());
+              if(posTropa == null){
+                  JOptionPane.showMessageDialog(null, "Não foi possível recrutar");
+              }else if(o.getClass() == Arquearia.class){ 
+                  setValorPosicao(posTropa, new Arqueiro());
+              }else if(o.getClass() == Quartel.class){
+                  setValorPosicao(posTropa, new Espadachim());
+              }else if(o.getClass() == Estabulo.class){
+                  setValorPosicao(posTropa, new Cavaleiro());
+              }else if(o.getClass() == Principal.class){
+                  setValorPosicao(posTropa, new Heroi());
+              }
+            break;
+            
+            case 1://reformar
+            break;
+                
+            case 2://cancelar
+            break;
+        }
+    }
+    
+    //clique em uma tropa
+    private void cliqueTropa(Object o){
+        Tropa t = (Tropa)o;
+        String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
+                    
+        int response = JOptionPane.showOptionDialog(
+            null, 
+            "Vida: " + t.getVida()+ "\nSelecione o que você deseja fazer", 
+            o.getClass().getSimpleName(),
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.PLAIN_MESSAGE,
+            null, 
+            options, 
+            options[0]
+        );
+        
+         switch(response){
+            case 0://atacar
+            break;
+            
+            case 1://movimentar
+            break;
+                
+            case 2://cancelar
+            break;
+        }
+    }
+    
+    private Posicao posicaoLivreMaisProxima(Posicao atual){
+        Posicao retorno = null;
+        if(mapa.getValueAt(atual.getX() + 1, atual.getY() + 1) == null){
+            retorno =new Posicao(atual.getX() + 1, atual.getY() + 1);
+        }else if(mapa.getValueAt(atual.getX() + 1, atual.getY()) == null){
+            retorno =new Posicao(atual.getX() + 1, atual.getY());
+        }else if(mapa.getValueAt(atual.getX() + 1, atual.getY() - 1) == null){
+            retorno =new Posicao(atual.getX() + 1, atual.getY() - 1);
+        }else if(mapa.getValueAt(atual.getX(), atual.getY() - 1) == null){
+            retorno =new Posicao(atual.getX(), atual.getY() - 1);
+        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY() - 1) == null){
+            retorno =new Posicao(atual.getX() - 1, atual.getY() - 1);
+        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY()) == null){
+            retorno =new Posicao(atual.getX() - 1, atual.getY());
+        }else if(mapa.getValueAt(atual.getX() - 1, atual.getY()+ 1) == null){
+            retorno =new Posicao(atual.getX() - 1, atual.getY()+ 1);
+        }else if(mapa.getValueAt(atual.getX(), atual.getY() + 1) == null){
+            retorno =new Posicao(atual.getX(), atual.getY() + 1);
+        }
+        return retorno;
     }
     
     //Limpar Mapa

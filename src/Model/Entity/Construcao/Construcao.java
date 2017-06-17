@@ -5,15 +5,30 @@
  */
 package Model.Entity.Construcao;
 
+import Model.Entity.Mapa.Posicao;
+
 /**
  *
  * @author filipe
  */
 public class Construcao {
+    
+    private Posicao posicao;
+    private int vida;
     private final String simbolo;
     
-    public Construcao(String simbolo){
+    public Construcao(String simbolo, Posicao pos){
         this.simbolo = simbolo;
+        this.posicao = pos;
+        this.vida = 50;
+    }
+    
+    public Posicao getPosicao() {
+        return posicao;
+    }
+    
+    public int getVida() {
+        return vida;
     }
     
     @Override

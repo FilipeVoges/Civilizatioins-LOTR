@@ -5,6 +5,8 @@
  */
 package Model.Entity.Construcao;
 
+import Model.Entity.Mapa.Posicao;
+
 /**
  *
  * @author filipe
@@ -12,7 +14,7 @@ package Model.Entity.Construcao;
 public class Principal extends Construcao{
     private String Simbolo = "⌂";
 
-    public Principal() {
-        super("⌂");
+    public Principal(Posicao pos) {
+        super("⌂", pos);
     }
 }

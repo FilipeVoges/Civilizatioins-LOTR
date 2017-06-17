@@ -5,6 +5,8 @@
  */
 package Model.Entity.Construcao;
 
+import Model.Entity.Mapa.Posicao;
+
 /**
  *
  * @author filipe
@@ -12,8 +14,8 @@ package Model.Entity.Construcao;
 public class Arquearia extends Construcao {
     private String simbolo = "◎";
 
-    public Arquearia() {
-        super("◎");
+    public Arquearia(Posicao pos) {
+        super("◎", pos);
     }
     
 }
