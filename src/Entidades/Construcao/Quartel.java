@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Construcao;
+package Entidades.Construcao;
 
-import Model.Entity.Mapa.Posicao;
+import Entidades.Mapa.Posicao;
 
 /**
  *
  * @author filipe
  */
-public class Arquearia extends Construcao {
-    private String simbolo = "◎";
+public class Quartel extends Construcao{
+    private String simbolo = "♖";
 
-    public Arquearia(Posicao pos) {
-        super("◎", pos, 1, 50);
+    public Quartel(Posicao pos) {
+        super("♖", pos, 3, 100);
     }
-    
 }

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Model;
 
 /**
  *
  * @author ASUS-DEV
  */
-public class MapaController {
+public class ConstrucaoModel {
     
 }

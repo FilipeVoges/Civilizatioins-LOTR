@@ -5,7 +5,7 @@
  */
 package Main;
 
-import Model.Entity.Mapa.Mapa;
+import Entidades.Mapa.Mapa;
 import View.TelaPrincipal;
 import javax.swing.JFrame;
 

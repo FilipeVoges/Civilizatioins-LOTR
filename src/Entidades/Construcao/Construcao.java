@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Construcao;
+package Entidades.Construcao;
 
-import Model.Entity.Mapa.Posicao;
+import Entidades.Mapa.Posicao;
 
 /**
  *

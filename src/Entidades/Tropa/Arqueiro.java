@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Tropa;
+package Entidades.Tropa;
+
 
 /**
  *
  * @author filipe
  */
-public class Cavaleiro extends Tropa{
-    
-    private String simbolo = "♘";
-    
-    public Cavaleiro() {
-        super(20, 3, 5, 1, 3, "♘");
+public class Arqueiro extends Tropa{
+    private String simbolo = "➵";
+    public Arqueiro() {
+        super(15, 1, 3, 5, 2, "➵");
     }   
 }

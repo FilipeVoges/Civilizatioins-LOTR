@@ -1,34 +1,40 @@
 package View;
 
-import Controller.MapaController;
-import Model.Entity.Construcao.Arquearia;
-import Model.Entity.Construcao.Estabulo;
-import Model.Entity.Construcao.Principal;
-import Model.Entity.Construcao.Quartel;
-import Model.Entity.Mapa.Mapa;
-import Model.Entity.Mapa.Posicao;
+
+import Entidades.Mapa.Mapa;
+import Entidades.Mapa.Posicao;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class TelaPrincipal extends JFrame {
 	
 
-    MapaView mapaView;
-    MapaController mapaController;
+    private static MapaView mapaView;
+    private static InfoView infoView;
+    
       	
     public TelaPrincipal(Mapa mapa){
         
-        mapaController = new MapaController();
-        mapaController.iniciaPosicoes(mapa);
-        mapaView = new MapaView(mapa);
-        
         this.setLayout(new BorderLayout());
-        this.add(mapaView, BorderLayout.CENTER);
+        
+       
+        mapaView = new MapaView(mapa);
+        this.add(mapaView, BorderLayout.NORTH);
+        
+        infoView = new InfoView();
+        this.add(infoView, BorderLayout.SOUTH);
+        
         this.pack();
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 600);
+    }
+    
+    public static MapaView getMapaView() {
+        return mapaView;
     }
 }
       

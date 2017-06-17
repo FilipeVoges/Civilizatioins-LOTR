@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Gollum;
+package Model;
 
 /**
  *
  * @author ASUS-DEV
  */
-public class Anel {
-    
-    public Anel(){
-        
-    }
+public class CidadeModel {
     
 }

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Cidade;
+package Entidades.Cidade;
 
-import Model.Entity.Construcao.Construcao;
-import Model.Entity.Tropa.Tropa;
+import Entidades.Construcao.Construcao;
+import Entidades.Tropa.Tropa;
 import java.util.ArrayList;
 
 /**

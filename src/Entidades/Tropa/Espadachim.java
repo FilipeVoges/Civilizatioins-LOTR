@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Construcao;
-
-import Model.Entity.Mapa.Posicao;
+package Entidades.Tropa;
 
 /**
  *
  * @author filipe
  */
-public class Quartel extends Construcao{
-    private String simbolo = "♖";
-
-    public Quartel(Posicao pos) {
-        super("♖", pos, 3, 100);
+public class Espadachim extends Tropa{
+    private String simbolo = "♙";
+    public Espadachim() {
+        super(15, 1, 7, 1, 2, "♙");
     }
 }

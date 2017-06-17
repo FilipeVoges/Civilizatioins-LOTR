@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entity.Construcao;
-
-import Model.Entity.Mapa.Posicao;
+package Entidades.Tropa;
 
 /**
  *
  * @author filipe
  */
-public class Estabulo extends Construcao{
-    private String simbolo = "♞";
+public class Cavaleiro extends Tropa{
     
-    public Estabulo(Posicao pos){
-        super("♞", pos, 2, 70);
-    }
+    private String simbolo = "♘";
+    
+    public Cavaleiro() {
+        super(20, 3, 5, 1, 3, "♘");
+    }   
 }

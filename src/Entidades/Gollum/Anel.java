@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Entidades.Gollum;
 
 /**
  *
  * @author ASUS-DEV
  */
-public class MapaController {
+public class Anel {
+    
+    public Anel(){
+        
+    }
     
 }
