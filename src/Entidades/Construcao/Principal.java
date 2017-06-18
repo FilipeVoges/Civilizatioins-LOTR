@@ -13,8 +13,20 @@ import Entidades.Mapa.Posicao;
  */
 public class Principal extends Construcao{
     private String Simbolo = "⌂";
+    private boolean heroiConjurado;
 
     public Principal(Posicao pos) {
         super("⌂", pos, 1, 50);
+        this.heroiConjurado= false;
     }
+
+    public boolean isHeroiConjurado() {
+        return heroiConjurado;
+    }
+
+    public void setHeroiConjurado(boolean heroiConjurado) {
+        this.heroiConjurado = heroiConjurado;
+    }
+    
+    
 }

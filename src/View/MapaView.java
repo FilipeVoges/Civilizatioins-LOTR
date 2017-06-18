@@ -37,12 +37,15 @@ public class MapaView extends JPanel{
     private  JTable tableMapa;
     private  JScrollPane mapaContainer;
     private ArrayList<Posicao> posJogadores;
+    private Mapa mapa;
+    Gollum gollum;
     
     
     
     public MapaView(Mapa mapa){
       
         //mapa
+        this.mapa = mapa;
         iniciaPosicoes(mapa);
         tableMapa = new JTable(mapa.getTamX(),mapa.getTamX());
 	tableMapa.setBackground(Color.GREEN.darker().darker());
@@ -73,7 +76,7 @@ public class MapaView extends JPanel{
 	// table.setShowGrid(false);	//Mostra as linhas e colunas da tabela
     }
     
-        /***************************************************************************/
+    /***************************************************************************/
     public void posicionaJogadores(int qtdeJogadores){
         for(int i = 0; i< qtdeJogadores; i++){
             
@@ -97,6 +100,14 @@ public class MapaView extends JPanel{
             else temp.setX(temp.getX() - 2); 
             setaValorPosicao(temp.getX(), temp.getY(), new Quartel(new Posicao(temp.getX(), temp.getY())));
         }
+    }
+    
+    public void posicionaGollum(){
+        setaValorPosicao(this.mapa.getTamX()/2, this.mapa.getTamY()/2, new Gollum());
+    }
+    
+    public void moveGollum(){
+        
     }
     
     
@@ -172,7 +183,11 @@ public class MapaView extends JPanel{
               }else if(o.getClass() == Estabulo.class){
                   setaValorPosicao(posTropa.getX(), posTropa.getY(), new Cavaleiro());
               }else if(o.getClass() == Principal.class){
-                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Heroi());
+                  Principal p = (Principal) o;
+                  if(!p.isHeroiConjurado()){
+                    setaValorPosicao(posTropa.getX(), posTropa.getY(), new Heroi());
+                    p.setHeroiConjurado(true);
+                  }
               }
             break;
             
@@ -215,7 +230,7 @@ public class MapaView extends JPanel{
     }
     
     
-    public void iniciaPosicoes(Mapa mapa){
+    private void iniciaPosicoes(Mapa mapa){
         posJogadores = new ArrayList<>();
         posJogadores.add(new Posicao(mapa.getTamX() -2 , 1));
         posJogadores.add(new Posicao(1, mapa.getTamY() -2));

@@ -44,6 +44,20 @@ public class InfoView extends JPanel{
                 btnDesistir.setVisible(true);
                 
                 mapaView.posicionaJogadores(4);
+                mapaView. posicionaGollum();
+            }
+
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
+        });
+        
+        btnPassaVez.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mapaView.moveGollum();
+                
             }
 
             @Override public void mousePressed(MouseEvent e) {}
