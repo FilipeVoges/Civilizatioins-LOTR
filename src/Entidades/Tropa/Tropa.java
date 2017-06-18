@@ -5,7 +5,7 @@
  */
 package Entidades.Tropa;
 
-import Model.Entity.Mapa.Posicao;
+import Entidades.Mapa.Posicao;
 
 /**
  *

@@ -5,7 +5,7 @@
  */
 package Entidades.Tropa;
 
-import Model.Entity.Gollum.Anel;
+import Entidades.Gollum.Anel;
 
 /**
  *

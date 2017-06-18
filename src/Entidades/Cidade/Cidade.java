@@ -37,6 +37,10 @@ public class Cidade {
         return nome;
     }
     
+    public boolean verificaUltimaConstrucao(){
+        return construcoes.isEmpty();
+    }
+    
     
     
     
