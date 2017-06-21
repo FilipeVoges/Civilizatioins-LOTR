@@ -18,17 +18,19 @@ public class Tropa {
     private int velocidadeMovimento;
     private int forca;
     private int distanciaAtaque;
-    private Posicao posicao;
+    private Posicao posicaoAtual;
+    private Posicao posicaoDestino;
     private int resistencia;
     private String simbolo;
 
-    public Tropa(int vida, int velocidadeMovimento, int forca, int distanciaAtaque, int resistencia, String simbolo) {
+    public Tropa(int vida, int velocidadeMovimento, int forca, int distanciaAtaque, int resistencia, String simbolo, Posicao posicao) {
         this.vida = vida;
         this.velocidadeMovimento = velocidadeMovimento;
         this.forca = forca;
         this.distanciaAtaque = distanciaAtaque;
         this.resistencia = resistencia;
         this.simbolo = simbolo;
+        this.posicaoAtual = posicao;
     }
     
     public int getVida() {
@@ -52,10 +54,18 @@ public class Tropa {
     }
 
     public Posicao getPosicao() {
-        return posicao;
+        return posicaoAtual;
     }
-	
-      
+
+    public Posicao getPosicaoDestino() {
+        return posicaoDestino;
+    }
+
+    public void setPosicaoDestino(Posicao posicaoDestino) {
+        this.posicaoDestino = posicaoDestino;
+    }
+    
+    
     private int calculaDistancia(Tropa tropaAliada, Posicao destino){
         Posicao posicaoAtual = tropaAliada.getPosicao();
         

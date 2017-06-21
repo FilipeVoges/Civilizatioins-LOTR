@@ -18,6 +18,8 @@ import Entidades.Tropa.Cavaleiro;
 import Entidades.Tropa.Espadachim;
 import Entidades.Tropa.Heroi;
 import Entidades.Tropa.Tropa;
+import Enumeradores.FinalidadeClique;
+import Main.Civilization;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -177,16 +179,18 @@ public class MapaView extends JPanel{
               if(posTropa == null){
                   JOptionPane.showMessageDialog(null, "Não foi possível recrutar");
               }else if(o.getClass() == Arquearia.class){ 
-                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Arqueiro());
+                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Arqueiro(posTropa));
               }else if(o.getClass() == Quartel.class){
-                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Espadachim());
+                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Espadachim(posTropa));
               }else if(o.getClass() == Estabulo.class){
-                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Cavaleiro());
+                  setaValorPosicao(posTropa.getX(), posTropa.getY(), new Cavaleiro(posTropa));
               }else if(o.getClass() == Principal.class){
                   Principal p = (Principal) o;
                   if(!p.isHeroiConjurado()){
-                    setaValorPosicao(posTropa.getX(), posTropa.getY(), new Heroi());
+                    setaValorPosicao(posTropa.getX(), posTropa.getY(), new Heroi(posTropa));
                     p.setHeroiConjurado(true);
+                  }else {
+                      JOptionPane.showMessageDialog(null, "Voce ja possui um heroi");
                   }
               }
             break;
@@ -203,28 +207,45 @@ public class MapaView extends JPanel{
     //clique em uma tropa
     /***************************************************************************/
     private void cliqueTropa(Object o){
-        Tropa t = (Tropa)o;
-        String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
-                    
-        int response = JOptionPane.showOptionDialog(
-            null, 
-            "Vida: " + t.getVida()+ "\nSelecione o que você deseja fazer", 
-            o.getClass().getSimpleName(),
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.PLAIN_MESSAGE,
-            null, 
-            options, 
-            options[0]
-        );
+        Tropa t = (Tropa) o;
         
-         switch(response){
-            case 0://atacar
+        switch(Civilization.getJogador().getTipoClique()){
+            
+            case SELECAO:
+                
+                String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
+
+                int response = JOptionPane.showOptionDialog(
+                    null, 
+                    "Vida: " + t.getVida()+ "\nSelecione o que você deseja fazer", 
+                    o.getClass().getSimpleName(),
+                    JOptionPane.DEFAULT_OPTION, 
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, 
+                    options, 
+                    options[0]
+                );
+
+                 switch(response){
+                    case 0://atacar
+                        Civilization.getJogador().setTipoClique(FinalidadeClique.ATACAR);
+                    break;
+
+                    case 1://movimentar
+                        Civilization.getJogador().setTipoClique(FinalidadeClique.MOVIMENTAR);
+                    break;
+
+                    case 2://cancelar
+                        Civilization.getJogador().setTipoClique(FinalidadeClique.SELECAO);
+                    break;
+                }
             break;
             
-            case 1://movimentar
+            case ATACAR:
             break;
-                
-            case 2://cancelar
+            
+            case MOVIMENTAR:
+                pegaValorPosicao(t.getPosicao().getX(), t.getPosicao().getY());
             break;
         }
     }

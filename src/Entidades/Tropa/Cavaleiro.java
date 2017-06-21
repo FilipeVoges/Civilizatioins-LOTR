@@ -5,6 +5,8 @@
  */
 package Entidades.Tropa;
 
+import Entidades.Mapa.Posicao;
+
 /**
  *
  * @author filipe
@@ -12,8 +14,7 @@ package Entidades.Tropa;
 public class Cavaleiro extends Tropa{
     
     private String simbolo = "♘";
-    
-    public Cavaleiro() {
-        super(20, 3, 5, 1, 3, "♘");
+    public Cavaleiro(Posicao posicao) {
+        super(20, 3, 5, 1, 3, "♘", posicao);
     }   
 }

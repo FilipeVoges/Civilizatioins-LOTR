@@ -5,13 +5,15 @@
  */
 package Entidades.Tropa;
 
+import Entidades.Mapa.Posicao;
+
 /**
  *
  * @author filipe
  */
 public class Espadachim extends Tropa{
     private String simbolo = "♙";
-    public Espadachim() {
-        super(15, 1, 7, 1, 2, "♙");
+    public Espadachim(Posicao posicao) {
+        super(15, 1, 7, 1, 2, "♙", posicao);
     }
 }

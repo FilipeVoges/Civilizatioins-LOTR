@@ -5,6 +5,7 @@
  */
 package Entidades.Jogador;
 
+import Enumeradores.FinalidadeClique;
 import java.awt.Color;
 
 /**
@@ -16,13 +17,17 @@ public class Jogador {
     private Color cor;
     private boolean vencedor;
     private boolean temVez;
-    private int tipoClique;
+    private FinalidadeClique tipoClique;
     private int vezJogada;
     
     public Jogador(String nome, Color cor, int vezJogada){
         this.nome = nome;
         this.cor = cor;
         this.vezJogada = vezJogada;
+    }
+
+    public Jogador() {
+        this.tipoClique = FinalidadeClique.SELECAO;
     }
 
     public boolean isVencedor() {
@@ -45,11 +50,11 @@ public class Jogador {
         this.temVez = false;
     }
 
-    public int getTipoClique() {
+    public FinalidadeClique getTipoClique() {
         return tipoClique;
     }
 
-    public void setTipoClique(int finalidadeClique) {
+    public void setTipoClique(FinalidadeClique tipoClique) {
         this.tipoClique = tipoClique;
     }
 

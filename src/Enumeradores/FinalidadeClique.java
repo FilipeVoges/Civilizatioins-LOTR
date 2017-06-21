@@ -10,5 +10,5 @@ package Enumeradores;
  * @author Daniel
  */
 public enum FinalidadeClique {
-    SELECAO, ATACAR, DESTINO
+    SELECAO, ATACAR, MOVIMENTAR
 }

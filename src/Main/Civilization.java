@@ -5,6 +5,7 @@
  */
 package Main;
 
+import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Mapa;
 import View.TelaPrincipal;
 import javax.swing.JFrame;
@@ -14,6 +15,8 @@ import javax.swing.JFrame;
  * @author filipe
  */
 public class Civilization {
+    
+    private static Jogador jogador = new Jogador();
 
     /**
      * @param args the command line arguments
@@ -23,7 +26,14 @@ public class Civilization {
         java.awt.EventQueue.invokeLater(() -> {
             JFrame tela = new TelaPrincipal(new Mapa(25, 25));
             tela.setVisible(true);
-        });           
+        });    
+
     }
+
+    public static Jogador getJogador() {
+        return jogador;
+    }
+    
+    
     
 }

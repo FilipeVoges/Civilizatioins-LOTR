@@ -6,6 +6,7 @@
 package Entidades.Tropa;
 
 import Entidades.Gollum.Anel;
+import Entidades.Mapa.Posicao;
 
 /**
  *
@@ -23,8 +24,8 @@ public class Heroi extends Tropa{
         NORMAL, ULTRA;
     }
     
-    public Heroi(){
-        super(25, 1, 10, 1, 5, "✩");
+    public Heroi(Posicao posicao){
+        super(25, 1, 10, 1, 5, "✩", posicao);
         this.anel = null;
         this.acertosCharada = 0;
         this.duelando = false;
