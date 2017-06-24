@@ -5,6 +5,7 @@
  */
 package Entidades.Jogador;
 
+import Entidades.Cidade.Cidade;
 import Enumeradores.FinalidadeClique;
 import java.awt.Color;
 
@@ -15,6 +16,7 @@ import java.awt.Color;
 public class Jogador {
     private String nome;
     private Color cor;
+    private Cidade cidade;
     private boolean vencedor;
     private boolean temVez;
     private FinalidadeClique tipoClique;
@@ -24,9 +26,6 @@ public class Jogador {
         this.nome = nome;
         this.cor = cor;
         this.vezJogada = vezJogada;
-    }
-
-    public Jogador() {
         this.tipoClique = FinalidadeClique.SELECAO;
     }
 
@@ -68,14 +67,14 @@ public class Jogador {
 
     public Color getCor() {
         return cor;
+    }   
+
+    public Cidade getCidade() {
+        return cidade;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
+
 }

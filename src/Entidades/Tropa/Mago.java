@@ -10,13 +10,14 @@ import Entidades.Mapa.Posicao;
 
 /**
  *
- * @author filipe
+ * @author ASUS-DEV
  */
-public class Cavaleiro extends Tropa{
-    
-    private String simbolo = "♘";
-    public Cavaleiro(Posicao posicao, Cidade cidade){
+public class Mago extends Tropa{
+     
+    public Mago(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(20, 3, 5, 1, 3, "♘", posicao, cidade);
-    }   
+        super(50, 2, 25, 4, 5, "♕", posicao, cidade);
+    }
+   
+    
 }

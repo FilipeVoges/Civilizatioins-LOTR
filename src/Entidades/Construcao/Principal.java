@@ -5,7 +5,9 @@
  */
 package Entidades.Construcao;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import Entidades.Tropa.Heroi;
 
 /**
  *
@@ -15,9 +17,14 @@ public class Principal extends Construcao{
     private String Simbolo = "⌂";
     private boolean heroiConjurado;
 
-    public Principal(Posicao pos) {
-        super("⌂", pos, 1, 50);
+    public Principal(Posicao pos, Cidade c) {
+        super("⌂", pos, 1, 50, c);
+        //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
         this.heroiConjurado= false;
+    }
+    
+    public Heroi recrutar(Posicao posDisponivel){
+        return new Heroi(posDisponivel, super.getCidade());
     }
 
     public boolean isHeroiConjurado() {

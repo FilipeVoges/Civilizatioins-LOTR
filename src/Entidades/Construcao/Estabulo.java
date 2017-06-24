@@ -5,7 +5,9 @@
  */
 package Entidades.Construcao;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import Entidades.Tropa.Cavaleiro;
 
 /**
  *
@@ -14,7 +16,14 @@ import Entidades.Mapa.Posicao;
 public class Estabulo extends Construcao{
     private String simbolo = "♞";
     
-    public Estabulo(Posicao pos){
-        super("♞", pos, 2, 70);
+    public Estabulo(Posicao pos, Cidade c){
+        //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
+        super("♞", pos, 2, 70, c);
     }
+    
+    public Cavaleiro recrutar(Posicao posDisponivel){
+        return new Cavaleiro(posDisponivel, super.getCidade());
+    }
+    
+    
 }

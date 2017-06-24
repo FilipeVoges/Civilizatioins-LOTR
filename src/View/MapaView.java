@@ -5,6 +5,7 @@
  */
 package View;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Construcao.Arquearia;
 import Entidades.Construcao.Construcao;
 import Entidades.Construcao.Estabulo;
@@ -81,26 +82,47 @@ public class MapaView extends JPanel{
     /***************************************************************************/
     public void posicionaJogadores(int qtdeJogadores){
         for(int i = 0; i< qtdeJogadores; i++){
-            
+            Cidade c = new Cidade("Dolly", 100);
+
             //posicina edificio principal
             Posicao temp = posJogadores.get(i);
-            setaValorPosicao(temp.getX(), temp.getY(), new Principal(new Posicao(temp.getX(), temp.getY())));
+            setaValorPosicao(
+                    temp.getX(), 
+                    temp.getY(), 
+                    c.construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+            );
+            
             System.out.println(temp.getX() + " " + temp.getY());
             
             //posiciona Arquearia
             if(temp.getX() > 2) temp.setX(temp.getX() - 2);
-            else temp.setX(temp.getX() + 2);     
-            setaValorPosicao(temp.getX(), temp.getY(), new Arquearia(new Posicao(temp.getX(), temp.getY())));
+            else temp.setX(temp.getX() + 2);
+            
+            setaValorPosicao(
+                    temp.getX(), 
+                    temp.getY(), 
+                    c.construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+            );
             
             //posiciona Estabulo
             if(temp.getY() > 2) temp.setY(temp.getY() - 2);
             else temp.setY(temp.getY() + 2);     
-            setaValorPosicao(temp.getX(), temp.getY(), new Estabulo(new Posicao(temp.getX(), temp.getY())));
+            
+            setaValorPosicao(
+                    temp.getX(), 
+                    temp.getY(), 
+                    c.construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+            );
             
             //posiciona Quartel
             if(temp.getX() > 4 )temp.setX(temp.getX() + 2);
             else temp.setX(temp.getX() - 2); 
-            setaValorPosicao(temp.getX(), temp.getY(), new Quartel(new Posicao(temp.getX(), temp.getY())));
+            
+            setaValorPosicao(
+                    temp.getX(), 
+                    temp.getY(), 
+                    c.construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+            );
         }
     }
     

@@ -15,8 +15,7 @@ import javax.swing.JFrame;
  * @author filipe
  */
 public class Civilization {
-    
-    private static Jogador jogador = new Jogador();
+   
 
     /**
      * @param args the command line arguments
@@ -28,12 +27,5 @@ public class Civilization {
             tela.setVisible(true);
         });    
 
-    }
-
-    public static Jogador getJogador() {
-        return jogador;
-    }
-    
-    
-    
+    } 
 }

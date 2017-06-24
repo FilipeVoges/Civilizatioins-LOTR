@@ -5,6 +5,7 @@
  */
 package Entidades.Tropa;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Gollum.Anel;
 import Entidades.Mapa.Posicao;
 
@@ -18,14 +19,10 @@ public class Heroi extends Tropa{
     private Anel anel;
     private int acertosCharada;
     private boolean duelando;
-
-
-    private enum tipoHeroi{
-        NORMAL, ULTRA;
-    }
     
-    public Heroi(Posicao posicao){
-        super(25, 1, 10, 1, 5, "✩", posicao);
+    public Heroi(Posicao posicao, Cidade cidade){
+        //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
+        super(25, 1, 10, 1, 5, "✩", posicao, cidade);
         this.anel = null;
         this.acertosCharada = 0;
         this.duelando = false;
@@ -33,11 +30,13 @@ public class Heroi extends Tropa{
     
     public Anel perdeAnel() {
         this.anel = null;
+        super.setSimbolo(simboloNormal);
         return new Anel();
     }
 
     public void pegaAnel(Anel anel) {
         this.anel = anel;
+        super.setSimbolo(simboloAnel);
     }
 
     public int getAcertosCharada() {

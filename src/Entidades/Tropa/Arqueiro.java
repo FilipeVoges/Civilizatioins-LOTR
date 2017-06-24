@@ -5,6 +5,7 @@
  */
 package Entidades.Tropa;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 
 
@@ -14,7 +15,8 @@ import Entidades.Mapa.Posicao;
  */
 public class Arqueiro extends Tropa{
     private String simbolo = "➵";
-    public Arqueiro(Posicao posicao) {
-        super(15, 1, 3, 5, 2, "➵", posicao);
+    public Arqueiro(Posicao posicao, Cidade cidade){
+        //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
+        super(15, 1, 3, 5, 2, "➵", posicao, cidade);
     }   
 }

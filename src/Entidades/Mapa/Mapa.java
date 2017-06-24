@@ -14,11 +14,11 @@ import java.util.ArrayList;
  *
  * @author filipe
  */
+
 public class Mapa {
     
     private int tamX;
     private int tamY;
-    ArrayList<Jogador> jogadores;
     ArrayList<Cidade> cidades;
     Gollum gollum;
     
@@ -26,7 +26,6 @@ public class Mapa {
     public Mapa(int tX, int tY){
         this.tamX = tX;
         this.tamY = tY;
-        jogadores = new ArrayList<>();
         cidades = new ArrayList<>();
         gollum = new Gollum();
     }
@@ -37,14 +36,6 @@ public class Mapa {
 
     public int getTamY() {
         return tamY;
-    }
-
-    public ArrayList<Jogador> getJogadores() {
-        return jogadores;
-    }
-
-    public void setJogadores(ArrayList<Jogador> jogadores) {
-        this.jogadores = jogadores;
     }
 
     public ArrayList<Cidade> getCidades() {

@@ -5,6 +5,7 @@
  */
 package Entidades.Construcao;
 
+import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 
 /**
@@ -13,42 +14,43 @@ import Entidades.Mapa.Posicao;
  */
 public class Construcao {
     
-    private int tempoRecrutamento;
-    private int nivel; 
-    private boolean destruido;
-    private int recursoRecrutamento;
     private Posicao posicao;
     private int vida;
     private final String simbolo;
-    private int progressoReforma;
-    private int radius;
-    
-    
-    public Construcao(String simbolo, Posicao pos, int tempoRecrutamento, int recursoRecrutamento){
-        this.simbolo = simbolo;
-        this.posicao = pos;
-        this.tempoRecrutamento = tempoRecrutamento;
-        this.recursoRecrutamento = recursoRecrutamento;
-        this.vida = 50;
-        this.nivel = 1;
-        this.destruido = false;
+    private int vidaMaxima;
+    private boolean destruido;
+    private int recursoRecrutamento;
+    private Cidade cidade;
+
+    public Construcao() {
+        this.simbolo = null;
     }
     
+    
+    public Construcao(
+            String simbolo, 
+            Posicao pos, 
+            int tempoRecrutamento, 
+            int recursoRecrutamento, 
+            Cidade cidade
+    ){
+        this.simbolo = simbolo;
+        this.posicao = pos;
+        this.recursoRecrutamento = recursoRecrutamento;
+        this.vida = 50;
+        this.vidaMaxima = 50;
+        this.destruido = false;
+        this.cidade = cidade;
+    }
+    
+    
+    //Getters and Setters
     public Posicao getPosicao() {
         return posicao;
     }
     
     public int getVida() {
         return vida;
-    }
-    
-    @Override
-    public String toString(){
-        return simbolo;
-    }
-
-    public int getTempoRecrutamento() {
-        return tempoRecrutamento;
     }
 
     public boolean isDestruido() {
@@ -62,14 +64,29 @@ public class Construcao {
     public int getRecursoRecrutamento() {
         return recursoRecrutamento;
     }
-    
-    public int getProgressoReforma() {
-        return progressoReforma;
-    }
 
-    public void setProgressoReforma(int progressoReforma) {
-        this.progressoReforma = progressoReforma;
+    public Cidade getCidade() {
+        return cidade;
     }
+    
+    // outras funções
+    public int calculaReforma(){
+       return (this.vidaMaxima - this.vida) * 10;
+    }
+    
+    public void reformar(){
+        this.vida = this.vidaMaxima;
+    }
+    
+  
+    @Override
+    public String toString(){
+        return simbolo;
+    }
+    
+    
+    
+    
     
     
 }
