@@ -7,20 +7,21 @@ package Entidades.Construcao;
 
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Construcao {
+public class Construcao implements Serializable {
     
-    private Posicao posicao;
-    private int vida;
-    private final String simbolo;
-    private int vidaMaxima;
-    private boolean destruido;
-    private int recursoRecrutamento;
-    private Cidade cidade;
+    protected Posicao posicao;
+    protected int vida;
+    protected final String simbolo;
+    protected int vidaMaxima;
+    protected boolean destruido;
+    protected int recursoRecrutamento;
+    protected Cidade cidade;
 
     public Construcao() {
         this.simbolo = null;
@@ -30,15 +31,15 @@ public class Construcao {
     public Construcao(
             String simbolo, 
             Posicao pos, 
-            int tempoRecrutamento, 
-            int recursoRecrutamento, 
+            int recursoRecrutamento,
+            int vida,
             Cidade cidade
     ){
         this.simbolo = simbolo;
         this.posicao = pos;
         this.recursoRecrutamento = recursoRecrutamento;
-        this.vida = 50;
-        this.vidaMaxima = 50;
+        this.vida = vida;
+        this.vidaMaxima = vida;
         this.destruido = false;
         this.cidade = cidade;
     }

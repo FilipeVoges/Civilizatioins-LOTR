@@ -8,24 +8,29 @@ package Entidades.Tropa;
 import Entidades.Cidade.Cidade;
 import Entidades.Gollum.Anel;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Heroi extends Tropa{
-    private String simboloNormal = "✩";
-    private String simboloAnel = "✮";
-    private Anel anel;
-    private int acertosCharada;
-    private boolean duelando;
-    
-    public Heroi(Posicao posicao, Cidade cidade){
-        //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(25, 1, 10, 1, 5, "✩", posicao, cidade);
+
+public class Heroi extends Tropa implements Serializable{
+    protected String nome;
+    protected String simboloNormal = "✩";
+    protected String simboloAnel = "✮";
+    protected String nomeHeroi;
+    protected Anel anel;
+    protected int acertosCharada;
+    protected boolean duelando;
+
+    public Heroi(String nome, int velocidadeMovimento, int forca, int distanciaAtaque, int resistencia, Posicao posicao, Cidade cidade) {
+        
+        super(50, velocidadeMovimento, forca, distanciaAtaque, resistencia, "✩", posicao, cidade);
         this.anel = null;
         this.acertosCharada = 0;
         this.duelando = false;
+        
     }
     
     public Anel perdeAnel() {
@@ -54,6 +59,11 @@ public class Heroi extends Tropa{
     public void setDuelando(boolean duelando) {
         this.duelando = duelando;
     }
+
+    public String getNome() {
+        return nome;
+    }
+    
 }
 
 

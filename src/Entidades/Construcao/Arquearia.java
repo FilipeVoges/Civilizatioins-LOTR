@@ -8,6 +8,7 @@ package Entidades.Construcao;
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Arqueiro;
+import java.io.Serializable;
 
 /**public Arqueiro recrutar(Posicao posDisponivel){
         return new Arqueiro(posDisponivel);
@@ -15,12 +16,12 @@ import Entidades.Tropa.Arqueiro;
  *
  * @author filipe
  */
-public class Arquearia extends Construcao {
-    private String simbolo = "◎";
+public class Arquearia extends Construcao implements Serializable{
+    protected String simbolo = "◎";
 
     public Arquearia(Posicao pos, Cidade c) {
-        //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
-        super("◎", pos, 1, 50, c);
+        //simbolo, posicao, recursoRecrutamento, vida, cidade
+        super("◎", pos, 50, 100, c);
     }
     
     public Arqueiro recrutar(Posicao posDisponivel){

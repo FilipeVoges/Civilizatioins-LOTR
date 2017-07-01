@@ -5,10 +5,12 @@
  */
 package Enumeradores;
 
-/**
- *
- * @author Daniel
- */
-public enum FinalidadeClique {
-    SELECAO, ATACAR, MOVIMENTAR
+
+public enum TipoJogada {
+    ATACAR, 
+    MOVIMENTAR, 
+    SELECAO, NOVA_TROPA, 
+    REFORMA_CONSTRUCAO, 
+    DESISTIR, 
+    PASSA_VEZ
 }

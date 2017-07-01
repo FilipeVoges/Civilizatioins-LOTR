@@ -8,23 +8,52 @@ package Entidades.Construcao;
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Heroi;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Principal extends Construcao{
-    private String Simbolo = "⌂";
-    private boolean heroiConjurado;
+public class Principal extends Construcao implements Serializable{
+    protected String Simbolo = "⌂";
+    protected boolean heroiConjurado;
 
     public Principal(Posicao pos, Cidade c) {
-        super("⌂", pos, 1, 50, c);
         //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
+        super("⌂", pos, 100, 300, c);
         this.heroiConjurado= false;
     }
     
     public Heroi recrutar(Posicao posDisponivel){
-        return new Heroi(posDisponivel, super.getCidade());
+        
+        Heroi heroi = null;
+        switch(super.cidade.getJogador().getRaca()){
+            
+            case HUMANO:
+                // nome, velocidadeMovimento, forca, distanciaAtaque, resistencia, posicao, cidade
+                heroi = new Heroi("Aragorn", 2, 5, 3, 4, posDisponivel, cidade);
+            break;
+            
+            case ELFO:
+                // nome, velocidadeMovimento, forca, distanciaAtaque, resistencia, posicao, cidade
+                heroi = new Heroi("Legolas", 1, 3, 5, 4, posDisponivel, cidade);
+            break;
+            
+            case URUK_HAI:
+                // nome, velocidadeMovimento, forca, distanciaAtaque, resistencia, posicao, cidade
+                heroi = new Heroi("Lurtz", 1, 7, 1, 4, posDisponivel, cidade);
+            break;
+            
+            case ORC:
+                // nome, velocidadeMovimento, forca, distanciaAtaque, resistencia, posicao, cidade
+                heroi = new Heroi("Azog", 3, 5, 1, 4, posDisponivel, cidade);
+            break;
+            
+            default:
+            break;
+            
+        }
+        return heroi;
     }
 
     public boolean isHeroiConjurado() {

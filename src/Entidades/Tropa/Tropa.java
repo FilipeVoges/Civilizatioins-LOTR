@@ -14,15 +14,15 @@ import Entidades.Mapa.Posicao;
  */
 public class Tropa {
     
-    private int vida;
-    private int velocidadeMovimento;
-    private int forca;
-    private int distanciaAtaque;
-    private Posicao posicaoAtual;
-    private Posicao posicaoDestino;
-    private int resistencia;
-    private String simbolo;
-    private Cidade cidade;
+    protected int vida;
+    protected int velocidadeMovimento;
+    protected int forca;
+    protected int distanciaAtaque;
+    protected Posicao posicaoAtual;
+    protected Posicao posicaoDestino;
+    protected int resistencia;
+    protected String simbolo;
+    protected Cidade cidade;
 
     public Tropa(
             int vida, 

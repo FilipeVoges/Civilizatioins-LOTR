@@ -11,8 +11,8 @@ package Entidades.Jogada;
  */
 public class Jogada {
     
-    Object antigo;
-    Object modificado;
+    protected Object antigo;
+    protected Object modificado;
     
     public Jogada(Object velho, Object novo){
         this.antigo = velho;

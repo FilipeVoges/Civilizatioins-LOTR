@@ -8,17 +8,18 @@ package Entidades.Construcao;
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Espadachim;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Quartel extends Construcao{
-    private String simbolo = "♖";
+public class Quartel extends Construcao implements Serializable{
+    protected String simbolo = "♖";
 
     public Quartel(Posicao pos, Cidade c) {
-        //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
-        super("♖", pos, 3, 100, c);
+        //simbolo, posicao, recursoRecrutamento, vida, cidade
+        super("♖", pos, 50, 100, c);
     }
     
     public Espadachim recrutar(Posicao posDisponivel){

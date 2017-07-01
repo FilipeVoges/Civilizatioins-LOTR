@@ -12,34 +12,60 @@ import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Posicao;
-import Entidades.Tropa.Tropa;
 import java.util.ArrayList;
 
-/**
- *
- * @author filipe
- */
+
 public class Cidade {
     
-    private int recursos;
-    private String nome;
-    private ArrayList<Construcao> construcoes;
-    private Jogador jogador;
+    protected int recursos;
+    protected String nome;
+    protected ArrayList<Construcao> construcoes;
+    protected Jogador jogador;
+  
     
-    public Cidade(String nome, int recursosIniciais, Jogador dono){
-        this.nome = nome;
-        this.recursos = recursosIniciais;
+    public Cidade(Jogador dono){
+        
+        switch(dono.getRaca()){
+        
+            case HUMANO:
+                this.nome = "Gondor";
+            break;
+            
+            case ELFO:
+                this.nome = "Valfenda";
+            break;
+            
+            case URUK_HAI:
+                this.nome = "Isengard";
+            break;
+            
+            case ORC:
+                this.nome = "Portão Negro";
+            break;
+            
+            default:
+            break;
+        }
+        
+        this.recursos = 300;
         dono.setCidade(this);
         this.jogador = dono;
         construcoes = new ArrayList<>();
     }
+    
+     public void recebeRecursos(){
+         
+        int qtdeConstrucao = 0;
+        for(int i = 0; i < construcoes.size(); i++){
+            if(construcoes.get(i).isDestruido() == false){
+                qtdeConstrucao++;
+            }
+        }
+        recursos += 50 * qtdeConstrucao;
+    }
 
     public int getRecursos() {
         return recursos;
-    }
-
-    public void setRecursos(int recursos) {
-        this.recursos = recursos;
     }
 
     public String getNome() {

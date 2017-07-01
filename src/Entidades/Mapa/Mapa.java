@@ -17,10 +17,10 @@ import java.util.ArrayList;
 
 public class Mapa {
     
-    private int tamX;
-    private int tamY;
-    ArrayList<Cidade> cidades;
-    Gollum gollum;
+    protected int tamX;
+    protected int tamY;
+    protected ArrayList<Cidade> cidades;
+    protected Gollum gollum;
     
     
     public Mapa(int tX, int tY){

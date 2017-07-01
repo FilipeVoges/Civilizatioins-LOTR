@@ -8,17 +8,18 @@ package Entidades.Construcao;
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Cavaleiro;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Estabulo extends Construcao{
-    private String simbolo = "♞";
+public class Estabulo extends Construcao implements Serializable{
+    protected String simbolo = "♞";
     
     public Estabulo(Posicao pos, Cidade c){
-        //simbolo, posicao, tempoRecrutamento, recursoRecrutamento
-        super("♞", pos, 2, 70, c);
+        //simbolo, posicao, recursoRecrutamento, vida
+        super("♞", pos, 70, 100, c);
     }
     
     public Cavaleiro recrutar(Posicao posDisponivel){

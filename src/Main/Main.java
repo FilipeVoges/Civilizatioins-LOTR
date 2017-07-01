@@ -14,7 +14,7 @@ import javax.swing.JFrame;
  *
  * @author filipe
  */
-public class Civilization {
+public class Main {
    
 
     /**

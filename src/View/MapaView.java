@@ -19,8 +19,8 @@ import Entidades.Tropa.Cavaleiro;
 import Entidades.Tropa.Espadachim;
 import Entidades.Tropa.Heroi;
 import Entidades.Tropa.Tropa;
-import Enumeradores.FinalidadeClique;
-import Main.Civilization;
+import Enumeradores.TipoJogada;
+import Main.Main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -231,7 +231,7 @@ public class MapaView extends JPanel{
     private void cliqueTropa(Object o){
         Tropa t = (Tropa) o;
         
-        switch(Civilization.getJogador().getTipoClique()){
+        switch(Main.getJogador().getTipoClique()){
             
             case SELECAO:
                 
@@ -250,15 +250,15 @@ public class MapaView extends JPanel{
 
                  switch(response){
                     case 0://atacar
-                        Civilization.getJogador().setTipoClique(FinalidadeClique.ATACAR);
+                        Main.getJogador().setTipoClique(TipoJogada.ATACAR);
                     break;
 
                     case 1://movimentar
-                        Civilization.getJogador().setTipoClique(FinalidadeClique.MOVIMENTAR);
+                        Main.getJogador().setTipoClique(TipoJogada.MOVIMENTAR);
                     break;
 
                     case 2://cancelar
-                        Civilization.getJogador().setTipoClique(FinalidadeClique.SELECAO);
+                        Main.getJogador().setTipoClique(TipoJogada.SELECAO);
                     break;
                 }
             break;

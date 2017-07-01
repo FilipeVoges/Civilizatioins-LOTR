@@ -6,7 +6,8 @@
 package Entidades.Jogador;
 
 import Entidades.Cidade.Cidade;
-import Enumeradores.FinalidadeClique;
+import Enumeradores.Raca;
+import Enumeradores.TipoJogada;
 import java.awt.Color;
 
 /**
@@ -14,19 +15,19 @@ import java.awt.Color;
  * @author filipe
  */
 public class Jogador {
-    private String nome;
-    private Color cor;
-    private Cidade cidade;
-    private boolean vencedor;
-    private boolean temVez;
-    private FinalidadeClique tipoClique;
-    private int vezJogada;
+    protected String nome;
+    protected Cidade cidade;
+    protected boolean vencedor;
+    protected boolean temVez;
+    protected TipoJogada tipoClique;
+    protected int vezJogada;
+    protected Raca raca;
     
-    public Jogador(String nome, Color cor, int vezJogada){
+    public Jogador(String nome, Raca raca, int vezJogada){
         this.nome = nome;
-        this.cor = cor;
+        this.raca = raca;
         this.vezJogada = vezJogada;
-        this.tipoClique = FinalidadeClique.SELECAO;
+        this.tipoClique = TipoJogada.SELECAO;
     }
 
     public boolean isVencedor() {
@@ -49,11 +50,11 @@ public class Jogador {
         this.temVez = false;
     }
 
-    public FinalidadeClique getTipoClique() {
+    public TipoJogada getTipoClique() {
         return tipoClique;
     }
 
-    public void setTipoClique(FinalidadeClique tipoClique) {
+    public void setTipoClique(TipoJogada tipoClique) {
         this.tipoClique = tipoClique;
     }
 
@@ -65,16 +66,16 @@ public class Jogador {
         return nome;
     }
 
-    public Color getCor() {
-        return cor;
-    }   
-
     public Cidade getCidade() {
         return cidade;
     }
 
     public void setCidade(Cidade cidade) {
         this.cidade = cidade;
+    }
+
+    public Raca getRaca() {
+        return raca;
     }
 
 }

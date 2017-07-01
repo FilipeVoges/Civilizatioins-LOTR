@@ -11,8 +11,8 @@ package Entidades.Mapa;
  */
 public class Posicao {
     
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
     public Posicao(int x, int y) {
         this.x = x;
