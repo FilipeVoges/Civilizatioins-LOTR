@@ -21,6 +21,7 @@ public class Jogador {
     protected TipoJogada tipoClique;
     protected int vezJogada;
     protected Raca raca;
+    protected String cor; // existe apenas no diagrama de classe.
     
     public Jogador(String nome, Raca raca, int vezJogada){
         this.nome = nome;
@@ -41,11 +42,11 @@ public class Jogador {
         return temVez;
     }
 
-    public void recebeVez() {
+    public void recebeVez() { //não tem no diagrama de classes
         this.temVez = true;
     }
     
-    public void passaVez() {
+    public void passaVez() { //não tem no diagrama de classes
         this.temVez = false;
     }
 
