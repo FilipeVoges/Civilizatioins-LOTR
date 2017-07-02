@@ -176,9 +176,9 @@ public class AtorJogador extends JFrame {
                 btnPassaVez.setVisible(true);
                 btnDesistir.setVisible(true);
                 cidadeMapa = new Cidade(jogadorMapa);
-                infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
                 posicionaJogadores(1);
                 jogadorMapa.recebeVez();
+                infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
             }
         });
         
@@ -200,6 +200,7 @@ public class AtorJogador extends JFrame {
                     btnIniciaJogo.setVisible(true);
                     btnPassaVez.setVisible(false);
                     btnDesistir.setVisible(false);
+                    infoRecursos.setText("");
                 }
             }
         });

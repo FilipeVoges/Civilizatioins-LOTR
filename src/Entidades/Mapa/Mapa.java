@@ -35,8 +35,8 @@ public class Mapa {
     protected ArrayList<Cidade> cidades;
     protected ArrayList<Posicao> posInicialMapa;
     protected Gollum gollum;
-    boolean partidaEmAndamento;
-    protected Tropa tropaSelecionada;
+    protected boolean partidaEmAndamento;
+    protected Object objetoSelecionado;
     //Falta a collection de jogadores definidas no Mapa
     
     public Mapa(){
@@ -134,17 +134,20 @@ public class Mapa {
             break;
             
             case ATACAR:
-                if(objeto != null){
-                    //TODO: Implementar lógica
+                if(objeto != null && objetoSelecionado != null){
+                    
+                    jogada = atacar(clique, jogador, objeto);
+                    
                 }else{
                     exibirMensagem("Selecione um alvo válido");
                     jogador.setTipoClique(TipoJogada.SELECAO);
-                    tropaSelecionada = null;
+                    objetoSelecionado = null;
                 }
             break;
             
             case MOVIMENTAR:
                 if(objeto == null){
+                    Tropa tropaSelecionada = (Tropa) objetoSelecionado;
                     Posicao atual = new Posicao(tropaSelecionada.getPosicao().getX(), tropaSelecionada.getPosicao().getY());
                     int distancia = tropaSelecionada.calculaDistancia(clique);
                     if(distancia <= tropaSelecionada.getDistanciaMovimento()){
@@ -152,11 +155,11 @@ public class Mapa {
                         jogada = new Jogada(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
                         jogador.setTipoClique(TipoJogada.SELECAO);
                         tropaSelecionada = null;
-                    }
+                    }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
                 }else{
                     exibirMensagem("Selecione uma posição disponível");
                     jogador.setTipoClique(TipoJogada.SELECAO);
-                    tropaSelecionada = null;
+                    objetoSelecionado = null;
                 }
             break;
         }
@@ -245,8 +248,8 @@ public class Mapa {
     }
      
    /**************************************************************************/
-    private void cliqueTropa(Object o, Jogador jogador){
-        Tropa tropa = (Tropa) o;
+    private void cliqueTropa(Object objeto, Jogador jogador){
+        Tropa tropa = (Tropa) objeto;
                  
         if(tropa.getCidade() == jogador.getCidade() && jogador.verificaVez()){
             String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
@@ -256,7 +259,7 @@ public class Mapa {
                 "Cidade: " + tropa.getCidade().getNome()
                 + "\nVida: " + tropa.getVida()+ "\n"
                 + "Selecione o que você deseja fazer", 
-                o.getClass().getSimpleName(),
+                objeto.getClass().getSimpleName(),
                 JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.PLAIN_MESSAGE,
                 null, 
@@ -267,12 +270,12 @@ public class Mapa {
              switch(response){
                 case 0://atacar
                     jogador.setTipoClique(TipoJogada.ATACAR);
-                    tropaSelecionada = tropa;
+                    objetoSelecionado = objeto;
                 break;
 
                 case 1://movimentar
                     jogador.setTipoClique(TipoJogada.MOVIMENTAR);
-                    tropaSelecionada = tropa;
+                    objetoSelecionado = objeto;
                 break;
 
                 case 2://cancelar
@@ -283,13 +286,51 @@ public class Mapa {
                 null, 
                 "Cidade: " + tropa.getCidade().getNome()
                  + "\nVida: " + tropa.getVida(), 
-                o.getClass().getSimpleName(), 
+                objeto.getClass().getSimpleName(), 
                 0
               );   
     }
-    
-    
-    
-    
+
+    /**************************************************************************/
+    private Jogada atacar(Posicao clique, Jogador jogador, Object objeto){
+       
+        Jogada jogada = null;
+        
+        if(objeto.getClass().getSuperclass() == Construcao.class){
+            Construcao alvo = (Construcao) objeto;
+            Tropa atacante = (Tropa) objetoSelecionado;
+            //calcula distancia
+            if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
+                
+                //TODO: terminar de implementar
+                
+            }else exibirMensagem("Você esta muito distante do alvo para atacar");
+            
+        }
+        else if(objeto.getClass().getSuperclass() == Tropa.class){
+            Tropa alvo = (Tropa) objeto;
+            Tropa atacante = (Tropa) objetoSelecionado;
+            //calcula distancia
+            if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
+                
+                //TODO: terminar de implementar
+                
+            }else exibirMensagem("Você esta muito distante do alvo para atacar");
+            
+        }
+        else if(objeto.getClass() == Gollum.class){
+            if(objetoSelecionado != null && objetoSelecionado.getClass() == Heroi.class){
+                Heroi heroiSelecionado = (Heroi) objetoSelecionado;
+                if(heroiSelecionado.calculaDistancia(gollum.getPosicao()) - heroiSelecionado.getDistanciaAtaque() <= 0){
+                    exibirMensagem("Vou roubar teu precioso");
+                    
+                    //TODO: terminar implementação respondeCharada
+                    
+                }else exibirMensagem("Você esta muito distante do alvo para atacar");
+            }else exibirMensagem("A Tropa selecionada não pode atacar o Gollum");
+        }
+        return jogada;
+        
+    }
     
 }

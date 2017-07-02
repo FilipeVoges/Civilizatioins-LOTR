@@ -44,6 +44,7 @@ public class Jogador {
 
     public void recebeVez() { //não tem no diagrama de classes
         this.temVez = true;
+        this.cidade.recebeRecursos();
     }
     
     public void passaVez() { //não tem no diagrama de classes
