@@ -5,6 +5,8 @@
  */
 package Entidades.Jogada;
 
+import Enumeradores.TipoJogada;
+
 /**
  *
  * @author ASUS-DEV
@@ -13,10 +15,14 @@ public class Jogada {
     
     protected Object antigo;
     protected Object modificado;
+    protected TipoJogada tipoJogada;
     
-    public Jogada(Object velho, Object novo){
+    public Jogada(){}
+    
+    public Jogada(Object velho, Object novo, TipoJogada tipo){
         this.antigo = velho;
         this.modificado = novo;
+        this.tipoJogada = tipo;
     }
 
     public Object getAntigo() {
@@ -25,6 +31,22 @@ public class Jogada {
 
     public Object getModificado() {
         return modificado;
+    }
+
+    public TipoJogada getTipoJogada() {
+        return tipoJogada;
+    }
+
+    public void setAntigo(Object antigo) {
+        this.antigo = antigo;
+    }
+
+    public void setModificado(Object modificado) {
+        this.modificado = modificado;
+    }
+
+    public void setTipoJogada(TipoJogada tipoJogada) {
+        this.tipoJogada = tipoJogada;
     }
     
     

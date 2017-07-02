@@ -6,15 +6,12 @@ import Entidades.Construcao.Construcao;
 import Entidades.Construcao.Estabulo;
 import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
-import Entidades.Gollum.Gollum;
+import Entidades.Jogada.Jogada;
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Mapa;
 import Entidades.Mapa.Posicao;
-import Entidades.Tropa.Cavaleiro;
-import Entidades.Tropa.Espadachim;
 import Entidades.Tropa.Tropa;
 import Enumeradores.Raca;
-import Enumeradores.TipoJogada;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -41,7 +38,6 @@ public class AtorJogador extends JFrame {
     protected String server;
     protected Jogador jogadorMapa;
     protected Cidade cidadeMapa;
-    protected Tropa tropaSelecionada;
       	
     public AtorJogador(Mapa mapa){  
         
@@ -109,8 +105,49 @@ public class AtorJogador extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int linha = tabela.rowAtPoint(e.getPoint());
                 int coluna = tabela.columnAtPoint(e.getPoint());
-                realizaJogada(linha, coluna);
-            }
+                Posicao clique = new Posicao(linha, coluna);
+                Object o = pegaValorPosicao(clique);
+                
+                Jogada jogada = mapa.realizaJogada(clique, jogadorMapa, o);
+                
+                if(jogada != null){
+                    switch(jogada.getTipoJogada()){
+
+                        case ATACAR:
+                            System.out.println("Atacar");
+                            //TODO
+                        break;
+
+                        case REFORMA_CONSTRUCAO:
+                            System.out.println("Reformar construção");
+                            Construcao reformada = (Construcao) jogada.getModificado();
+                            setaValorPosicao(reformada.getPosicao(), reformada);
+                        break;
+
+                        case NOVA_TROPA:
+                            System.out.println("Nova tropa");
+                            Tropa novaTropa = (Tropa) jogada.getModificado();
+                            Construcao cons = (Construcao) jogada.getAntigo();
+                            Posicao posTropa = posicaoLivreMaisProxima(cons.getPosicao());
+                            novaTropa.setPosicaoAtual(posTropa);
+                            setaValorPosicao(posTropa, novaTropa);      
+                        break;
+
+                        case MOVIMENTAR:
+                            System.out.println("Movimentar");
+                            Posicao antiga = (Posicao) jogada.getAntigo();
+                            Tropa atual = (Tropa) jogada.getModificado();
+                            setaValorPosicao(antiga, null);
+                            setaValorPosicao(atual.getPosicao(), atual);
+                        break;
+
+                        default:
+                        break;
+                    }
+                }
+
+                infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos()); 
+           }
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
             @Override public void mouseEntered(MouseEvent e) {}
@@ -227,11 +264,18 @@ public class AtorJogador extends JFrame {
     }
     
     //Setter
+    public void setaValorPosicao(Posicao p, Object item){
+        tabela.setValueAt(item, p.getX(), p.getY());
+    }
     public void setaValorPosicao(int x, int y, Object item){
         tabela.setValueAt(item, x, y);
     }
     
     //Getter
+    public Object pegaValorPosicao(Posicao p){
+       return tabela.getValueAt(p.getX(), p.getY());
+    }
+    
     public Object pegaValorPosicao(int x, int y){
        return tabela.getValueAt(x, y);
     }
@@ -240,21 +284,21 @@ public class AtorJogador extends JFrame {
     public Posicao posicaoLivreMaisProxima(Posicao atual){
         Posicao retorno = null;
         if(this.pegaValorPosicao(atual.getX() + 1, atual.getY() + 1) == null){
-            retorno =new Posicao(atual.getX() + 1, atual.getY() + 1);
+            retorno = new Posicao(atual.getX() + 1, atual.getY() + 1);
         }else if(this.pegaValorPosicao(atual.getX() + 1, atual.getY()) == null){
-            retorno =new Posicao(atual.getX() + 1, atual.getY());
+            retorno = new Posicao(atual.getX() + 1, atual.getY());
         }else if(this.pegaValorPosicao(atual.getX() + 1, atual.getY() - 1) == null){
-            retorno =new Posicao(atual.getX() + 1, atual.getY() - 1);
+            retorno = new Posicao(atual.getX() + 1, atual.getY() - 1);
         }else if(this.pegaValorPosicao(atual.getX(), atual.getY() - 1) == null){
-            retorno =new Posicao(atual.getX(), atual.getY() - 1);
+            retorno = new Posicao(atual.getX(), atual.getY() - 1);
         }else if(this.pegaValorPosicao(atual.getX() - 1, atual.getY() - 1) == null){
-            retorno =new Posicao(atual.getX() - 1, atual.getY() - 1);
+            retorno = new Posicao(atual.getX() - 1, atual.getY() - 1);
         }else if(this.pegaValorPosicao(atual.getX() - 1, atual.getY()) == null){
-            retorno =new Posicao(atual.getX() - 1, atual.getY());
+            retorno = new Posicao(atual.getX() - 1, atual.getY());
         }else if(this.pegaValorPosicao(atual.getX() - 1, atual.getY()+ 1) == null){
-            retorno =new Posicao(atual.getX() - 1, atual.getY()+ 1);
+            retorno = new Posicao(atual.getX() - 1, atual.getY()+ 1);
         }else if(this.pegaValorPosicao(atual.getX(), atual.getY() + 1) == null){
-            retorno =new Posicao(atual.getX(), atual.getY() + 1);
+            retorno = new Posicao(atual.getX(), atual.getY() + 1);
         }
         return retorno;
     }  
@@ -267,8 +311,7 @@ public class AtorJogador extends JFrame {
             Posicao temp = mapa.getPosInicialMapa().get(i);
             System.out.println(temp.getX() + " " + temp.getY());
             setaValorPosicao(
-                    temp.getX(), 
-                    temp.getY(), 
+                    temp, 
                     cidadeMapa.construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
             );
             
@@ -279,8 +322,7 @@ public class AtorJogador extends JFrame {
             else temp.setX(temp.getX() + 2);
             
             setaValorPosicao(
-                    temp.getX(), 
-                    temp.getY(), 
+                    temp, 
                     cidadeMapa.construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
             );
             
@@ -289,8 +331,7 @@ public class AtorJogador extends JFrame {
             else temp.setY(temp.getY() + 2);     
             
             setaValorPosicao(
-                    temp.getX(), 
-                    temp.getY(), 
+                    temp, 
                     cidadeMapa.construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
             );
             
@@ -299,167 +340,11 @@ public class AtorJogador extends JFrame {
             else temp.setX(temp.getX() - 2); 
             
             setaValorPosicao(
-                    temp.getX(), 
-                    temp.getY(), 
+                    temp, 
                     cidadeMapa.construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
             );
         }
     }
     
-    /***************************************************************************/
-    public void realizaJogada(int linha, int coluna){
-        Object o = pegaValorPosicao(linha, coluna);
-        
-        switch(jogadorMapa.getTipoClique()){
-            
-            case SELECAO:
-                
-                if(o != null){
-                    if(o.getClass().getSuperclass() == Construcao.class){
-                         cliqueConstrucao(o);
-                    }
-                    else if(o.getClass().getSuperclass() == Tropa.class){
-                         cliqueTropa(o);
-                    }
-                    else if(o.getClass() == Gollum.class){
-                        JOptionPane.showMessageDialog(null, "Meu precioso!!", "Gollum", 0);
-                    }                 
-                }
-            break;
-            
-            case ATACAR:
-                if(o != null){
-                    //TODO: Implementar lógica
-                }else{
-                    mapa.exibirMensagem("Selecione um alvo válido");
-                    jogadorMapa.setTipoClique(TipoJogada.SELECAO);
-                    tropaSelecionada = null;
-                }
-            break;
-            
-            case MOVIMENTAR:
-                if(o == null){
-                    Tropa atual = tropaSelecionada;
-                    int distancia = tropaSelecionada.calculaDistancia(new Posicao(linha, coluna));
-                    if(distancia <= tropaSelecionada.getDistanciaMovimento()){
-                        setaValorPosicao(tropaSelecionada.getPosicao().getX(), tropaSelecionada.getPosicao().getY(), null);
-                        setaValorPosicao(linha, coluna, tropaSelecionada);
-                        tropaSelecionada.setPosicaoAtual(new Posicao(linha, coluna));
-                        jogadorMapa.setTipoClique(TipoJogada.SELECAO);
-                    }
-                }else{
-                    mapa.exibirMensagem("Selecione uma posição disponível");
-                    jogadorMapa.setTipoClique(TipoJogada.SELECAO);
-                    tropaSelecionada = null;
-                }
-            break;
-        }
-        
-        infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
-    }
-    
-    private void cliqueConstrucao(Object o){
-        Construcao c = (Construcao) o;
-        String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
-            
-        if(c.getCidade() == jogadorMapa.getCidade() && jogadorMapa.verificaVez()){
-            int response = JOptionPane.showOptionDialog(
-                null, 
-                "Vida: " + c.getVida()+ "\n Selecione o que você deseja fazer", 
-                o.getClass().getSimpleName(),
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.PLAIN_MESSAGE,
-                null, 
-                options, 
-                options[0]
-            );
-
-            switch(response){
-                case 0://nova tropa
-                    int r = JOptionPane.showConfirmDialog(null, "Preço: " + c.getRecursoRecrutamento() + "\n Deseja realmente recrutar essa tropa?");
-                    if(r == 0){
-                        if(cidadeMapa.descontaRecursos(c.getRecursoRecrutamento())){
-                            Posicao posTropa = posicaoLivreMaisProxima(c.getPosicao());
-                            if(posTropa == null){
-                                JOptionPane.showMessageDialog(null, "Não foi possível recrutar");
-                            }else if(o.getClass() == Arquearia.class){ 
-                                setaValorPosicao(posTropa.getX(), posTropa.getY(), c);
-                            }else if(o.getClass() == Quartel.class){
-                                setaValorPosicao(posTropa.getX(), posTropa.getY(), new Espadachim(posTropa, cidadeMapa));
-                            }else if(o.getClass() == Estabulo.class){
-                                setaValorPosicao(posTropa.getX(), posTropa.getY(), new Cavaleiro(posTropa, cidadeMapa));
-                            }else if(o.getClass() == Principal.class){
-                                Principal p = (Principal) o;
-                                if(!p.isHeroiConjurado()){
-                                    setaValorPosicao(posTropa.getX(), posTropa.getY(), p.recrutar(posTropa));
-                                    p.setHeroiConjurado(true);
-                                }else {
-                                    mapa.exibirMensagem("Voce ja possui um heroi");
-                                }
-                            }
-                        }else mapa.exibirMensagem("Recursos Insuficientes");
-                    }
-                break;
-
-                case 1://reformar
-                break;
-
-                case 2://cancelar
-                break;
-            }
-            
-        }else JOptionPane.showMessageDialog(
-                null, 
-                "Cidade: " + c.getCidade().getNome()
-                 + "\nVida: " + c.getVida(), 
-                o.getClass().getSimpleName(), 
-                0
-              );
-    }
-    
-    private void cliqueTropa(Object o){
-        Tropa t = (Tropa) o;
-                 
-        if(t.getCidade() == jogadorMapa.getCidade() && jogadorMapa.verificaVez()){
-            String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
-
-            int response = JOptionPane.showOptionDialog(
-                null,
-                "Cidade: " + t.getCidade().getNome()
-                + "\nVida: " + t.getVida()+ "\n"
-                + "Selecione o que você deseja fazer", 
-                o.getClass().getSimpleName(),
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.PLAIN_MESSAGE,
-                null, 
-                options, 
-                options[0]
-            );
-
-             switch(response){
-                case 0://atacar
-                    jogadorMapa.setTipoClique(TipoJogada.ATACAR);
-                    tropaSelecionada = t;
-                break;
-
-                case 1://movimentar
-                    jogadorMapa.setTipoClique(TipoJogada.MOVIMENTAR);
-                    tropaSelecionada = t;
-                break;
-
-                case 2://cancelar
-                    jogadorMapa.setTipoClique(TipoJogada.SELECAO);
-                break;
-            }
-        }else JOptionPane.showMessageDialog(
-                null, 
-                "Cidade: " + t.getCidade().getNome()
-                 + "\nVida: " + t.getVida(), 
-                o.getClass().getSimpleName(), 
-                0
-              );
-           
-        
-    }
 }
       
