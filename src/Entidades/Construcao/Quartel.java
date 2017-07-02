@@ -21,7 +21,7 @@ public class Quartel extends Construcao implements Serializable{
         //simbolo, posicao, recursoRecrutamento, vida, cidade
         super("♖", pos, 50, 100, c);
     }
-    
+    //função não existe no diagrama de classes
     public Espadachim recrutar(Posicao posDisponivel){
         return new Espadachim(posDisponivel, super.getCidade());
     }

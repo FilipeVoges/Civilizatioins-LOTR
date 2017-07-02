@@ -21,7 +21,7 @@ public class Estabulo extends Construcao implements Serializable{
         //simbolo, posicao, recursoRecrutamento, vida
         super("♞", pos, 70, 100, c);
     }
-    
+    //função não existe no diagrama de classes
     public Cavaleiro recrutar(Posicao posDisponivel){
         return new Cavaleiro(posDisponivel, super.getCidade());
     }

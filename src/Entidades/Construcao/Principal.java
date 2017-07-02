@@ -23,7 +23,7 @@ public class Principal extends Construcao implements Serializable{
         super("⌂", pos, 100, 300, c);
         this.heroiConjurado= false;
     }
-    
+    //função não existe no diagrama de classes
     public Heroi recrutar(Posicao posDisponivel){
         
         Heroi heroi = null;

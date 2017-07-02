@@ -22,7 +22,11 @@ public class Construcao implements Serializable {
     protected boolean destruido;
     protected int recursoRecrutamento;
     protected Cidade cidade;
-
+    /*
+    Faltam esses atributos:
+    progressoReforma :int, tipoTropa: Tropa, tropaTurno :int
+    */
+    
     public Construcao() {
         this.simbolo = null;
     }
@@ -43,7 +47,14 @@ public class Construcao implements Serializable {
         this.destruido = false;
         this.cidade = cidade;
     }
-    
+    /*
+    Funções que faltam:
+    verificaUltimaConstrucao(this):boolean
+    novaTropa(tropaSelecionada):Tropa
+    selecionaTropa():Tropa
+    comprarNovaTroca()
+    verificaPosicaoLivre(posicao:Posicao):Posicao
+    */
     
     //Getters and Setters
     public Posicao getPosicao() {

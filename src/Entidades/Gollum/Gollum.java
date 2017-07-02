@@ -19,7 +19,11 @@ public class Gollum {
     protected ArrayList<Charada> charadas;
     protected String simbolo = "¤";
     protected Posicao posicao;
-    
+    /*Faltam atributos
+    velocidadeMovimento
+    charadasPerguntadas
+    respostas
+    */
     public Gollum(Posicao posicao){
         
         this.anel = new Anel();
@@ -31,7 +35,7 @@ public class Gollum {
     }
     
     
-    
+    //Falta a função mostraCharadas
     public void criaCharadas(){
         
         /**************************************************/

@@ -20,9 +20,9 @@ public class Cidade {
     protected int recursos;
     protected String nome;
     protected ArrayList<Construcao> construcoes;
-    protected Jogador jogador;
-  
-    
+    protected Jogador jogador; //No diagrama de classe, isso não existe
+    // no diagrama de classes faltam as tropas.
+    //temos que alinhar.
     public Cidade(Jogador dono){
         
         switch(dono.getRaca()){

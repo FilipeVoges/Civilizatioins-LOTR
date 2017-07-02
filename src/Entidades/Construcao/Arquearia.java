@@ -23,7 +23,7 @@ public class Arquearia extends Construcao implements Serializable{
         //simbolo, posicao, recursoRecrutamento, vida, cidade
         super("◎", pos, 50, 100, c);
     }
-    
+    //função não existe no diagrama de classes
     public Arqueiro recrutar(Posicao posDisponivel){
         return new Arqueiro(posDisponivel, super.getCidade());
     }

@@ -19,7 +19,7 @@ public class Heroi extends Tropa implements Serializable{
     protected String nome;
     protected String simboloNormal = "✩";
     protected String simboloAnel = "✮";
-    protected String nomeHeroi;
+    protected String nomeHeroi;//Ta duplicado? Atualizar Diagrama de classes quando definir o que é
     protected Anel anel;
     protected int acertosCharada;
     protected boolean duelando;

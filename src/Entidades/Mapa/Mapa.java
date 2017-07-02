@@ -24,7 +24,7 @@ public class Mapa {
     protected ArrayList<Posicao> posInicialMapa;
     protected Gollum gollum;
     boolean partidaEmAndamento;
-    
+    //Falta a collection de jogadores definidas no Mapa
     
     public Mapa(){
        
@@ -43,11 +43,11 @@ public class Mapa {
         posInicialMapa.add(new Posicao(tamX -2, tamY -2));
         posInicialMapa.add(new Posicao(1, 1));
     }
-    
+    //Falta uma caralhada de função. Verificar no diagrama de classes
     public void iniciarPartida(){
         if(!verificaPartidaEmAndamento()){
             this.partidaEmAndamento = true;
-            //TODO: fazer o iniciar partida com o NetGames
+            //TODO: fazer o iniciar partida com o NetGames NO DIAGRAMA ESTA RETORNANDO BOOLEAN
         }
     }
     
