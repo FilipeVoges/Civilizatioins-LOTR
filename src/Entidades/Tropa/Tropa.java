@@ -92,8 +92,10 @@ public class Tropa {
         return vantagem;
     }
     
-    public int calculaRetalicao(){
-        return (int) Math.round(getResistencia() * Math.random());
+    public int calculaRetalicao(Tropa atacante, Tropa alvo){
+        double vantagem = alvo.calculaVantagem(atacante);
+        int retaliacao = (int) ((alvo.getForca()/2)*vantagem);
+        return retaliacao;
     }
     
     @Override
