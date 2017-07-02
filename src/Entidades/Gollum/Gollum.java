@@ -5,6 +5,7 @@
  */
 package Entidades.Gollum;
 
+import Entidades.Mapa.Posicao;
 import java.util.ArrayList;
 
 /**
@@ -17,12 +18,14 @@ public class Gollum {
     protected boolean duelando;
     protected ArrayList<Charada> charadas;
     protected String simbolo = "¤";
+    protected Posicao posicao;
     
-    public Gollum(){
+    public Gollum(Posicao posicao){
         
         this.anel = new Anel();
         this.visivel = true;
         charadas = new ArrayList<>();
+        this.posicao = posicao;
         criaCharadas();
     
     }
@@ -186,6 +189,12 @@ public class Gollum {
     public void setDuelando(boolean duelando) {
         this.duelando = duelando;
     }
+
+    public Posicao getPosicao() {
+        return posicao;
+    }
+    
+    
     
     @Override
     public String toString(){

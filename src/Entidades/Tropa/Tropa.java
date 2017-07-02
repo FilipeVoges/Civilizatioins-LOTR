@@ -18,6 +18,7 @@ public class Tropa {
     protected int velocidadeMovimento;
     protected int forca;
     protected int distanciaAtaque;
+    protected int distanciaMovimento;
     protected Posicao posicaoAtual;
     protected Posicao posicaoDestino;
     protected int resistencia;
@@ -38,6 +39,7 @@ public class Tropa {
         this.velocidadeMovimento = velocidadeMovimento;
         this.forca = forca;
         this.distanciaAtaque = distanciaAtaque;
+        this.distanciaMovimento = 2;
         this.resistencia = resistencia;
         this.simbolo = simbolo;
         this.posicaoAtual = posicao;
@@ -68,6 +70,10 @@ public class Tropa {
         return posicaoAtual;
     }
 
+    public void setPosicaoAtual(Posicao posicaoAtual) {
+        this.posicaoAtual = posicaoAtual;
+    }
+
     public Posicao getPosicaoDestino() {
         return posicaoDestino;
     }
@@ -80,13 +86,15 @@ public class Tropa {
         return cidade;
     }
 
-    protected void setSimbolo(String simbolo) {
+    public void setSimbolo(String simbolo) {
         this.simbolo = simbolo;
     }
-    
-    
-    private int calculaDistancia(Tropa tropaAliada, Posicao destino){
-        Posicao posicaoAtual = tropaAliada.getPosicao();
+
+    public int getDistanciaMovimento() {
+        return distanciaMovimento;
+    }
+  
+    public int calculaDistancia(Posicao destino){
         
         int posY = Math.abs(posicaoAtual.getY() - destino.getY());
         int posX = Math.abs(posicaoAtual.getX() - destino.getX());
@@ -94,11 +102,11 @@ public class Tropa {
         return posY + posX; 
     }
     
-    private int calculaDano(Tropa tropaAtacante){
+    public int calculaDano(Tropa tropaAtacante){
         return (int) Math.round(tropaAtacante.getForca() * Math.random());
     }
     
-    private int calculaRetalicao(){
+    public int calculaRetalicao(){
         return (int) Math.round(getResistencia() * Math.random());
     }
     

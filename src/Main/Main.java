@@ -7,7 +7,7 @@ package Main;
 
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Mapa;
-import View.TelaPrincipal;
+import InterfaceGrafica.AtorJogador;
 import javax.swing.JFrame;
 
 /**
@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         java.awt.EventQueue.invokeLater(() -> {
-            JFrame tela = new TelaPrincipal(new Mapa(25, 25));
+            JFrame tela = new AtorJogador(new Mapa());
             tela.setVisible(true);
         });    
 

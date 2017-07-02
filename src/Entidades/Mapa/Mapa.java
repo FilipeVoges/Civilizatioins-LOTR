@@ -9,6 +9,7 @@ import Entidades.Cidade.Cidade;
 import Entidades.Gollum.Gollum;
 import Entidades.Jogador.Jogador;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,14 +21,44 @@ public class Mapa {
     protected int tamX;
     protected int tamY;
     protected ArrayList<Cidade> cidades;
+    protected ArrayList<Posicao> posInicialMapa;
     protected Gollum gollum;
+    boolean partidaEmAndamento;
     
     
-    public Mapa(int tX, int tY){
-        this.tamX = tX;
-        this.tamY = tY;
+    public Mapa(){
+       
+        this.tamX = 25;
+        this.tamY = 25;
+        iniciaPosicoesMapa();
         cidades = new ArrayList<>();
-        gollum = new Gollum();
+        gollum = new Gollum(new Posicao(tamX / 2, tamY / 2));
+        this.partidaEmAndamento = false;
+    }
+    
+    private void iniciaPosicoesMapa(){
+        posInicialMapa = new ArrayList<>();
+        posInicialMapa.add(new Posicao(tamX -2 , 1));
+        posInicialMapa.add(new Posicao(1, tamY -2));
+        posInicialMapa.add(new Posicao(tamX -2, tamY -2));
+        posInicialMapa.add(new Posicao(1, 1));
+    }
+    
+    public void iniciarPartida(){
+        if(!verificaPartidaEmAndamento()){
+            this.partidaEmAndamento = true;
+            //TODO: fazer o iniciar partida com o NetGames
+        }
+    }
+    
+    public void informarDesistencia(Jogador jogador){
+        
+        for(Cidade cidade :cidades){
+            if(jogador.getCidade() == cidade){
+                cidades.remove(cidade);
+            }
+        }
+        //TODO: enviar desistencia pro NetGames
     }
 
     public int getTamX() {
@@ -45,6 +76,29 @@ public class Mapa {
     public void setCidades(ArrayList<Cidade> cidades) {
         this.cidades = cidades;
     }
+
+    public boolean verificaPartidaEmAndamento() {
+        return partidaEmAndamento;
+    }
+    
+     public void setPartidaEmAndamento(boolean partidaEmAndamento) {
+        this.partidaEmAndamento = partidaEmAndamento;
+    }
+
+    public Gollum getGollum() {
+        return gollum;
+    }
+
+    public ArrayList<Posicao> getPosInicialMapa() {
+        return posInicialMapa;
+    }
+    
+    public void exibirMensagem(String mensagem){
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+    
+    
+    
     
     
     

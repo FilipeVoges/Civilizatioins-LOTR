@@ -53,7 +53,7 @@ public class Cidade {
         construcoes = new ArrayList<>();
     }
     
-     public void recebeRecursos(){
+    public void recebeRecursos(){
          
         int qtdeConstrucao = 0;
         for(int i = 0; i < construcoes.size(); i++){
@@ -66,6 +66,15 @@ public class Cidade {
 
     public int getRecursos() {
         return recursos;
+    }
+    
+    public boolean descontaRecursos(int valorDesconto) {
+        int recTemp = this.recursos - valorDesconto; 
+        if(recTemp < 0) return false;
+        else{
+            this.recursos = recTemp;
+            return true;
+        }
     }
 
     public String getNome() {

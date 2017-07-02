@@ -9,7 +9,8 @@ package Enumeradores;
 public enum TipoJogada {
     ATACAR, 
     MOVIMENTAR, 
-    SELECAO, NOVA_TROPA, 
+    SELECAO,
+    NOVA_TROPA, 
     REFORMA_CONSTRUCAO, 
     DESISTIR, 
     PASSA_VEZ

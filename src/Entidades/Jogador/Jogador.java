@@ -8,7 +8,6 @@ package Entidades.Jogador;
 import Entidades.Cidade.Cidade;
 import Enumeradores.Raca;
 import Enumeradores.TipoJogada;
-import java.awt.Color;
 
 /**
  *
