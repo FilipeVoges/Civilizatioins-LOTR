@@ -67,8 +67,29 @@ public class Tropa {
     }
     
     
-    public int calculaDano(Tropa tropaAtacante){
-        return (int) Math.round(tropaAtacante.getForca() * Math.random());
+    public int calculaDano(Tropa alvo){
+        double vantagem = this.calculaVantagem(alvo);
+        int dano = (int) ((this.getForca()*vantagem) - alvo.getResistencia());
+        return dano;
+    }
+    
+    public double calculaVantagem(Tropa alvo){
+        double vantagem = 1;
+        if(this instanceof Espadachim && alvo instanceof Cavaleiro){
+            vantagem = 1.8;
+        } else if(this instanceof Arqueiro && alvo instanceof Espadachim){
+            vantagem = 1.8;
+        } else if(this instanceof Cavaleiro && alvo instanceof Arqueiro){
+            vantagem = 1.8;
+        } else if(this instanceof Espadachim && alvo instanceof Arqueiro){
+            vantagem = 0.3;
+        } else if(this instanceof Arqueiro && alvo instanceof Cavaleiro){
+            vantagem = 0.3;
+        } else if(this instanceof Cavaleiro && alvo instanceof Espadachim){
+            vantagem = 0.3;
+        }
+        
+        return vantagem;
     }
     
     public int calculaRetalicao(){
