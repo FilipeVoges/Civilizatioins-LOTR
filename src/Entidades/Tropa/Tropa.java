@@ -103,6 +103,10 @@ public class Tropa {
             vantagem = 0.3;
         } else if(this instanceof Cavaleiro && alvo instanceof Espadachim){
             vantagem = 0.3;
+        } else if(this instanceof Heroi){
+            vantagem = 1.9;
+        } else if(this instanceof Mago){
+            vantagem = 1.2;
         }
         
         return vantagem;
