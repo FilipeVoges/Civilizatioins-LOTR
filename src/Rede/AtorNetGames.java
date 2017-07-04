@@ -5,6 +5,7 @@
  */
 package Rede;
 
+import Entidades.Jogada.JogadaTabuleiro;
 import Entidades.Jogador.Jogador;
 import Enumeradores.Raca;
 import InterfaceGrafica.AtorJogador;
@@ -89,8 +90,9 @@ public class AtorNetGames implements OuvidorProxy{
 
     @Override
     public void receberJogada(Jogada jogada) {
+        JogadaTabuleiro jogadaRecebida = (JogadaTabuleiro) jogada;
         System.out.println("Jogada recebida");
-        atorJogador.recebeJogada((Entidades.Jogada.JogadaTabuleiro)jogada);
+        atorJogador.recebeJogada(jogadaRecebida);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class AtorNetGames implements OuvidorProxy{
         atorJogador.limpar();
     }
     
-    public void enviaJogada(Entidades.Jogada.JogadaTabuleiro jogada) {
+    public void enviaJogada(Jogada jogada) {
         try{
            proxy.enviaJogada(jogada); 
         }catch(NaoJogandoException e){

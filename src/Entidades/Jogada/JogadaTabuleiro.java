@@ -17,9 +17,12 @@ public class JogadaTabuleiro implements br.ufsc.inf.leobr.cliente.Jogada {
     protected Object modificado;
     protected TipoJogada tipoJogada;
     
-    public JogadaTabuleiro(){}
+    public JogadaTabuleiro(){
+        super();
+    }
     
     public JogadaTabuleiro(Object velho, Object novo, TipoJogada tipo){
+        super();
         this.antigo = velho;
         this.modificado = novo;
         this.tipoJogada = tipo;

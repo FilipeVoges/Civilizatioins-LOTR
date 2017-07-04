@@ -17,6 +17,7 @@ import Entidades.Tropa.Tropa;
 import Enumeradores.Raca;
 import Enumeradores.TipoJogada;
 import Rede.AtorNetGames;
+import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -81,8 +82,8 @@ public class AtorJogador extends JFrame{
         labelPanel.setLayout(new FlowLayout());
         infoPanel.setLayout(new BorderLayout());
         botaoPanel.add(btnConectarServidor);
+        botaoPanel.add(btnIniciaJogo);        
         botaoPanel.add(btnConectarPartidaExistente);
-        botaoPanel.add(btnIniciaJogo);
         botaoPanel.add(btnPassaVez);
         botaoPanel.add(btnDesistir);
         labelPanel.add(infoNomeJogador);
@@ -119,7 +120,7 @@ public class AtorJogador extends JFrame{
                 Posicao clique = new Posicao(linha, coluna);
                 Object o = pegaValorPosicao(clique);
                 
-                JogadaTabuleiro jogada = mapa.realizaJogada(clique, jogadorMapa, o);
+                Jogada jogada = mapa.realizaJogada(clique, jogadorMapa, o);
                 atorNetGames.enviaJogada(jogada);
                 //recebeJogada(jogada);
            }
@@ -184,7 +185,8 @@ public class AtorJogador extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 jogadorMapa.passaVez();
                 btnPassaVez.setVisible(false);
-                atorNetGames.enviaJogada(new JogadaTabuleiro(jogadorMapa, null, TipoJogada.PASSA_VEZ));
+                Jogada jogada = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.PASSA_VEZ);
+                atorNetGames.enviaJogada(jogada);
             }
         });
         
@@ -294,7 +296,8 @@ public class AtorJogador extends JFrame{
                         Construcao alvo = (Construcao) jogada.getModificado();
                         setaValorPosicao(alvo.getPosicao(), alvo);
                         if(jogadorMapa.getCidade().verificaTodosDestruidos()){
-                            atorNetGames.enviaJogada(new JogadaTabuleiro(jogadorMapa, null, TipoJogada.DERROTADO));
+                            Jogada jogadaEnvia = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.DERROTADO);
+                            atorNetGames.enviaJogada(jogadaEnvia);
                         }
 
                     }else if(jogada.getModificado().getClass().getSuperclass() == Tropa.class){
@@ -459,14 +462,20 @@ public class AtorJogador extends JFrame{
         btnDesistir.setVisible(false);
         btnIniciaJogo.setVisible(true);
         btnConectarPartidaExistente.setVisible(true);
+        infoRacaJogador.setText("");
+        infoRecursos.setText("");
+        infoNomeJogador.setText("");
     }
     
     public void movimentarGollum(){
-        JogadaTabuleiro jogada = new JogadaTabuleiro();
-        jogada.setAntigo(new Posicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY()));
+        Jogada jogada = new JogadaTabuleiro(
+                new Posicao(
+                        mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY()
+                ),
+                mapa.getGollum(),
+                TipoJogada.MOVIMENTAR
+        );
         mapa.getGollum().setPosicao(posicaoLivreMaisProxima(mapa.getGollum().getPosicao()));
-        jogada.setModificado(mapa.getGollum());
-        jogada.setTipoJogada(TipoJogada.MOVIMENTAR);
         atorNetGames.enviaJogada(jogada);
     }
 
