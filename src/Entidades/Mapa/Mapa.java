@@ -135,14 +135,12 @@ public class Mapa {
             
             case ATACAR:
                 if(objeto != null && objetoSelecionado != null){
-                    
-                    jogada = atacar(clique, jogador, objeto);
-                    
+                    jogada = atacar(objeto); 
                 }else{
                     exibirMensagem("Selecione um alvo válido");
-                    jogador.setTipoClique(TipoJogada.SELECAO);
                     objetoSelecionado = null;
                 }
+                jogador.setTipoClique(TipoJogada.SELECAO);
             break;
             
             case MOVIMENTAR:
@@ -154,11 +152,11 @@ public class Mapa {
                         tropaSelecionada.setPosicaoAtual(clique);
                         jogada = new Jogada(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
                         jogador.setTipoClique(TipoJogada.SELECAO);
-                        tropaSelecionada = null;
+                        objetoSelecionado = null;
                     }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
+                     
                 }else{
                     exibirMensagem("Selecione uma posição disponível");
-                    jogador.setTipoClique(TipoJogada.SELECAO);
                     objetoSelecionado = null;
                 }
             break;
@@ -173,7 +171,7 @@ public class Mapa {
         Construcao construcao = (Construcao) o;
         String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
             
-        if(construcao.getCidade() == jogador.getCidade() && jogador.verificaVez()){
+        if(construcao.getCidade() == jogador.getCidade() && jogador.verificaVez() && !construcao.isDestruido()){
             int response = JOptionPane.showOptionDialog(
                 null, 
                 "Vida: " + construcao.getVida()+ "\n Selecione o que você deseja fazer", 
@@ -207,10 +205,16 @@ public class Mapa {
                                 if(!principal.isHeroiConjurado()){
                                     jogada.setModificado(principal.recrutar(construcao.getPosicao()));
                                     principal.setHeroiConjurado(true);
-                                }else exibirMensagem("Voce ja possui um heroi");
+                                }else{
+                                    exibirMensagem("Voce ja possui um heroi");
+                                    jogador.setTipoClique(TipoJogada.SELECAO);
+                                }
                                 
                             }
-                        }else exibirMensagem("Recursos Insuficientes");
+                        }else{
+                            exibirMensagem("Recursos Insuficientes");
+                            jogador.setTipoClique(TipoJogada.SELECAO);
+                        }
                     }
                 break;
 
@@ -219,14 +223,21 @@ public class Mapa {
                     r = JOptionPane.showConfirmDialog(null, "Preço: " + construcao.calculaReforma() + "\n Deseja realmente reformar essa construção?");
                     if(r == 0){
                         if(jogador.getCidade().descontaRecursos(construcao.calculaReforma())){
-                               
-                            jogada = new Jogada();
-                            jogada.setTipoJogada(TipoJogada.REFORMA_CONSTRUCAO);
-                            jogada.setAntigo(construcao);
-                            construcao.reformar();
-                            jogada.setModificado(construcao);
+                            
+                            if(construcao.reformar()){
+                                jogada = new Jogada();
+                                jogada.setTipoJogada(TipoJogada.REFORMA_CONSTRUCAO);
+                                jogada.setAntigo(construcao);
+                                jogada.setModificado(construcao);
+                            }else{
+                                exibirMensagem("Não é possível reformar uma construção destruida");
+                                jogador.setTipoClique(TipoJogada.SELECAO);
+                            }
                         
-                        }else exibirMensagem("Recursos Insuficientes");
+                        }else{
+                            exibirMensagem("Recursos Insuficientes");
+                            jogador.setTipoClique(TipoJogada.SELECAO);
+                        }
                     }
                         
                     
@@ -251,7 +262,7 @@ public class Mapa {
     private void cliqueTropa(Object objeto, Jogador jogador){
         Tropa tropa = (Tropa) objeto;
                  
-        if(tropa.getCidade() == jogador.getCidade() && jogador.verificaVez()){
+        if(tropa.getCidade() == jogador.getCidade() && jogador.verificaVez() && tropa.isVivo()){
             String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
 
             int response = JOptionPane.showOptionDialog(
@@ -292,7 +303,7 @@ public class Mapa {
     }
 
     /**************************************************************************/
-    private Jogada atacar(Posicao clique, Jogador jogador, Object objeto){
+    private Jogada atacar(Object objeto){
        
         Jogada jogada = null;
         
@@ -300,11 +311,15 @@ public class Mapa {
             Construcao alvo = (Construcao) objeto;
             Tropa atacante = (Tropa) objetoSelecionado;
             //calcula distancia
+            System.out.println(atacante.calculaDistancia(alvo.getPosicao()));
+            System.out.println(atacante.getDistanciaAtaque());
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
                 
-                //TODO: terminar de implementar
+                alvo.recebeDano(atacante.calculaDano(alvo));
+                jogada = new Jogada(atacante, alvo, TipoJogada.ATACAR);
                 
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
+            
             
         }
         else if(objeto.getClass().getSuperclass() == Tropa.class){
@@ -313,9 +328,13 @@ public class Mapa {
             //calcula distancia
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
                 
-                //TODO: terminar de implementar
-                
+                alvo.recebeDano(atacante.calculaDano(alvo));
+                if(alvo.isVivo())atacante.recebeDano(alvo.calculaRetalicao(atacante));
+                jogada = new Jogada(atacante, alvo, TipoJogada.ATACAR);
+             
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
+  
+            
             
         }
         else if(objeto.getClass() == Gollum.class){
@@ -328,6 +347,7 @@ public class Mapa {
                     
                 }else exibirMensagem("Você esta muito distante do alvo para atacar");
             }else exibirMensagem("A Tropa selecionada não pode atacar o Gollum");
+              
         }
         return jogada;
         

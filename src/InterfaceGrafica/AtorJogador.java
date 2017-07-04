@@ -110,43 +110,7 @@ public class AtorJogador extends JFrame {
                 
                 Jogada jogada = mapa.realizaJogada(clique, jogadorMapa, o);
                 
-                if(jogada != null){
-                    switch(jogada.getTipoJogada()){
-
-                        case ATACAR:
-                            System.out.println("Atacar");
-                            //TODO
-                        break;
-
-                        case REFORMA_CONSTRUCAO:
-                            System.out.println("Reformar construção");
-                            Construcao reformada = (Construcao) jogada.getModificado();
-                            setaValorPosicao(reformada.getPosicao(), reformada);
-                        break;
-
-                        case NOVA_TROPA:
-                            System.out.println("Nova tropa");
-                            Tropa novaTropa = (Tropa) jogada.getModificado();
-                            Construcao cons = (Construcao) jogada.getAntigo();
-                            Posicao posTropa = posicaoLivreMaisProxima(cons.getPosicao());
-                            novaTropa.setPosicaoAtual(posTropa);
-                            setaValorPosicao(posTropa, novaTropa);      
-                        break;
-
-                        case MOVIMENTAR:
-                            System.out.println("Movimentar");
-                            Posicao antiga = (Posicao) jogada.getAntigo();
-                            Tropa atual = (Tropa) jogada.getModificado();
-                            setaValorPosicao(antiga, null);
-                            setaValorPosicao(atual.getPosicao(), atual);
-                        break;
-
-                        default:
-                        break;
-                    }
-                }
-
-                infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos()); 
+                atualizaTela(jogada);
            }
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
@@ -254,6 +218,55 @@ public class AtorJogador extends JFrame {
     }
     
     
+    public void atualizaTela(Jogada jogada){
+        if(jogada != null){
+            switch(jogada.getTipoJogada()){
+
+                case ATACAR:
+                    System.out.println("Atacar");
+                    Tropa atacante = (Tropa) jogada.getAntigo();
+                    
+                    setaValorPosicao(atacante.getPosicao(), atacante);
+                    if(jogada.getModificado().getClass().getSuperclass() == Construcao.class){
+                        Construcao alvo = (Construcao) jogada.getModificado();
+                        setaValorPosicao(alvo.getPosicao(), alvo);
+
+                    }else if(jogada.getModificado().getClass().getSuperclass() == Tropa.class){ 
+                        System.out.println("Tropa atacada");
+                        Tropa alvo = (Tropa) jogada.getModificado();
+                        setaValorPosicao(alvo.getPosicao(), alvo);  
+                    }
+                break;
+
+                case REFORMA_CONSTRUCAO:
+                    System.out.println("Reformar construção");
+                    Construcao reformada = (Construcao) jogada.getModificado();
+                    setaValorPosicao(reformada.getPosicao(), reformada);
+                break;
+
+                case NOVA_TROPA:
+                    System.out.println("Nova tropa");
+                    Tropa novaTropa = (Tropa) jogada.getModificado();
+                    Construcao cons = (Construcao) jogada.getAntigo();
+                    Posicao posTropa = posicaoLivreMaisProxima(cons.getPosicao());
+                    novaTropa.setPosicaoAtual(posTropa);
+                    setaValorPosicao(posTropa, novaTropa);      
+                break;
+
+                case MOVIMENTAR:
+                    System.out.println("Movimentar");
+                    Posicao antiga = (Posicao) jogada.getAntigo();
+                    Tropa atual = (Tropa) jogada.getModificado();
+                    setaValorPosicao(atual.getPosicao(), atual);
+                    setaValorPosicao(antiga, null);
+                break;
+
+                default:
+                break;
+            }
+        }
+        infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos()); 
+    }
 
     //Limpar Mapa
     public void limparMapa(){

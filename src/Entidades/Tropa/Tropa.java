@@ -6,6 +6,7 @@
 package Entidades.Tropa;
 
 import Entidades.Cidade.Cidade;
+import Entidades.Construcao.Construcao;
 import Entidades.Mapa.Posicao;
 
 /**
@@ -24,6 +25,7 @@ public class Tropa {
     protected int resistencia;
     protected String simbolo;
     protected Cidade cidade;
+    protected boolean vivo;
     //Diagrama de classes possui o atributo OCUPADO :boolean
     /*
     Faltam as seguintes funções:
@@ -56,6 +58,7 @@ public class Tropa {
         this.simbolo = simbolo;
         this.posicaoAtual = posicao;
         this.cidade = cidade;
+        this.vivo = true;
     }
     //diagrama: calculaDistancia(tropaAliada, destino): int
     public int calculaDistancia(Posicao destino){
@@ -69,11 +72,25 @@ public class Tropa {
     
     public int calculaDano(Tropa alvo){
         double vantagem = this.calculaVantagem(alvo);
-        int dano = (int) ((this.getForca()*vantagem) - alvo.getResistencia());
+        int dano = (int) ((this.getForca() * vantagem) - alvo.getResistencia());
         return dano;
     }
     
-    public double calculaVantagem(Tropa alvo){
+    public int calculaDano(Construcao alvo){
+        return (int) (this.getForca());
+    }
+    
+    public int recebeDano(int dano) {
+        vida -= dano;
+        if(vida <= 0){
+            vida = 0;
+            simbolo = "✞";
+            vivo = false;
+        }
+        return vida;
+    }
+    
+    private double calculaVantagem(Tropa alvo){
         double vantagem = 1;
         if(this instanceof Espadachim && alvo instanceof Cavaleiro){
             vantagem = 1.8;
@@ -92,8 +109,8 @@ public class Tropa {
         return vantagem;
     }
     
-    public int calculaRetalicao(Tropa atacante, Tropa alvo){
-        double vantagem = alvo.calculaVantagem(atacante);
+    public int calculaRetalicao( Tropa alvo){
+        double vantagem = alvo.calculaVantagem(this);
         int retaliacao = (int) ((alvo.getForca()/2)*vantagem);
         return retaliacao;
     }
@@ -106,6 +123,11 @@ public class Tropa {
     public int getVida() {
         return vida;
     }
+    
+    public boolean isVivo() {
+        return vivo;
+    }
+    
 
     public int getVelocidadeMovimento() {
         return velocidadeMovimento;

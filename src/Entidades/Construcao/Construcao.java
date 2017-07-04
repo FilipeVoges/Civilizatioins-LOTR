@@ -31,7 +31,6 @@ public class Construcao implements Serializable {
         this.simbolo = null;
     }
     
-    
     public Construcao(
             String simbolo, 
             Posicao pos, 
@@ -64,13 +63,17 @@ public class Construcao implements Serializable {
     public int getVida() {
         return vida;
     }
+    
+    public void recebeDano(int dano) {
+        vida -= dano;
+        if(vida <= 0){
+            vida = 0;
+            destruido = true;
+        }
+    }
 
     public boolean isDestruido() {
         return destruido;
-    }
-
-    public void setDestruido(boolean destruido) {
-        this.destruido = destruido;
     }
 
     public int getRecursoRecrutamento() {
@@ -86,8 +89,11 @@ public class Construcao implements Serializable {
        return (this.vidaMaxima - this.vida) * 10;
     }
     
-    public void reformar(){
-        this.vida = this.vidaMaxima;
+    public boolean reformar(){
+        if(!destruido){
+            this.vida = this.vidaMaxima;
+            return true;
+        }else return false;
     }
     
   

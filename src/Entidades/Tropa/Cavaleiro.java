@@ -17,6 +17,6 @@ public class Cavaleiro extends Tropa{
     private String simbolo = "♘";
     public Cavaleiro(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(20, 3, 5, 1, 3, "♘", posicao, cidade);
+        super(20, 3, 15, 1, 3, "♘", posicao, cidade);
     }   
 }

@@ -17,6 +17,6 @@ public class Arqueiro extends Tropa{
     private String simbolo = "➵";
     public Arqueiro(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(15, 1, 3, 5, 2, "➵", posicao, cidade);
+        super(15, 1, 10, 5, 2, "➵", posicao, cidade);
     }   
 }
