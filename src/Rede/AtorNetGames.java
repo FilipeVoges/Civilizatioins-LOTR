@@ -50,25 +50,36 @@ public class AtorNetGames implements OuvidorProxy{
         this.qtdeJogadores = qtdeJogadores;
         if(qtdeJogadores > 4)throw new Exception("Limite Jogadores excedido");
         proxy.iniciarPartida(qtdeJogadores);
-        proxy.iniciarNovaPartida(1);
-        atorJogador.getJogadorMapa().recebeVez();
-        atorJogador.getJogadorMapa().setVezJogada(1);
-        atorJogador.posicionaJogadores(1, atorJogador.getJogadorMapa());
+        
    
     }
     
     @Override
     public void iniciarNovaPartida(Integer posicao) {
-        if(atorJogador.getJogadorMapa().getVezJogada() != posicao){
-            Jogador jogador = new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(posicao)));
-            jogador.setVezJogada(posicao);
-            atorJogador.posicionaJogadores(posicao, jogador);
+        System.out.println(posicao);
+        if(posicao == 1){
+            atorJogador.getJogadorMapa().recebeVez();
+            atorJogador.getJogadorMapa().setVezJogada(1);
+            atorJogador.posicionaJogadores(1, atorJogador.getJogadorMapa());
+            
+            atorJogador.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(2))));
+            atorJogador.getJogadorMapa().setVezJogada(2);
+            atorJogador.posicionaJogadores(2, atorJogador.getJogadorInimigo());
+            
+        }else if(posicao == 2){
+            atorJogador.getJogadorMapa().setVezJogada(2);
+            atorJogador.posicionaJogadores(2, atorJogador.getJogadorMapa());
+            
+            atorJogador.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(1))));
+            atorJogador.getJogadorMapa().setVezJogada(1);
+            atorJogador.posicionaJogadores(1, atorJogador.getJogadorInimigo());
         }
     }
 
     @Override
     public void finalizarPartidaComErro(String message) {
         JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
+        atorJogador.limpar();
     }
 
     @Override
@@ -78,18 +89,22 @@ public class AtorNetGames implements OuvidorProxy{
 
     @Override
     public void receberJogada(Jogada jogada) {
-        Entidades.Jogada.JogadaTabuleiro jogadaRecebida = (Entidades.Jogada.JogadaTabuleiro) jogada;
-        atorJogador.recebeJogada(jogadaRecebida);
+        System.out.println("Jogada recebida");
+        atorJogador.recebeJogada((Entidades.Jogada.JogadaTabuleiro)jogada);
     }
 
     @Override
     public void tratarConexaoPerdida() {
         JOptionPane.showMessageDialog(null , "Conexão perdida");
+        atorJogador.limpar();
     }
 
     @Override
     public void tratarPartidaNaoIniciada(String message) {
-        JOptionPane.showMessageDialog(null , "Partida não iniciada, tente novamente");
+        JOptionPane.showMessageDialog(atorJogador,
+				"A partida não pode ser iniciada devido ao seguinte erro: "
+						+ message);
+        atorJogador.limpar();
     }
     
     public void enviaJogada(Entidades.Jogada.JogadaTabuleiro jogada) {
@@ -97,6 +112,7 @@ public class AtorNetGames implements OuvidorProxy{
            proxy.enviaJogada(jogada); 
         }catch(NaoJogandoException e){
             JOptionPane.showMessageDialog(null , "Você não esta jogando");
+            atorJogador.limpar();
         }
     }
     

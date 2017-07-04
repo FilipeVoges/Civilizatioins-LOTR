@@ -38,11 +38,11 @@ public class AtorJogador extends JFrame{
     protected JTable tabela;
     protected JScrollPane mapaContainer;
     protected JPanel mapaPanel, infoPanel, botaoPanel, labelPanel;
-    protected JButton btnIniciaJogo, btnConectar, btnPassaVez, btnDesistir;
+    protected JButton btnIniciaJogo, btnConectarPartidaExistente, btnConectarServidor, btnPassaVez, btnDesistir;
     protected JLabel infoNomeJogador, infoRacaJogador, labelEspaco, infoRecursos;
     protected Mapa mapa;
     protected String server;
-    protected Jogador jogadorMapa;
+    protected Jogador jogadorMapa, jogadorInimigo;
     protected AtorNetGames atorNetGames;
       	
     public AtorJogador(Mapa mapa){  
@@ -69,17 +69,19 @@ public class AtorJogador extends JFrame{
         infoRacaJogador = new JLabel();
         infoRecursos = new JLabel();
         labelEspaco = new JLabel("  ");
-        btnIniciaJogo = new JButton("Iniciar Jogo");
-        btnConectar = new JButton("Conectar a partida");
+        btnIniciaJogo = new JButton("Iniciar novo Jogo");
+        btnConectarServidor = new JButton("Conectar ao Servidor");
         btnPassaVez = new JButton("Passa a Vez");
         btnDesistir = new JButton("Desistir");
+        btnConectarPartidaExistente = new JButton("Conectar a partida");
         infoPanel = new JPanel();
         botaoPanel = new JPanel();
         labelPanel = new JPanel();
         botaoPanel.setLayout(new FlowLayout());
         labelPanel.setLayout(new FlowLayout());
         infoPanel.setLayout(new BorderLayout());
-        botaoPanel.add(btnConectar);
+        botaoPanel.add(btnConectarServidor);
+        botaoPanel.add(btnConectarPartidaExistente);
         botaoPanel.add(btnIniciaJogo);
         botaoPanel.add(btnPassaVez);
         botaoPanel.add(btnDesistir);
@@ -93,6 +95,7 @@ public class AtorJogador extends JFrame{
         btnIniciaJogo.setVisible(false);
         btnPassaVez.setVisible(false);
         btnDesistir.setVisible(false);
+        btnConectarPartidaExistente.setVisible(false);
         this.add(infoPanel, BorderLayout.SOUTH);
         
         ouvidorClique();
@@ -126,13 +129,14 @@ public class AtorJogador extends JFrame{
             @Override public void mouseExited(MouseEvent e) {}
         });
         
-        btnConectar.addActionListener(new ActionListener() {
+        btnConectarServidor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean conectado = conectar();
                 if(conectado){
                     btnIniciaJogo.setVisible(true);
-                    btnConectar.setVisible(false);
+                    btnConectarPartidaExistente.setVisible(true);
+                    btnConectarServidor.setVisible(false);
                     mapa.exibirMensagem("Conexão Estabelecida");
                 }else{
                     mapa.exibirMensagem("Erro ao se conectar com o servidor");
@@ -148,6 +152,7 @@ public class AtorJogador extends JFrame{
                     atorNetGames.iniciarPartidaRede(2);
                     mapa.iniciarPartida();
                     btnIniciaJogo.setVisible(false);
+                    btnConectarPartidaExistente.setVisible(false);
                     btnPassaVez.setVisible(true);
                     btnDesistir.setVisible(true);
                     setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
@@ -159,6 +164,18 @@ public class AtorJogador extends JFrame{
                 }catch(Exception exception){
                     mapa.exibirMensagem("Limite de jogadores excedido");
                 }
+            }
+        });
+        
+        btnConectarPartidaExistente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnIniciaJogo.setVisible(false);
+                btnConectarPartidaExistente.setVisible(false);
+                //btnPassaVez.setVisible(true);
+                btnDesistir.setVisible(true);
+                setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
+                infoRecursos.setText("Recursos: " + jogadorMapa.getCidade().getRecursos());
             }
         });
         
@@ -198,7 +215,7 @@ public class AtorJogador extends JFrame{
     private boolean conectar(){
         String nome = "";
         String racaString = "";
-        nome = JOptionPane.showInputDialog("Insira seu nome");
+        //nome = JOptionPane.showInputDialog("Insira seu nome");
         String[] options = new String[] {"Elfo", "Humano", "Uruk Hai", "Orc"};             
         int response = JOptionPane.showOptionDialog(
             null, 
@@ -226,13 +243,13 @@ public class AtorJogador extends JFrame{
             break;
         }
         
-        server = JOptionPane.showInputDialog("Insira o endereço do servidor no qual deseja se conectar");
+        server = JOptionPane.showInputDialog("Insira o endereço do servidor no qual deseja se conectar", "localhost");
         //TODO: Fazer a parte de conexão com o NetGames
         try {
             
-            atorNetGames.conectar(nome, server);
+            atorNetGames.conectar(racaString, server);
             jogadorMapa = new Jogador(Jogador.pegaRacaPeloNome(racaString));
-            infoNomeJogador.setText("Jogador: " + nome);
+            //infoNomeJogador.setText("Jogador: " + nome);
             infoRacaJogador.setText("Raça: " + racaString);
             limparMapa();
             return true;
@@ -245,7 +262,9 @@ public class AtorJogador extends JFrame{
     
     
     public void recebeJogada(JogadaTabuleiro jogada){
+        System.out.println("jogadita");
         if(jogada != null){
+            System.out.println("jogadita not null");
             switch(jogada.getTipoJogada()){
 
                 case ATACAR:
@@ -333,16 +352,14 @@ public class AtorJogador extends JFrame{
                     }else{
                         mapa.exibirMensagem("Voce Venceu");
                     }
-                    limparMapa();
-                    btnPassaVez.setVisible(false);
-                    btnDesistir.setVisible(false);
-                    btnIniciaJogo.setVisible(true);
+                    limpar();
                 break;
 
                 default:
+                    System.out.println("jogadita nao identificada");
                 break;
             }
-        }
+        }else System.out.println("jogadita null");
         infoRecursos.setText("Recursos: " + jogadorMapa.getCidade().getRecursos()); 
     }
 
@@ -436,6 +453,14 @@ public class AtorJogador extends JFrame{
         
     }
     
+    public void limpar(){
+        limparMapa();
+        btnPassaVez.setVisible(false);
+        btnDesistir.setVisible(false);
+        btnIniciaJogo.setVisible(true);
+        btnConectarPartidaExistente.setVisible(true);
+    }
+    
     public void movimentarGollum(){
         JogadaTabuleiro jogada = new JogadaTabuleiro();
         jogada.setAntigo(new Posicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY()));
@@ -448,6 +473,20 @@ public class AtorJogador extends JFrame{
     public Jogador getJogadorMapa() {
         return jogadorMapa;
     }
+
+    public void setJogadorMapa(Jogador jogadorMapa) {
+        this.jogadorMapa = jogadorMapa;
+    }
+
+    public Jogador getJogadorInimigo() {
+        return jogadorInimigo;
+    }
+
+    public void setJogadorInimigo(Jogador jogadorInimigo) {
+        this.jogadorInimigo = jogadorInimigo;
+    }
+    
+    
     
 }
       

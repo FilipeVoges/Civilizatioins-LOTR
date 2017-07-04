@@ -28,6 +28,7 @@ public class Jogador {
         this.temVez = false;
         this.tipoClique = TipoJogada.SELECAO;
         this.cidade = new Cidade(this);
+        this.vezJogada = 0;
     }
 
     public boolean isVencedor() {
