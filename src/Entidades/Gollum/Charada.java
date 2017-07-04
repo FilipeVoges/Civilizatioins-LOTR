@@ -5,8 +5,10 @@
  */
 package Entidades.Gollum;
 
+import java.io.Serializable;
 
-public class Charada {
+
+public class Charada implements Serializable{
     protected String pergunta;
     protected String respostaCerta;
     protected String respostaErrada1;

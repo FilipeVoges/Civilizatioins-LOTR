@@ -5,11 +5,14 @@
  */
 package Entidades.Gollum;
 
+import java.io.Serializable;
+
 /**
  *
  * @author ASUS-DEV
  */
-public class Anel {
+
+public class Anel implements Serializable {
     
     public Anel(){
         

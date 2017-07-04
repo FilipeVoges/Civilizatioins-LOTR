@@ -87,6 +87,16 @@ public class AtorNetGames implements OuvidorProxy{
     public void receberMensagem(String msg) {
          JOptionPane.showMessageDialog(null , msg);
     }
+    
+    public void enviaJogada(JogadaTabuleiro jogada) {
+        try{
+           Jogada jogadaEnvia = jogada;
+           proxy.enviaJogada(jogadaEnvia); 
+        }catch(NaoJogandoException e){
+            JOptionPane.showMessageDialog(null , "Você não esta jogando");
+            atorJogador.limpar();
+        }
+    }
 
     @Override
     public void receberJogada(Jogada jogada) {
@@ -107,15 +117,6 @@ public class AtorNetGames implements OuvidorProxy{
 				"A partida não pode ser iniciada devido ao seguinte erro: "
 						+ message);
         atorJogador.limpar();
-    }
-    
-    public void enviaJogada(Jogada jogada) {
-        try{
-           proxy.enviaJogada(jogada); 
-        }catch(NaoJogandoException e){
-            JOptionPane.showMessageDialog(null , "Você não esta jogando");
-            atorJogador.limpar();
-        }
     }
     
     /*public String obterNomeAdversario() {

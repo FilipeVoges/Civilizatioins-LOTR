@@ -26,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,7 +41,7 @@ public class AtorJogador extends JFrame{
     protected JTable tabela;
     protected JScrollPane mapaContainer;
     protected JPanel mapaPanel, infoPanel, botaoPanel, labelPanel;
-    protected JButton btnIniciaJogo, btnConectarPartidaExistente, btnConectarServidor, btnPassaVez, btnDesistir;
+    protected JButton btnIniciaJogo, btnConectarPartidaExistente, btnConectarServidor, btnPassaVez, btnDesistir, btnDesconectar;
     protected JLabel infoNomeJogador, infoRacaJogador, labelEspaco, infoRecursos;
     protected Mapa mapa;
     protected String server;
@@ -74,6 +76,7 @@ public class AtorJogador extends JFrame{
         btnConectarServidor = new JButton("Conectar ao Servidor");
         btnPassaVez = new JButton("Passa a Vez");
         btnDesistir = new JButton("Desistir");
+        btnDesconectar = new JButton("Desconectar");
         btnConectarPartidaExistente = new JButton("Conectar a partida");
         infoPanel = new JPanel();
         botaoPanel = new JPanel();
@@ -84,6 +87,7 @@ public class AtorJogador extends JFrame{
         botaoPanel.add(btnConectarServidor);
         botaoPanel.add(btnIniciaJogo);        
         botaoPanel.add(btnConectarPartidaExistente);
+        labelPanel.add(btnDesconectar);
         botaoPanel.add(btnPassaVez);
         botaoPanel.add(btnDesistir);
         labelPanel.add(infoNomeJogador);
@@ -96,6 +100,7 @@ public class AtorJogador extends JFrame{
         btnIniciaJogo.setVisible(false);
         btnPassaVez.setVisible(false);
         btnDesistir.setVisible(false);
+        btnDesconectar.setVisible(false);
         btnConectarPartidaExistente.setVisible(false);
         this.add(infoPanel, BorderLayout.SOUTH);
         
@@ -120,9 +125,9 @@ public class AtorJogador extends JFrame{
                 Posicao clique = new Posicao(linha, coluna);
                 Object o = pegaValorPosicao(clique);
                 
-                Jogada jogada = mapa.realizaJogada(clique, jogadorMapa, o);
+                JogadaTabuleiro jogada = mapa.realizaJogada(clique, jogadorMapa, o);
                 atorNetGames.enviaJogada(jogada);
-                //recebeJogada(jogada);
+                recebeJogada(jogada);
            }
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
@@ -154,6 +159,7 @@ public class AtorJogador extends JFrame{
                     mapa.iniciarPartida();
                     btnIniciaJogo.setVisible(false);
                     btnConectarPartidaExistente.setVisible(false);
+                    btnDesconectar.setVisible(false);
                     btnPassaVez.setVisible(true);
                     btnDesistir.setVisible(true);
                     setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
@@ -173,6 +179,7 @@ public class AtorJogador extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 btnIniciaJogo.setVisible(false);
                 btnConectarPartidaExistente.setVisible(false);
+                btnDesconectar.setVisible(false);
                 //btnPassaVez.setVisible(true);
                 btnDesistir.setVisible(true);
                 setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
@@ -185,7 +192,7 @@ public class AtorJogador extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 jogadorMapa.passaVez();
                 btnPassaVez.setVisible(false);
-                Jogada jogada = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.PASSA_VEZ);
+                JogadaTabuleiro jogada = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.PASSA_VEZ);
                 atorNetGames.enviaJogada(jogada);
             }
         });
@@ -195,19 +202,30 @@ public class AtorJogador extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
                 if(desistiu == 0){
-                    try{
+        
+                    mapa.informarDesistencia(jogadorMapa);
+                    limparMapa();
+                    btnIniciaJogo.setVisible(true);
+                    btnPassaVez.setVisible(false);
+                    btnDesistir.setVisible(false);
+                    infoRecursos.setText("");
+                
+                }
+            }
+        });
+        
+        btnDesconectar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
+                if(desistiu == 0){
+        
+                    try {
                         atorNetGames.desconectar();
-                        mapa.informarDesistencia(jogadorMapa);
-                        limparMapa();
-                        btnIniciaJogo.setVisible(true);
-                        btnPassaVez.setVisible(false);
-                        btnDesistir.setVisible(false);
-                        infoRecursos.setText("");
-                        
-                    }catch(NaoConectadoException ex){
-                        mapa.exibirMensagem("Você não está conectado a uma partida");
-                        ex.printStackTrace();
+                    } catch (NaoConectadoException ex) {
+                        mapa.exibirMensagem("Você não esta conectado a uma partida");
                     }
+                
                 }
             }
         });
@@ -264,9 +282,7 @@ public class AtorJogador extends JFrame{
     
     
     public void recebeJogada(JogadaTabuleiro jogada){
-        System.out.println("jogadita");
         if(jogada != null){
-            System.out.println("jogadita not null");
             switch(jogada.getTipoJogada()){
 
                 case ATACAR:
@@ -296,7 +312,7 @@ public class AtorJogador extends JFrame{
                         Construcao alvo = (Construcao) jogada.getModificado();
                         setaValorPosicao(alvo.getPosicao(), alvo);
                         if(jogadorMapa.getCidade().verificaTodosDestruidos()){
-                            Jogada jogadaEnvia = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.DERROTADO);
+                            JogadaTabuleiro jogadaEnvia = new JogadaTabuleiro(jogadorMapa, null, TipoJogada.DERROTADO);
                             atorNetGames.enviaJogada(jogadaEnvia);
                         }
 
@@ -335,6 +351,7 @@ public class AtorJogador extends JFrame{
                 break;
                 
                 case PASSA_VEZ:
+                     System.out.println("Passar Vez");
                     Jogador passouVez = (Jogador) jogada.getAntigo();
                     //verifica se passou um turno completo
                     if(passouVez.getVezJogada() == 1 ){
@@ -359,10 +376,10 @@ public class AtorJogador extends JFrame{
                 break;
 
                 default:
-                    System.out.println("jogadita nao identificada");
+                    System.out.println("jogada nao identificada");
                 break;
             }
-        }else System.out.println("jogadita null");
+        }else System.out.println("jogada nula");
         infoRecursos.setText("Recursos: " + jogadorMapa.getCidade().getRecursos()); 
     }
 
@@ -419,7 +436,7 @@ public class AtorJogador extends JFrame{
     public void posicionaJogadores(int ordemJogador, Jogador jogador){
        // for(int i = 0; i< qtdeJogadores; i++){
             //posicina edificio principal
-        Posicao temp = mapa.getPosInicialMapa().get(ordemJogador--);
+        Posicao temp = mapa.getPosInicialMapa().get(--ordemJogador);
         setaValorPosicao(
                 temp, 
                 jogador.getCidade().construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
@@ -460,6 +477,7 @@ public class AtorJogador extends JFrame{
         limparMapa();
         btnPassaVez.setVisible(false);
         btnDesistir.setVisible(false);
+        btnDesconectar.setVisible(true);
         btnIniciaJogo.setVisible(true);
         btnConectarPartidaExistente.setVisible(true);
         infoRacaJogador.setText("");
@@ -468,7 +486,7 @@ public class AtorJogador extends JFrame{
     }
     
     public void movimentarGollum(){
-        Jogada jogada = new JogadaTabuleiro(
+        JogadaTabuleiro jogada = new JogadaTabuleiro(
                 new Posicao(
                         mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY()
                 ),

@@ -8,12 +8,13 @@ package Entidades.Tropa;
 import Entidades.Cidade.Cidade;
 import Entidades.Construcao.Construcao;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Tropa {
+public class Tropa implements Serializable{
     
     protected int vida;
     //protected int velocidadeMovimento;

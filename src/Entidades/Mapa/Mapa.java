@@ -22,6 +22,7 @@ import Entidades.Tropa.Heroi;
 import Entidades.Tropa.Mago;
 import Entidades.Tropa.Tropa;
 import Enumeradores.TipoJogada;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -30,7 +31,7 @@ import javax.swing.JOptionPane;
  * @author filipe
  */
 
-public class Mapa {
+public class Mapa implements Serializable {
     
     protected int tamX;
     protected int tamY;
@@ -41,7 +42,7 @@ public class Mapa {
     protected Object objetoSelecionado;
     //Falta a collection de jogadores definidas no Mapa
     
-    public Mapa(){
+    public Mapa() {
        
         this.tamX = 25;
         this.tamY = 25;
@@ -53,10 +54,13 @@ public class Mapa {
     
     private void iniciaPosicoesMapa(){
         posInicialMapa = new ArrayList<>();
-        posInicialMapa.add(new Posicao(tamX -2 , 1));
-        posInicialMapa.add(new Posicao(1, tamY -2));
-        posInicialMapa.add(new Posicao(tamX -2, tamY -2));
         posInicialMapa.add(new Posicao(1, 1));
+        posInicialMapa.add(new Posicao(tamX -2, tamY -2));
+        posInicialMapa.add(new Posicao(1, tamY -2));
+        posInicialMapa.add(new Posicao(tamX -2 , 1));
+        
+        
+        
     }
     
     //Falta uma caralhada de função. Verificar no diagrama de classes

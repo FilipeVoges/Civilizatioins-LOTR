@@ -7,6 +7,7 @@ package Entidades.Gollum;
 
 import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Heroi;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Random;
  *
  * @author filipe
  */
-public class Gollum {
+public class Gollum implements Serializable{
     protected Anel anel;
     protected boolean visivel;
     protected ArrayList<Charada> charadas;

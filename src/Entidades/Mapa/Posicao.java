@@ -5,11 +5,13 @@
  */
 package Entidades.Mapa;
 
+import java.io.Serializable;
+
 /**
  *
  * @author filipe
  */
-public class Posicao {
+public class Posicao implements Serializable{
     
     protected int x;
     protected int y;

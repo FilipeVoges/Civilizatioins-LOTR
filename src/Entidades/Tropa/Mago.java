@@ -7,12 +7,13 @@ package Entidades.Tropa;
 
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author ASUS-DEV
  */
-public class Mago extends Tropa{
+public class Mago extends Tropa implements Serializable{
      
     public Mago(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade

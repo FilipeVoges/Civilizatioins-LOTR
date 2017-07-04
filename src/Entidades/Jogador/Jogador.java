@@ -8,12 +8,13 @@ package Entidades.Jogador;
 import Entidades.Cidade.Cidade;
 import Enumeradores.Raca;
 import Enumeradores.TipoJogada;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Jogador {
+public class Jogador implements Serializable{
     protected String nome;
     protected Cidade cidade;
     protected boolean vencedor;

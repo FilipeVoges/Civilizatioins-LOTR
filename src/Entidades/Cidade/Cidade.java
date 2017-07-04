@@ -12,10 +12,11 @@ import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Cidade {
+public class Cidade implements Serializable{
     
     protected int recursos;
     protected String nome;

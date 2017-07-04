@@ -7,12 +7,13 @@ package Entidades.Tropa;
 
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Cavaleiro extends Tropa{
+public class Cavaleiro extends Tropa implements Serializable{
     
     private String simbolo = "♘";
     public Cavaleiro(Posicao posicao, Cidade cidade){

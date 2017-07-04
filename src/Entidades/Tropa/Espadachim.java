@@ -7,12 +7,13 @@ package Entidades.Tropa;
 
 import Entidades.Cidade.Cidade;
 import Entidades.Mapa.Posicao;
+import java.io.Serializable;
 
 /**
  *
  * @author filipe
  */
-public class Espadachim extends Tropa{
+public class Espadachim extends Tropa implements Serializable{
     private String simbolo = "♙";
     public Espadachim(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
