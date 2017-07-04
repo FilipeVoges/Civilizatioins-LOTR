@@ -6,6 +6,7 @@
 package Entidades.Gollum;
 
 import Entidades.Mapa.Posicao;
+import Entidades.Tropa.Heroi;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.Random;
 public class Gollum {
     protected Anel anel;
     protected boolean visivel;
-    protected boolean duelando;
     protected ArrayList<Charada> charadas;
     protected String simbolo = "¤";
     protected Posicao posicao;
@@ -178,9 +178,18 @@ public class Gollum {
         return c;
     }
     
-     public Anel perdeAnel() {
+    public Anel perdeAnel() {
         this.anel = null;
         return new Anel();
+    }
+    
+    public boolean temAnel(){
+        if(anel!= null)return true;
+        else return false;
+    }
+    
+    public void comer(Heroi heroi){
+        heroi.recebeDano(8000);
     }
 
     public void pegaAnel(Anel anel) {
@@ -196,15 +205,7 @@ public class Gollum {
         if(visivel) simbolo = "¤";
         else simbolo = "";
     }
-
-    public boolean isDuelando() {
-        return duelando;
-    }
-
-    public void setDuelando(boolean duelando) {
-        this.duelando = duelando;
-    }
-
+    
     public Posicao getPosicao() {
         return posicao;
     }

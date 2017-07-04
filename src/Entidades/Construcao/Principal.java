@@ -31,7 +31,7 @@ public class Principal extends Construcao implements Serializable{
             
             case HUMANO:
                 // nome, velocidadeMovimento, forca, distanciaAtaque, resistencia, posicao, cidade
-                heroi = new Heroi("Aragorn", 2, 25, 3, 4, posDisponivel, cidade);
+                heroi = new Heroi("Aragorn", 2000, 25, 3, 4, posDisponivel, cidade);
             break;
             
             case ELFO:

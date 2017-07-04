@@ -6,10 +6,13 @@ import Entidades.Construcao.Construcao;
 import Entidades.Construcao.Estabulo;
 import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
+import Entidades.Gollum.Gollum;
 import Entidades.Jogada.Jogada;
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Mapa;
 import Entidades.Mapa.Posicao;
+import Entidades.Tropa.Heroi;
+import Entidades.Tropa.Mago;
 import Entidades.Tropa.Tropa;
 import Enumeradores.Raca;
 import java.awt.BorderLayout;
@@ -141,6 +144,7 @@ public class AtorJogador extends JFrame {
                 btnDesistir.setVisible(true);
                 cidadeMapa = new Cidade(jogadorMapa);
                 posicionaJogadores(1);
+                setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
                 jogadorMapa.recebeVez();
                 infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
             }
@@ -226,13 +230,28 @@ public class AtorJogador extends JFrame {
                     System.out.println("Atacar");
                     Tropa atacante = (Tropa) jogada.getAntigo();
                     
+                    //saga do anel
+                    if(jogada.getModificado().getClass() == Gollum.class){
+                        Heroi heroi = (Heroi)jogada.getAntigo();
+                        Gollum gollum = (Gollum) jogada.getModificado();
+                        
+                        setaValorPosicao(heroi.getPosicao(), heroi);
+                        setaValorPosicao(gollum.getPosicao(), gollum);
+                        
+                    }else if (jogada.getModificado().getClass() == Mago.class){
+                        Mago mago = (Mago) jogada.getModificado();
+                        Heroi heroi = (Heroi) jogada.getAntigo();
+                        setaValorPosicao(heroi.getPosicao(), heroi);
+                        mago.setPosicaoAtual(posicaoLivreMaisProxima(heroi.getPosicao()));
+                        setaValorPosicao(mago.getPosicao(), mago);
+                    }
+                    
                     setaValorPosicao(atacante.getPosicao(), atacante);
                     if(jogada.getModificado().getClass().getSuperclass() == Construcao.class){
                         Construcao alvo = (Construcao) jogada.getModificado();
                         setaValorPosicao(alvo.getPosicao(), alvo);
 
-                    }else if(jogada.getModificado().getClass().getSuperclass() == Tropa.class){ 
-                        System.out.println("Tropa atacada");
+                    }else if(jogada.getModificado().getClass().getSuperclass() == Tropa.class){
                         Tropa alvo = (Tropa) jogada.getModificado();
                         setaValorPosicao(alvo.getPosicao(), alvo);  
                     }

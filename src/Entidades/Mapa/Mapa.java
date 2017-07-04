@@ -11,6 +11,7 @@ import Entidades.Construcao.Construcao;
 import Entidades.Construcao.Estabulo;
 import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
+import Entidades.Gollum.Charada;
 import Entidades.Gollum.Gollum;
 import Entidades.Jogada.Jogada;
 import Entidades.Jogador.Jogador;
@@ -18,6 +19,7 @@ import Entidades.Tropa.Arqueiro;
 import Entidades.Tropa.Cavaleiro;
 import Entidades.Tropa.Espadachim;
 import Entidades.Tropa.Heroi;
+import Entidades.Tropa.Mago;
 import Entidades.Tropa.Tropa;
 import Enumeradores.TipoJogada;
 import java.util.ArrayList;
@@ -135,7 +137,7 @@ public class Mapa {
             
             case ATACAR:
                 if(objeto != null && objetoSelecionado != null){
-                    jogada = atacar(objeto); 
+                    jogada = atacar(objeto, jogador); 
                 }else{
                     exibirMensagem("Selecione um alvo válido");
                     objetoSelecionado = null;
@@ -303,7 +305,7 @@ public class Mapa {
     }
 
     /**************************************************************************/
-    private Jogada atacar(Object objeto){
+    private Jogada atacar(Object objeto, Jogador jogador){
        
         Jogada jogada = null;
         
@@ -340,12 +342,49 @@ public class Mapa {
         else if(objeto.getClass() == Gollum.class){
             if(objetoSelecionado != null && objetoSelecionado.getClass() == Heroi.class){
                 Heroi heroiSelecionado = (Heroi) objetoSelecionado;
-                if(heroiSelecionado.calculaDistancia(gollum.getPosicao()) - heroiSelecionado.getDistanciaAtaque() <= 0){
+                if(heroiSelecionado.calculaDistancia(gollum.getPosicao()) - heroiSelecionado.getDistanciaAtaque() <= 0 && gollum.temAnel()){
                     exibirMensagem("Vou roubar teu precioso");
                     
-                    //TODO: terminar implementação respondeCharada
+                    ArrayList<Charada> charadas = gollum.mostraCharada();
                     
-                }else exibirMensagem("Você esta muito distante do alvo para atacar");
+                    for( int i = 0; i < 3; i++ ){
+                        System.out.println(i);
+                        String[] options = new String[] {
+                            charadas.get(i).getRespostaErrada1(), 
+                            charadas.get(i).getRespostaCerta(), 
+                            charadas.get(i).getRespostaErrada2()};
+                        int response = JOptionPane.showOptionDialog(
+                            null,
+                            charadas.get(i).getPergunta(),
+                            "Charada " + i,
+                            JOptionPane.DEFAULT_OPTION, 
+                            JOptionPane.PLAIN_MESSAGE,
+                            null, 
+                            options, 
+                            options[0]
+                        );
+                        
+                        if(response == 1){
+                            System.out.println("Acertou mizeravi");
+
+                            heroiSelecionado.setAcertosCharada(heroiSelecionado.getAcertosCharada()+1);
+                        }else break;
+                    }
+                    System.out.println(heroiSelecionado.getAcertosCharada());
+                    if(heroiSelecionado.getAcertosCharada() == 3){
+                         exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
+                        heroiSelecionado.pegaAnel(gollum.perdeAnel());
+                        Mago mago = new Mago(heroiSelecionado.getPosicao(), jogador.getCidade());
+                        jogada = new Jogada(heroiSelecionado, mago, TipoJogada.ATACAR);
+                    }else{
+                        exibirMensagem("Você errou, agora eu vou te comer!!");
+                        gollum.comer(heroiSelecionado);
+                        jogada = new Jogada(heroiSelecionado, gollum, TipoJogada.ATACAR);
+                    }
+                    
+                    gollum.setVisivel(false);
+                    
+                }else exibirMensagem("Você não pode atacar o Gollum");
             }else exibirMensagem("A Tropa selecionada não pode atacar o Gollum");
               
         }

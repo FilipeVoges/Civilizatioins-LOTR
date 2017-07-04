@@ -16,12 +16,12 @@ import Entidades.Mapa.Posicao;
 public class Tropa {
     
     protected int vida;
-    protected int velocidadeMovimento;
+    //protected int velocidadeMovimento;
     protected int forca;
     protected int distanciaAtaque;
     protected int distanciaMovimento;
     protected Posicao posicaoAtual;
-    protected Posicao posicaoDestino;
+    //protected Posicao posicaoDestino;
     protected int resistencia;
     protected String simbolo;
     protected Cidade cidade;
@@ -41,7 +41,7 @@ public class Tropa {
     */
     public Tropa(
             int vida, 
-            int velocidadeMovimento, 
+            int distanciaMovimento, 
             int forca, 
             int distanciaAtaque, 
             int resistencia, 
@@ -50,10 +50,9 @@ public class Tropa {
             Cidade cidade
     ) {
         this.vida = vida;
-        this.velocidadeMovimento = velocidadeMovimento;
         this.forca = forca;
         this.distanciaAtaque = distanciaAtaque;
-        this.distanciaMovimento = 2;
+        this.distanciaMovimento = distanciaMovimento;
         this.resistencia = resistencia;
         this.simbolo = simbolo;
         this.posicaoAtual = posicao;
@@ -82,7 +81,7 @@ public class Tropa {
     
     public int recebeDano(int dano) {
         vida -= dano;
-        if(vida <= 0){
+        if(vida <= 0) {
             vida = 0;
             simbolo = "✞";
             vivo = false;
@@ -129,10 +128,6 @@ public class Tropa {
     }
     
 
-    public int getVelocidadeMovimento() {
-        return velocidadeMovimento;
-    }
-
     public int getForca() {
         return forca;
     }
@@ -151,14 +146,6 @@ public class Tropa {
     
     public void setPosicaoAtual(Posicao posicaoAtual) {
         this.posicaoAtual = posicaoAtual;
-    }
-
-    public Posicao getPosicaoDestino() {
-        return posicaoDestino;
-    }
-
-    public void setPosicaoDestino(Posicao posicaoDestino) {
-        this.posicaoDestino = posicaoDestino;
     }
 
     public Cidade getCidade() {

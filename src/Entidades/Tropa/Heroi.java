@@ -22,15 +22,13 @@ public class Heroi extends Tropa implements Serializable{
     protected String nomeHeroi;//Ta duplicado? Atualizar Diagrama de classes quando definir o que é
     protected Anel anel;
     protected int acertosCharada;
-    protected boolean duelando;
-
+    
     public Heroi(String nome, int velocidadeMovimento, int forca, int distanciaAtaque, int resistencia, Posicao posicao, Cidade cidade) {
         
         super(50, velocidadeMovimento, forca, distanciaAtaque, resistencia, "✩", posicao, cidade);
         this.anel = null;
         this.acertosCharada = 0;
-        this.duelando = false;
-        
+
     }
     
     public Anel perdeAnel() {
@@ -50,14 +48,6 @@ public class Heroi extends Tropa implements Serializable{
 
     public void setAcertosCharada(int acertosCharada) {
         this.acertosCharada = acertosCharada;
-    }
-
-    public boolean isDuelando() {
-        return duelando;
-    }
-
-    public void setDuelando(boolean duelando) {
-        this.duelando = duelando;
     }
 
     public String getNome() {

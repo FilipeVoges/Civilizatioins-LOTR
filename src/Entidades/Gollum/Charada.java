@@ -18,5 +18,23 @@ public class Charada {
         this.respostaErrada1 = respostaErrada1;
         this.respostaErrada2 = respostaErrada2;
     }
+
+    public String getPergunta() {
+        return pergunta;
+    }
+
+    public String getRespostaCerta() {
+        return respostaCerta;
+    }
+
+    public String getRespostaErrada1() {
+        return respostaErrada1;
+    }
+
+    public String getRespostaErrada2() {
+        return respostaErrada2;
+    }
+    
+    
     
 }
