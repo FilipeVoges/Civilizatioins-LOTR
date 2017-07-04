@@ -7,7 +7,7 @@ import Entidades.Construcao.Estabulo;
 import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
 import Entidades.Gollum.Gollum;
-import Entidades.Jogada.Jogada;
+import Entidades.Jogada.JogadaTabuleiro;
 import Entidades.Jogador.Jogador;
 import Entidades.Mapa.Mapa;
 import Entidades.Mapa.Posicao;
@@ -15,6 +15,8 @@ import Entidades.Tropa.Heroi;
 import Entidades.Tropa.Mago;
 import Entidades.Tropa.Tropa;
 import Enumeradores.Raca;
+import Rede.AtorNetGames;
+import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -30,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class AtorJogador extends JFrame {
+public class AtorJogador extends JFrame{
 	
     protected JTable tabela;
     protected JScrollPane mapaContainer;
@@ -41,12 +43,14 @@ public class AtorJogador extends JFrame {
     protected String server;
     protected Jogador jogadorMapa;
     protected Cidade cidadeMapa;
+    protected AtorNetGames atorNetGames;
       	
     public AtorJogador(Mapa mapa){  
         
         this.mapa = mapa;
-        
+        this.setTitle("Civilization - LOTR");
         this.setLayout(new BorderLayout());
+        atorNetGames = new AtorNetGames(this);
     
         //inicia mapa
         tabela = new JTable(mapa.getTamX(),mapa.getTamX());
@@ -98,6 +102,7 @@ public class AtorJogador extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 600);
         this.setLocation(450, 100);
+        this.setVisible(true);
     }
     
     /***************************************************************************/
@@ -111,9 +116,9 @@ public class AtorJogador extends JFrame {
                 Posicao clique = new Posicao(linha, coluna);
                 Object o = pegaValorPosicao(clique);
                 
-                Jogada jogada = mapa.realizaJogada(clique, jogadorMapa, o);
-                
-                atualizaTela(jogada);
+                JogadaTabuleiro jogada = mapa.realizaJogada(clique, jogadorMapa, o);
+                atorNetGames.enviaJogada(jogada);
+                //recebeJogada(jogada);
            }
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
@@ -138,15 +143,24 @@ public class AtorJogador extends JFrame {
         btnIniciaJogo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mapa.iniciarPartida();
-                btnIniciaJogo.setVisible(false);
-                btnPassaVez.setVisible(true);
-                btnDesistir.setVisible(true);
-                cidadeMapa = new Cidade(jogadorMapa);
-                posicionaJogadores(1);
-                setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
-                jogadorMapa.recebeVez();
-                infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
+                try {    
+                    //int qtdeJogadores = Integer.parseInt(JOptionPane.showInputDialog("Digite a quantidade de jogadores na partida"));
+                    atorNetGames.iniciarPartidaRede(2);
+                    mapa.iniciarPartida();
+                    btnIniciaJogo.setVisible(false);
+                    btnPassaVez.setVisible(true);
+                    btnDesistir.setVisible(true);
+                    cidadeMapa = new Cidade(jogadorMapa);
+                    posicionaJogadores(1);
+                    setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
+                    jogadorMapa.recebeVez();
+                    infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
+                }catch(NaoConectadoException exception){
+                    mapa.exibirMensagem("Você não esta conectado a nenhum servidor");
+                    exception.printStackTrace();
+                }catch(Exception exception){
+                    mapa.exibirMensagem("Limite de jogadores excedido");
+                }
             }
         });
         
@@ -163,12 +177,19 @@ public class AtorJogador extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
                 if(desistiu == 0){
-                    mapa.informarDesistencia(jogadorMapa);
-                    limparMapa();
-                    btnIniciaJogo.setVisible(true);
-                    btnPassaVez.setVisible(false);
-                    btnDesistir.setVisible(false);
-                    infoRecursos.setText("");
+                    try{
+                        atorNetGames.desconectar();
+                        mapa.informarDesistencia(jogadorMapa);
+                        limparMapa();
+                        btnIniciaJogo.setVisible(true);
+                        btnPassaVez.setVisible(false);
+                        btnDesistir.setVisible(false);
+                        infoRecursos.setText("");
+                        
+                    }catch(NaoConectadoException ex){
+                        mapa.exibirMensagem("Você não está conectado a uma partida");
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -213,16 +234,23 @@ public class AtorJogador extends JFrame {
         
         server = JOptionPane.showInputDialog("Insira o endereço do servidor no qual deseja se conectar");
         //TODO: Fazer a parte de conexão com o NetGames
-        
-        jogadorMapa = new Jogador(nome, raca, 0);
-        infoNomeJogador.setText("Jogador: " + nome);
-        infoRacaJogador.setText("Raça: " + racaString);
-        limparMapa();
-        return true;
+        try {
+            
+            atorNetGames.conectar(nome, server);
+            jogadorMapa = new Jogador(nome, raca, 0);
+            infoNomeJogador.setText("Jogador: " + nome);
+            infoRacaJogador.setText("Raça: " + racaString);
+            limparMapa();
+            return true;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
     
-    public void atualizaTela(Jogada jogada){
+    public void recebeJogada(JogadaTabuleiro jogada){
         if(jogada != null){
             switch(jogada.getTipoJogada()){
 
@@ -337,46 +365,42 @@ public class AtorJogador extends JFrame {
     }  
     
     /***************************************************************************/
-    public void posicionaJogadores(int qtdeJogadores){
-        for(int i = 0; i< qtdeJogadores; i++){
-            System.out.println("Primeiro carinha");
+    public void posicionaJogadores(int ordemJogador){
+       // for(int i = 0; i< qtdeJogadores; i++){
             //posicina edificio principal
-            Posicao temp = mapa.getPosInicialMapa().get(i);
-            System.out.println(temp.getX() + " " + temp.getY());
-            setaValorPosicao(
-                    temp, 
-                    cidadeMapa.construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
-            );
-            
-            
-            
-            //posiciona Arquearia
-            if(temp.getX() > 2) temp.setX(temp.getX() - 2);
-            else temp.setX(temp.getX() + 2);
-            
-            setaValorPosicao(
-                    temp, 
-                    cidadeMapa.construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
-            );
-            
-            //posiciona Estabulo
-            if(temp.getY() > 2) temp.setY(temp.getY() - 2);
-            else temp.setY(temp.getY() + 2);     
-            
-            setaValorPosicao(
-                    temp, 
-                    cidadeMapa.construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
-            );
-            
-            //posiciona Quartel
-            if(temp.getX() > 4 )temp.setX(temp.getX() + 2);
-            else temp.setX(temp.getX() - 2); 
-            
-            setaValorPosicao(
-                    temp, 
-                    cidadeMapa.construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
-            );
-        }
+        Posicao temp = mapa.getPosInicialMapa().get(ordemJogador);
+        setaValorPosicao(
+                temp, 
+                cidadeMapa.construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+        );
+
+        //posiciona Arquearia
+        if(temp.getX() > 2) temp.setX(temp.getX() - 2);
+        else temp.setX(temp.getX() + 2);
+
+        setaValorPosicao(
+                temp, 
+                cidadeMapa.construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+        );
+
+        //posiciona Estabulo
+        if(temp.getY() > 2) temp.setY(temp.getY() - 2);
+        else temp.setY(temp.getY() + 2);     
+
+        setaValorPosicao(
+                temp, 
+                cidadeMapa.construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+        );
+
+        //posiciona Quartel
+        if(temp.getX() > 4 )temp.setX(temp.getX() + 2);
+        else temp.setX(temp.getX() - 2); 
+
+        setaValorPosicao(
+                temp, 
+                cidadeMapa.construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+        );
+        //}
     }
     
 }

@@ -9,93 +9,99 @@ import InterfaceGrafica.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
+import br.ufsc.inf.leobr.cliente.exception.ArquivoMultiplayerException;
+import br.ufsc.inf.leobr.cliente.exception.JahConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
+import br.ufsc.inf.leobr.cliente.exception.NaoJogandoException;
+import br.ufsc.inf.leobr.cliente.exception.NaoPossivelConectarException;
+import javax.swing.JOptionPane;
 
 /**
- *
  * @author Filipe
  */
 public class AtorNetGames implements OuvidorProxy{
     
     private AtorJogador atorJogador;
     private Proxy proxy;
+    int qtdeJogadores;
     
     public AtorNetGames(AtorJogador atorJogador) {
         super();
         this.atorJogador = atorJogador;
         proxy = Proxy.getInstance();
         proxy.addOuvinte(this);
+        qtdeJogadores = 0;
     }
     
-    public void conectar(String nome, String servidor) {
-        try {
-            proxy.conectar(servidor, nome);
-        } catch (Exception e) {
-            
-            e.printStackTrace();
-        }
+    public void conectar(String nome, String servidor) throws JahConectadoException, NaoPossivelConectarException, ArquivoMultiplayerException {
+        
+        proxy.conectar(servidor, nome);
+       
     }
     
-    public void desconectar() {
-        try {
-            proxy.desconectar();
-        } catch (NaoConectadoException e) {
-            //Faz teu JOptionPane feio aqui Daniel
-            e.printStackTrace();
-        }
+    public void desconectar() throws NaoConectadoException {
+        proxy.desconectar();
+      
     }
     
-    public void iniciarPartidaRede() {
-        try {
-            proxy.iniciarPartida(2);
-        } catch (NaoConectadoException e) {
-            //Faz teu JOptionPane feio aqui Daniel
-            e.printStackTrace();
-	}
+    public void iniciarPartidaRede(int qtdeJogadores) throws NaoConectadoException, Exception {
+        this.qtdeJogadores = qtdeJogadores;
+        if(qtdeJogadores > 4)throw new Exception("Limite Jogadores excedido");
+        proxy.iniciarPartida(qtdeJogadores);
+   
     }
     
     @Override
     public void iniciarNovaPartida(Integer posicao) {
-        //seta o jogador que vai começar
+        proxy.iniciarNovaPartida(posicao);
     }
 
     @Override
     public void finalizarPartidaComErro(String message) {
-        //Faz teu JOptionPane feio aqui Daniel
+        JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
     }
 
     @Override
     public void receberMensagem(String msg) {
-        // TODO Auto-generated method stub
+         JOptionPane.showMessageDialog(null , msg);
     }
 
     @Override
     public void receberJogada(Jogada jogada) {
-//        Codigo do Tribal Wars, ver como vamos fazer
-//        Estado estado = (Estado) jogada;
-//	atorJogador.receberEstado(estado);
-//	minhaVez = true;
+        Entidades.Jogada.JogadaTabuleiro jogadaRecebida = (Entidades.Jogada.JogadaTabuleiro) jogada;
+        atorJogador.recebeJogada(jogadaRecebida);
     }
 
     @Override
     public void tratarConexaoPerdida() {
-        //Faz teu JOptionPane feio aqui Daniel "A Casa Caiu Vacilão"
+        JOptionPane.showMessageDialog(null , "Conexão perdida");
     }
 
     @Override
     public void tratarPartidaNaoIniciada(String message) {
-        //Faz teu JOptionPane feio aqui Daniel "Já falei que a Casa Caiu Vacilão"
+        JOptionPane.showMessageDialog(null , "Partida não iniciada, tente novamente");
     }
     
-    public String obterNomeAdversario() {
+    public void enviaJogada(Entidades.Jogada.JogadaTabuleiro jogada) {
+        try{
+            
+            Jogada jogadaEnviar = jogada;
+            proxy.enviaJogada(jogada);
+            
+        }catch(NaoJogandoException e){
+            JOptionPane.showMessageDialog(null , "Você não esta jogando");
+        }
+    }
+    
+    /*public String obterNomeAdversario() {
         String nome = "";
-        if (/*MinhaVez*/true) {
+        if (true) {
             nome = proxy.obterNomeAdversario(2);
         } else {
             nome = proxy.obterNomeAdversario(1);
         }
 
         return nome;
-    }
+    }*/
     
 }

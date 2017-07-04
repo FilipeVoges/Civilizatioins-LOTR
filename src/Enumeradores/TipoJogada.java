@@ -13,5 +13,6 @@ public enum TipoJogada {
     NOVA_TROPA, 
     REFORMA_CONSTRUCAO, 
     DESISTIR, 
-    PASSA_VEZ
+    PASSA_VEZ,
+    INICIAR_PARTIDA
 }

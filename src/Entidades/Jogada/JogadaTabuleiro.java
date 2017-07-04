@@ -11,15 +11,15 @@ import Enumeradores.TipoJogada;
  *
  * @author ASUS-DEV
  */
-public class Jogada {
+public class JogadaTabuleiro implements br.ufsc.inf.leobr.cliente.Jogada {
     
     protected Object antigo;
     protected Object modificado;
     protected TipoJogada tipoJogada;
     
-    public Jogada(){}
+    public JogadaTabuleiro(){}
     
-    public Jogada(Object velho, Object novo, TipoJogada tipo){
+    public JogadaTabuleiro(Object velho, Object novo, TipoJogada tipo){
         this.antigo = velho;
         this.modificado = novo;
         this.tipoJogada = tipo;

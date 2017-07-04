@@ -13,7 +13,7 @@ import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
 import Entidades.Gollum.Charada;
 import Entidades.Gollum.Gollum;
-import Entidades.Jogada.Jogada;
+import Entidades.Jogada.JogadaTabuleiro;
 import Entidades.Jogador.Jogador;
 import Entidades.Tropa.Arqueiro;
 import Entidades.Tropa.Cavaleiro;
@@ -114,9 +114,9 @@ public class Mapa {
     }
     
     
-    public Jogada realizaJogada(Posicao clique, Jogador jogador, Object objeto){
+    public JogadaTabuleiro realizaJogada(Posicao clique, Jogador jogador, Object objeto){
         
-        Jogada jogada = null;
+        JogadaTabuleiro jogada = null;
         
         switch(jogador.getTipoClique()){
             
@@ -152,7 +152,7 @@ public class Mapa {
                     int distancia = tropaSelecionada.calculaDistancia(clique);
                     if(distancia <= tropaSelecionada.getDistanciaMovimento()){
                         tropaSelecionada.setPosicaoAtual(clique);
-                        jogada = new Jogada(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
+                        jogada = new JogadaTabuleiro(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
                         jogador.setTipoClique(TipoJogada.SELECAO);
                         objetoSelecionado = null;
                     }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
@@ -168,8 +168,8 @@ public class Mapa {
     }
     
     /**************************************************************************/
-    private Jogada cliqueConstrucao(Object o, Jogador jogador){
-        Jogada jogada = null;
+    private JogadaTabuleiro cliqueConstrucao(Object o, Jogador jogador){
+        JogadaTabuleiro jogada = null;
         Construcao construcao = (Construcao) o;
         String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
             
@@ -192,7 +192,7 @@ public class Mapa {
                     r = JOptionPane.showConfirmDialog(null, "Preço: " + construcao.getRecursoRecrutamento() + "\n Deseja realmente recrutar essa tropa?");
                     if(r == 0){
                         if(jogador.getCidade().descontaRecursos(construcao.getRecursoRecrutamento())){
-                            jogada = new Jogada();
+                            jogada = new JogadaTabuleiro();
                             jogada.setTipoJogada(TipoJogada.NOVA_TROPA);
                             jogada.setAntigo(construcao);
                             
@@ -227,7 +227,7 @@ public class Mapa {
                         if(jogador.getCidade().descontaRecursos(construcao.calculaReforma())){
                             
                             if(construcao.reformar()){
-                                jogada = new Jogada();
+                                jogada = new JogadaTabuleiro();
                                 jogada.setTipoJogada(TipoJogada.REFORMA_CONSTRUCAO);
                                 jogada.setAntigo(construcao);
                                 jogada.setModificado(construcao);
@@ -305,9 +305,9 @@ public class Mapa {
     }
 
     /**************************************************************************/
-    private Jogada atacar(Object objeto, Jogador jogador){
+    private JogadaTabuleiro atacar(Object objeto, Jogador jogador){
        
-        Jogada jogada = null;
+        JogadaTabuleiro jogada = null;
         
         if(objeto.getClass().getSuperclass() == Construcao.class){
             Construcao alvo = (Construcao) objeto;
@@ -318,7 +318,7 @@ public class Mapa {
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
                 
                 alvo.recebeDano(atacante.calculaDano(alvo));
-                jogada = new Jogada(atacante, alvo, TipoJogada.ATACAR);
+                jogada = new JogadaTabuleiro(atacante, alvo, TipoJogada.ATACAR);
                 
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
             
@@ -332,7 +332,7 @@ public class Mapa {
                 
                 alvo.recebeDano(atacante.calculaDano(alvo));
                 if(alvo.isVivo())atacante.recebeDano(alvo.calculaRetalicao(atacante));
-                jogada = new Jogada(atacante, alvo, TipoJogada.ATACAR);
+                jogada = new JogadaTabuleiro(atacante, alvo, TipoJogada.ATACAR);
              
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
   
@@ -375,11 +375,11 @@ public class Mapa {
                          exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
                         heroiSelecionado.pegaAnel(gollum.perdeAnel());
                         Mago mago = new Mago(heroiSelecionado.getPosicao(), jogador.getCidade());
-                        jogada = new Jogada(heroiSelecionado, mago, TipoJogada.ATACAR);
+                        jogada = new JogadaTabuleiro(heroiSelecionado, mago, TipoJogada.ATACAR);
                     }else{
                         exibirMensagem("Você errou, agora eu vou te comer!!");
                         gollum.comer(heroiSelecionado);
-                        jogada = new Jogada(heroiSelecionado, gollum, TipoJogada.ATACAR);
+                        jogada = new JogadaTabuleiro(heroiSelecionado, gollum, TipoJogada.ATACAR);
                     }
                     
                     gollum.setVisivel(false);
