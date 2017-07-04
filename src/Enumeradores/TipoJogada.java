@@ -14,5 +14,5 @@ public enum TipoJogada {
     REFORMA_CONSTRUCAO, 
     DESISTIR, 
     PASSA_VEZ,
-    INICIAR_PARTIDA
+    DERROTADO
 }

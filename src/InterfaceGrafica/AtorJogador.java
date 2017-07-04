@@ -15,6 +15,7 @@ import Entidades.Tropa.Heroi;
 import Entidades.Tropa.Mago;
 import Entidades.Tropa.Tropa;
 import Enumeradores.Raca;
+import Enumeradores.TipoJogada;
 import Rede.AtorNetGames;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
 import java.awt.BorderLayout;
@@ -42,7 +43,6 @@ public class AtorJogador extends JFrame{
     protected Mapa mapa;
     protected String server;
     protected Jogador jogadorMapa;
-    protected Cidade cidadeMapa;
     protected AtorNetGames atorNetGames;
       	
     public AtorJogador(Mapa mapa){  
@@ -150,11 +150,9 @@ public class AtorJogador extends JFrame{
                     btnIniciaJogo.setVisible(false);
                     btnPassaVez.setVisible(true);
                     btnDesistir.setVisible(true);
-                    cidadeMapa = new Cidade(jogadorMapa);
-                    posicionaJogadores(1);
                     setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
                     jogadorMapa.recebeVez();
-                    infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos());
+                    infoRecursos.setText("Recursos: " + jogadorMapa.getCidade().getRecursos());
                 }catch(NaoConectadoException exception){
                     mapa.exibirMensagem("Você não esta conectado a nenhum servidor");
                     exception.printStackTrace();
@@ -169,6 +167,7 @@ public class AtorJogador extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 jogadorMapa.passaVez();
                 btnPassaVez.setVisible(false);
+                atorNetGames.enviaJogada(new JogadaTabuleiro(jogadorMapa, null, TipoJogada.PASSA_VEZ));
             }
         });
         
@@ -199,7 +198,6 @@ public class AtorJogador extends JFrame{
     private boolean conectar(){
         String nome = "";
         String racaString = "";
-        Raca raca = null;
         nome = JOptionPane.showInputDialog("Insira seu nome");
         String[] options = new String[] {"Elfo", "Humano", "Uruk Hai", "Orc"};             
         int response = JOptionPane.showOptionDialog(
@@ -215,19 +213,15 @@ public class AtorJogador extends JFrame{
         
         switch(response){
             case 0:
-                raca = Raca.ELFO;
                 racaString = "Elfo";
             break;
             case 1:
-                raca = Raca.HUMANO;
                 racaString = "Humano";
             break;
             case 2:
-                raca = Raca.URUK_HAI;
                 racaString = "Uruk Hai";
             break;
             case 3:
-                raca = Raca.ORC;
                 racaString = "Orc";
             break;
         }
@@ -237,7 +231,7 @@ public class AtorJogador extends JFrame{
         try {
             
             atorNetGames.conectar(nome, server);
-            jogadorMapa = new Jogador(nome, raca, 0);
+            jogadorMapa = new Jogador(Jogador.pegaRacaPeloNome(racaString));
             infoNomeJogador.setText("Jogador: " + nome);
             infoRacaJogador.setText("Raça: " + racaString);
             limparMapa();
@@ -272,12 +266,17 @@ public class AtorJogador extends JFrame{
                         setaValorPosicao(heroi.getPosicao(), heroi);
                         mago.setPosicaoAtual(posicaoLivreMaisProxima(heroi.getPosicao()));
                         setaValorPosicao(mago.getPosicao(), mago);
+                        mapa.getGollum().perdeAnel();
+                        mapa.getGollum().setVisivel(false);
                     }
                     
                     setaValorPosicao(atacante.getPosicao(), atacante);
                     if(jogada.getModificado().getClass().getSuperclass() == Construcao.class){
                         Construcao alvo = (Construcao) jogada.getModificado();
                         setaValorPosicao(alvo.getPosicao(), alvo);
+                        if(jogadorMapa.getCidade().verificaTodosDestruidos()){
+                            atorNetGames.enviaJogada(new JogadaTabuleiro(jogadorMapa, null, TipoJogada.DERROTADO));
+                        }
 
                     }else if(jogada.getModificado().getClass().getSuperclass() == Tropa.class){
                         Tropa alvo = (Tropa) jogada.getModificado();
@@ -303,16 +302,48 @@ public class AtorJogador extends JFrame{
                 case MOVIMENTAR:
                     System.out.println("Movimentar");
                     Posicao antiga = (Posicao) jogada.getAntigo();
-                    Tropa atual = (Tropa) jogada.getModificado();
-                    setaValorPosicao(atual.getPosicao(), atual);
+                    if(jogada.getModificado().getClass() == Tropa.class){
+                        Tropa atual = (Tropa) jogada.getModificado();
+                        setaValorPosicao(atual.getPosicao(), atual);
+                    }else if(jogada.getModificado().getClass() == Gollum.class){
+                        mapa.setGollum((Gollum) jogada.getModificado());
+                        setaValorPosicao(mapa.getGollum().getPosicao(), mapa.getGollum());
+                    }
                     setaValorPosicao(antiga, null);
+                break;
+                
+                case PASSA_VEZ:
+                    Jogador passouVez = (Jogador) jogada.getAntigo();
+                    //verifica se passou um turno completo
+                    if(passouVez.getVezJogada() == 1 ){
+                        movimentarGollum();
+                        mapa.getGollum().agir();
+                    }
+                    //verifica se e a vez do jogador
+                    if(passouVez.getVezJogada() + 1 == jogadorMapa.getVezJogada()){
+                        jogadorMapa.recebeVez();
+                    }
+                break;
+                
+                case DERROTADO:
+                case DESISTIR:
+                    Jogador derrotado = (Jogador)jogada.getAntigo();
+                    if(derrotado == jogadorMapa){
+                        mapa.exibirMensagem("Voce Perdeu");
+                    }else{
+                        mapa.exibirMensagem("Voce Venceu");
+                    }
+                    limparMapa();
+                    btnPassaVez.setVisible(false);
+                    btnDesistir.setVisible(false);
+                    btnIniciaJogo.setVisible(true);
                 break;
 
                 default:
                 break;
             }
         }
-        infoRecursos.setText("Recursos: " + cidadeMapa.getRecursos()); 
+        infoRecursos.setText("Recursos: " + jogadorMapa.getCidade().getRecursos()); 
     }
 
     //Limpar Mapa
@@ -365,13 +396,13 @@ public class AtorJogador extends JFrame{
     }  
     
     /***************************************************************************/
-    public void posicionaJogadores(int ordemJogador){
+    public void posicionaJogadores(int ordemJogador, Jogador jogador){
        // for(int i = 0; i< qtdeJogadores; i++){
             //posicina edificio principal
-        Posicao temp = mapa.getPosInicialMapa().get(ordemJogador);
+        Posicao temp = mapa.getPosInicialMapa().get(ordemJogador--);
         setaValorPosicao(
                 temp, 
-                cidadeMapa.construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+                jogador.getCidade().construir(Principal.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
         );
 
         //posiciona Arquearia
@@ -380,7 +411,7 @@ public class AtorJogador extends JFrame{
 
         setaValorPosicao(
                 temp, 
-                cidadeMapa.construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+                jogador.getCidade().construir(Arquearia.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
         );
 
         //posiciona Estabulo
@@ -389,7 +420,7 @@ public class AtorJogador extends JFrame{
 
         setaValorPosicao(
                 temp, 
-                cidadeMapa.construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+                jogador.getCidade().construir(Estabulo.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
         );
 
         //posiciona Quartel
@@ -398,9 +429,24 @@ public class AtorJogador extends JFrame{
 
         setaValorPosicao(
                 temp, 
-                cidadeMapa.construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
+                jogador.getCidade().construir(Quartel.class.getSimpleName(), new Posicao(temp.getX(), temp.getY()))
         );
         //}
+        
+        
+    }
+    
+    public void movimentarGollum(){
+        JogadaTabuleiro jogada = new JogadaTabuleiro();
+        jogada.setAntigo(new Posicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY()));
+        mapa.getGollum().setPosicao(posicaoLivreMaisProxima(mapa.getGollum().getPosicao()));
+        jogada.setModificado(mapa.getGollum());
+        jogada.setTipoJogada(TipoJogada.MOVIMENTAR);
+        atorNetGames.enviaJogada(jogada);
+    }
+
+    public Jogador getJogadorMapa() {
+        return jogadorMapa;
     }
     
 }

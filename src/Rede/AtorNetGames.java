@@ -5,6 +5,8 @@
  */
 package Rede;
 
+import Entidades.Jogador.Jogador;
+import Enumeradores.Raca;
 import InterfaceGrafica.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
@@ -48,12 +50,20 @@ public class AtorNetGames implements OuvidorProxy{
         this.qtdeJogadores = qtdeJogadores;
         if(qtdeJogadores > 4)throw new Exception("Limite Jogadores excedido");
         proxy.iniciarPartida(qtdeJogadores);
+        proxy.iniciarNovaPartida(1);
+        atorJogador.getJogadorMapa().recebeVez();
+        atorJogador.getJogadorMapa().setVezJogada(1);
+        atorJogador.posicionaJogadores(1, atorJogador.getJogadorMapa());
    
     }
     
     @Override
     public void iniciarNovaPartida(Integer posicao) {
-        proxy.iniciarNovaPartida(posicao);
+        if(atorJogador.getJogadorMapa().getVezJogada() != posicao){
+            Jogador jogador = new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(posicao)));
+            jogador.setVezJogada(posicao);
+            atorJogador.posicionaJogadores(posicao, jogador);
+        }
     }
 
     @Override
@@ -84,10 +94,7 @@ public class AtorNetGames implements OuvidorProxy{
     
     public void enviaJogada(Entidades.Jogada.JogadaTabuleiro jogada) {
         try{
-            
-            Jogada jogadaEnviar = jogada;
-            proxy.enviaJogada(jogada);
-            
+           proxy.enviaJogada(jogada); 
         }catch(NaoJogandoException e){
             JOptionPane.showMessageDialog(null , "Você não esta jogando");
         }

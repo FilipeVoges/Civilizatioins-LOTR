@@ -105,6 +105,12 @@ public class Mapa {
         return gollum;
     }
 
+    public void setGollum(Gollum gollum) {
+        this.gollum = gollum;
+    }
+    
+    
+
     public ArrayList<Posicao> getPosInicialMapa() {
         return posInicialMapa;
     }
@@ -372,7 +378,7 @@ public class Mapa {
                     }
                     System.out.println(heroiSelecionado.getAcertosCharada());
                     if(heroiSelecionado.getAcertosCharada() == 3){
-                         exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
+                        exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
                         heroiSelecionado.pegaAnel(gollum.perdeAnel());
                         Mago mago = new Mago(heroiSelecionado.getPosicao(), jogador.getCidade());
                         jogada = new JogadaTabuleiro(heroiSelecionado, mago, TipoJogada.ATACAR);

@@ -22,6 +22,7 @@ public class Gollum {
     protected ArrayList<Charada> charadas;
     protected String simbolo = "¤";
     protected Posicao posicao;
+    protected int turnosInvisiveis;
     /*Faltam atributos
     velocidadeMovimento
     charadasPerguntadas
@@ -33,8 +34,17 @@ public class Gollum {
         this.visivel = true;
         charadas = new ArrayList<>();
         this.posicao = posicao;
+        this.turnosInvisiveis = -1;
         criaCharadas();
     
+    }
+    
+    public void agir(){
+        if(this.turnosInvisiveis >= 0){
+            turnosInvisiveis++;
+        }else if(this.turnosInvisiveis >= 4){
+            setVisivel(true);
+        }
     }
     
     
@@ -186,8 +196,14 @@ public class Gollum {
 
     public void setVisivel(boolean visivel) {
         this.visivel = visivel;
-        if(visivel) simbolo = "¤";
-        else simbolo = "";
+        if(visivel){
+            simbolo = "¤";
+            this.turnosInvisiveis = -1;
+        }
+        else{
+            simbolo = "";
+            this.turnosInvisiveis = 0;
+        }
     }
     
     public Posicao getPosicao() {

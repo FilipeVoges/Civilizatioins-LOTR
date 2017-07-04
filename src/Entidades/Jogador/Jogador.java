@@ -23,11 +23,11 @@ public class Jogador {
     protected Raca raca;
     protected String cor; // existe apenas no diagrama de classe.
     
-    public Jogador(String nome, Raca raca, int vezJogada){
-        this.nome = nome;
+    public Jogador(Raca raca){
         this.raca = raca;
-        this.vezJogada = vezJogada;
+        this.temVez = false;
         this.tipoClique = TipoJogada.SELECAO;
+        this.cidade = new Cidade(this);
     }
 
     public boolean isVencedor() {
@@ -37,6 +37,11 @@ public class Jogador {
     public void setVencedor(boolean vencedor) {
         this.vencedor = vencedor;
     }
+
+    public void setVezJogada(int vezJogada) {
+        this.vezJogada = vezJogada;
+    }
+    
 
     public boolean verificaVez() {
         return temVez;
@@ -77,6 +82,21 @@ public class Jogador {
 
     public Raca getRaca() {
         return raca;
+    }
+    
+    
+    public static Raca pegaRacaPeloNome(String nome){
+        switch(nome){
+            case "Elfo":
+                return Raca.ELFO;
+            case "Humano":
+                return Raca.HUMANO;
+            case "Uruk Hai":
+                return Raca.URUK_HAI;
+            case "Orc":
+                return Raca.ORC; 
+        }
+        return null;
     }
 
 }

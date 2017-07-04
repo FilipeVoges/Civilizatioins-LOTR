@@ -85,7 +85,7 @@ public class Cidade {
         return jogador;
     }
 
-    public boolean verificaUltimaConstrucao(){
+    public boolean verificaTodosDestruidos(){
         boolean todosDestruidos = true;
         
         for(int i = 0; i < construcoes.size(); i++){
