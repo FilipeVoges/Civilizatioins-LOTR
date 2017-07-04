@@ -51,8 +51,8 @@ public class Gollum {
                 //resposta certa
                 "Montanha",
                 //respostas erradas
-                "",
-                ""
+                "Árvore",
+                "Pássaro"
             )
         );
       
@@ -66,8 +66,8 @@ public class Gollum {
                 //resposta certa
                 "Dentes",
                 //respostas erradas
-                "",
-                ""
+                "Manada",
+                "Ansiedade"
             )
         );
         
@@ -81,28 +81,12 @@ public class Gollum {
                 //resposta certa
                 "Vento",
                 //respostas erradas
-                "",
-                ""
+                "Galinha",
+                "Fantasma"
             )
         );
         
-        /**************************************************/
-        charadas.add(
-            new Charada(
-                "Um olho no azul dum rosto\n" +
-                "Viu outro olho no verde do outro.\n" +
-                "\"Aquele olho é como este olho\"\n" +
-                "Disse o primeiro olho,\n" +
-                "\"Mas lá embaixo é seu lugar,\n" +
-                "Aqui em cima é o meu lugar\".",
-                //resposta certa
-                "Sol das Margaridas",
-                //respostas erradas
-                "",
-                ""
-            )
-        );
-        
+
         /**************************************************/
         charadas.add(
             new Charada(
@@ -115,8 +99,8 @@ public class Gollum {
                 //resposta certa
                 "Escuridão",
                 //respostas erradas
-                "",
-                ""
+                "Assombração",
+                "Universo"
             )
         );
 
@@ -128,8 +112,8 @@ public class Gollum {
                 //resposta certa
                 "Ovos",
                 //respostas erradas
-                "",
-                ""
+                "Pérola",
+                "Escrínio"
             )
         );
 
@@ -143,8 +127,8 @@ public class Gollum {
                 //resposta certa
                 "Peixe",
                 //respostas erradas
-                "",
-                ""
+                "Sapo",
+                "Lagartixa"
             )
         );
         
@@ -161,8 +145,8 @@ public class Gollum {
                 //resposta certa
                 "Tempo",
                 //respostas erradas
-                "",
-                ""
+                "Peste",
+                "Ferrugem"
             )
         );
         
@@ -208,6 +192,10 @@ public class Gollum {
     
     public Posicao getPosicao() {
         return posicao;
+    }
+
+    public void setPosicao(Posicao posicao) {
+        this.posicao = posicao;
     }
 
     @Override
