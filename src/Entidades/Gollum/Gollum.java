@@ -7,6 +7,9 @@ package Entidades.Gollum;
 
 import Entidades.Mapa.Posicao;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -35,7 +38,6 @@ public class Gollum {
     }
     
     
-    //Falta a função mostraCharadas
     public void criaCharadas(){
         
         /**************************************************/
@@ -166,6 +168,15 @@ public class Gollum {
         
     }
         
+    public ArrayList<Charada> mostraCharada(){
+
+        ArrayList<Charada> c = new ArrayList<>();
+        Collections.shuffle(this.charadas);           
+        c.add(charadas.get(0));
+        c.add(charadas.get(1));
+        c.add(charadas.get(2));
+        return c;
+    }
     
      public Anel perdeAnel() {
         this.anel = null;
@@ -197,9 +208,7 @@ public class Gollum {
     public Posicao getPosicao() {
         return posicao;
     }
-    
-    
-    
+
     @Override
     public String toString(){
         return simbolo;
