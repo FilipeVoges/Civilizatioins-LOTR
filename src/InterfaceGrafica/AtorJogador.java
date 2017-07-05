@@ -164,6 +164,7 @@ public class AtorJogador extends JFrame{
                     //int qtdeJogadores = Integer.parseInt(JOptionPane.showInputDialog("Digite a quantidade de jogadores na partida"));
                     atorNetGames.iniciarPartidaRede(2);
                     mapa.getJogadorMapa().recebeVez();
+                    btnPassaVez.setVisible(true);
                     iniciaJogo();
                     
                 }catch(NaoConectadoException exception){
@@ -200,7 +201,6 @@ public class AtorJogador extends JFrame{
                     btnPassaVez.setVisible(false);
                     btnDesistir.setVisible(false);
                     infoRecursos.setText("");
-                
                 }
             }
         });
@@ -209,20 +209,21 @@ public class AtorJogador extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
-                if(desistiu == 0){  
+                if(desistiu == 0){   
                     try {
                         atorNetGames.desconectar();
+                        desconectar();
                     } catch (NaoConectadoException ex) {
                         mapa.exibirMensagem("Você não esta conectado a uma partida");
                     }
-                
+                    
                 }
             }
         });
     }
     
     //colhe os parâmetros para se conectar ao cervidor Proxy
-    private boolean conectar(){
+    public boolean conectar(){
         String nome = "";
         String racaString = "";
         //nome = JOptionPane.showInputDialog("Insira seu nome");
@@ -268,11 +269,16 @@ public class AtorJogador extends JFrame{
         }
     }
     
-    private void iniciaJogo(){
+    public void desconectar(){             
+        btnIniciaJogo.setVisible(false);
+        btnDesconectar.setVisible(false);
+        btnConectarServidor.setVisible(true);
+    }
+    
+    public void iniciaJogo(){
         mapa.iniciaPartida();
         btnIniciaJogo.setVisible(false);
         btnDesconectar.setVisible(false);
-        btnPassaVez.setVisible(true);
         btnDesistir.setVisible(true);
         setaValorPosicao(mapa.getGollum().getPosicao().getX(), mapa.getGollum().getPosicao().getY(), mapa.getGollum());
         infoRecursos.setText("Recursos: " + mapa.getJogadorMapa().getCidade().getRecursos());

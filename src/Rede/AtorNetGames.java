@@ -47,8 +47,6 @@ public class AtorNetGames implements OuvidorProxy{
         this.qtdeJogadores = qtdeJogadores;
         if(qtdeJogadores > 4)throw new Exception("Limite Jogadores excedido");
         proxy.iniciarPartida(qtdeJogadores);
-        
-   
     }
     
     @Override
@@ -64,7 +62,7 @@ public class AtorNetGames implements OuvidorProxy{
     @Override
     public void finalizarPartidaComErro(String message) {
         JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
-        atorJogador.limparMapa();
+        atorJogador.desconectar();
     }
 
     @Override
@@ -78,7 +76,7 @@ public class AtorNetGames implements OuvidorProxy{
            proxy.enviaJogada(jogadaEnvia); 
         }catch(NaoJogandoException e){
             JOptionPane.showMessageDialog(null , "Você não esta jogando");
-            atorJogador.limparMapa();
+            atorJogador.finalizaJogo();
         }
     }
 
@@ -92,7 +90,7 @@ public class AtorNetGames implements OuvidorProxy{
     @Override
     public void tratarConexaoPerdida() {
         JOptionPane.showMessageDialog(null , "Conexão perdida");
-        atorJogador.limparMapa();
+        atorJogador.desconectar();
     }
 
     @Override
@@ -100,7 +98,7 @@ public class AtorNetGames implements OuvidorProxy{
         JOptionPane.showMessageDialog(atorJogador,
 				"A partida não pode ser iniciada devido ao seguinte erro: "
 						+ message);
-        atorJogador.limparMapa();
+        atorJogador.finalizaJogo();
     }
     
     /*public String obterNomeAdversario() {
