@@ -13,7 +13,7 @@ import Entidades.Construcao.Principal;
 import Entidades.Construcao.Quartel;
 import Entidades.Gollum.Charada;
 import Entidades.Gollum.Gollum;
-import Entidades.Jogada.JogadaTabuleiro;
+import Entidades.Jogada.JogadaMapa;
 import Entidades.Jogador.Jogador;
 import Entidades.Tropa.Arqueiro;
 import Entidades.Tropa.Cavaleiro;
@@ -36,11 +36,11 @@ public class Mapa implements Serializable {
     protected int tamX;
     protected int tamY;
     protected ArrayList<Cidade> cidades;
-    protected ArrayList<Posicao> posInicialMapa;
+    protected ArrayList<Posicao> posInicialJogadoresNoMapa;
     protected Gollum gollum;
     protected boolean partidaEmAndamento;
     protected Object objetoSelecionado;
-    //Falta a collection de jogadores definidas no Mapa
+    protected Jogador jogadorMapa, jogadorInimigo;
     
     public Mapa() {
        
@@ -53,34 +53,13 @@ public class Mapa implements Serializable {
     }
     
     private void iniciaPosicoesMapa(){
-        posInicialMapa = new ArrayList<>();
-        posInicialMapa.add(new Posicao(1, 1));
-        posInicialMapa.add(new Posicao(tamX -2, tamY -2));
-        posInicialMapa.add(new Posicao(1, tamY -2));
-        posInicialMapa.add(new Posicao(tamX -2 , 1));
-        
-        
-        
+        posInicialJogadoresNoMapa = new ArrayList<>();
+        posInicialJogadoresNoMapa.add(new Posicao(1, 1));
+        posInicialJogadoresNoMapa.add(new Posicao(tamX -2, tamY -2));
+        posInicialJogadoresNoMapa.add(new Posicao(1, tamY -2));
+        posInicialJogadoresNoMapa.add(new Posicao(tamX -2 , 1));  
     }
-    
-    //Falta uma caralhada de função. Verificar no diagrama de classes
-    public void iniciarPartida(){
-        if(!verificaPartidaEmAndamento()){
-            this.partidaEmAndamento = true;
-            //TODO: fazer o iniciar partida com o NetGames NO DIAGRAMA ESTA RETORNANDO BOOLEAN
-        }
-    }
-    
-    public void informarDesistencia(Jogador jogador){
-        
-        for(Cidade cidade :cidades){
-            if(jogador.getCidade() == cidade){
-                cidades.remove(cidade);
-            }
-        }
-        //TODO: enviar desistencia pro NetGames
-    }
-
+   
     public int getTamX() {
         return tamX;
     }
@@ -93,16 +72,16 @@ public class Mapa implements Serializable {
         return cidades;
     }
 
-    public void setCidades(ArrayList<Cidade> cidades) {
-        this.cidades = cidades;
-    }
-
     public boolean verificaPartidaEmAndamento() {
         return partidaEmAndamento;
     }
     
-     public void setPartidaEmAndamento(boolean partidaEmAndamento) {
-        this.partidaEmAndamento = partidaEmAndamento;
+    public void iniciaPartida() {
+        partidaEmAndamento = true;
+    }
+    
+    public void finalizaPartida() {
+        partidaEmAndamento = false;
     }
 
     public Gollum getGollum() {
@@ -112,82 +91,99 @@ public class Mapa implements Serializable {
     public void setGollum(Gollum gollum) {
         this.gollum = gollum;
     }
-    
-    
 
-    public ArrayList<Posicao> getPosInicialMapa() {
-        return posInicialMapa;
+    public ArrayList<Posicao> pegaPosicaoInicialJogadoresNoMapa() {
+        return posInicialJogadoresNoMapa;
     }
     
     public void exibirMensagem(String mensagem){
         JOptionPane.showMessageDialog(null, mensagem);
     }
+
+    public Jogador getJogadorMapa() {
+        return jogadorMapa;
+    }
+
+    public void setJogadorMapa(Jogador jogadorMapa) {
+        this.jogadorMapa = jogadorMapa;
+    }
+
+    public Jogador getJogadorInimigo() {
+        return jogadorInimigo;
+    }
+
+    public void setJogadorInimigo(Jogador jogadorInimigo) {
+        this.jogadorInimigo = jogadorInimigo;
+    }
     
     
-    public JogadaTabuleiro realizaJogada(Posicao clique, Jogador jogador, Object objeto){
+    
+    public JogadaMapa realizaJogada(Posicao clique, Jogador jogador, Object objeto){
         
-        JogadaTabuleiro jogada = null;
+        JogadaMapa jogada = null;
         
-        switch(jogador.getTipoClique()){
-            
-            case SELECAO:
-                
-                if(objeto != null){
-                    if(objeto.getClass().getSuperclass() == Construcao.class){
-                        jogada = cliqueConstrucao(objeto, jogador);
+        if(partidaEmAndamento){
+            switch(jogador.getTipoClique()){
+
+                case SELECAO:
+
+                    if(objeto != null){
+                        if(objeto.getClass().getSuperclass() == Construcao.class){
+                            jogada = cliqueConstrucao(objeto, jogador);
+                        }
+                        else if(objeto.getClass().getSuperclass() == Tropa.class){
+                            cliqueTropa(objeto, jogador);
+                        }
+                        else if(objeto.getClass() == Gollum.class){
+                            exibirMensagem("Meu precioso!!");
+                        }                 
                     }
-                    else if(objeto.getClass().getSuperclass() == Tropa.class){
-                        cliqueTropa(objeto, jogador);
-                    }
-                    else if(objeto.getClass() == Gollum.class){
-                        JOptionPane.showMessageDialog(null, "Meu precioso!!", "Gollum", 0);
-                    }                 
-                }
-            break;
-            
-            case ATACAR:
-                if(objeto != null && objetoSelecionado != null){
-                    jogada = atacar(objeto, jogador); 
-                }else{
-                    exibirMensagem("Selecione um alvo válido");
-                    objetoSelecionado = null;
-                }
-                jogador.setTipoClique(TipoJogada.SELECAO);
-            break;
-            
-            case MOVIMENTAR:
-                if(objeto == null){
-                    Tropa tropaSelecionada = (Tropa) objetoSelecionado;
-                    Posicao atual = new Posicao(tropaSelecionada.getPosicao().getX(), tropaSelecionada.getPosicao().getY());
-                    int distancia = tropaSelecionada.calculaDistancia(clique);
-                    if(distancia <= tropaSelecionada.getDistanciaMovimento()){
-                        tropaSelecionada.setPosicaoAtual(clique);
-                        jogada = new JogadaTabuleiro(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
-                        jogador.setTipoClique(TipoJogada.SELECAO);
+                break;
+
+                case ATACAR:
+                    if(objeto != null && objetoSelecionado != null){
+                        jogada = atacar(objeto, jogador); 
+                    }else{
+                        exibirMensagem("Selecione um alvo válido");
                         objetoSelecionado = null;
-                    }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
-                     
-                }else{
-                    exibirMensagem("Selecione uma posição disponível");
-                    objetoSelecionado = null;
-                }
-            break;
-        }
+                    }
+                    jogador.setTipoClique(TipoJogada.SELECAO);
+                break;
+
+                case MOVIMENTAR:
+
+                    if(objeto == null){
+                        Tropa tropaSelecionada = (Tropa) objetoSelecionado;
+                        Posicao atual = new Posicao(tropaSelecionada.getPosicao().getX(), tropaSelecionada.getPosicao().getY());
+                        int distancia = tropaSelecionada.calculaDistancia(clique);
+                        if(distancia <= tropaSelecionada.getDistanciaMovimento()){
+                            tropaSelecionada.setPosicaoAtual(new Posicao(clique.getX(), clique.getY()));
+                            jogada = new JogadaMapa(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
+                            jogador.setTipoClique(TipoJogada.SELECAO);
+                            objetoSelecionado = null;
+                        }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
+                    }else{
+                        exibirMensagem("Selecione uma posição disponível");
+                        objetoSelecionado = null;
+                    }
+                break;
+            }
+        }else exibirMensagem("Não existe partida em andamento");
         
         return jogada;
     }
     
     /**************************************************************************/
-    private JogadaTabuleiro cliqueConstrucao(Object o, Jogador jogador){
-        JogadaTabuleiro jogada = null;
-        Construcao construcao = (Construcao) o;
+    private JogadaMapa cliqueConstrucao(Object objeto, Jogador jogador){
+        JogadaMapa jogada = null;
+        Construcao construcao = (Construcao) objeto;
         String[] options = new String[] {"Nova Tropa", "Reformar", "Cancelar"};
             
         if(construcao.getCidade() == jogador.getCidade() && jogador.verificaVez() && !construcao.isDestruido()){
             int response = JOptionPane.showOptionDialog(
                 null, 
                 "Vida: " + construcao.getVida()+ "\n Selecione o que você deseja fazer", 
-                o.getClass().getSimpleName(),
+                objeto.getClass().getSimpleName(),
                 JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.PLAIN_MESSAGE,
                 null, 
@@ -202,20 +198,20 @@ public class Mapa implements Serializable {
                     r = JOptionPane.showConfirmDialog(null, "Preço: " + construcao.getRecursoRecrutamento() + "\n Deseja realmente recrutar essa tropa?");
                     if(r == 0){
                         if(jogador.getCidade().descontaRecursos(construcao.getRecursoRecrutamento())){
-                            jogada = new JogadaTabuleiro();
+                            jogada = new JogadaMapa();
                             jogada.setTipoJogada(TipoJogada.NOVA_TROPA);
-                            jogada.setAntigo(construcao);
+                            jogada.setAtual(construcao);
                             
-                            if(o.getClass() == Arquearia.class){ 
-                                jogada.setModificado(new Arqueiro(construcao.getPosicao(), jogador.getCidade()));
-                            }else if(o.getClass() == Quartel.class){
-                                jogada.setModificado(new Espadachim(construcao.getPosicao(), jogador.getCidade()));
-                            }else if(o.getClass() == Estabulo.class){
-                                jogada.setModificado(new Cavaleiro(construcao.getPosicao(), jogador.getCidade()));
-                            }else if(o.getClass() == Principal.class){
-                                Principal principal = (Principal) o;
+                            if(objeto.getClass() == Arquearia.class){ 
+                                jogada.setAlvo(new Arqueiro(construcao.getPosicao(), jogador.getCidade()));
+                            }else if(objeto.getClass() == Quartel.class){
+                                jogada.setAlvo(new Espadachim(construcao.getPosicao(), jogador.getCidade()));
+                            }else if(objeto.getClass() == Estabulo.class){
+                                jogada.setAlvo(new Cavaleiro(construcao.getPosicao(), jogador.getCidade()));
+                            }else if(objeto.getClass() == Principal.class){
+                                Principal principal = (Principal) objeto;
                                 if(!principal.isHeroiConjurado()){
-                                    jogada.setModificado(principal.recrutar(construcao.getPosicao()));
+                                    jogada.setAlvo(principal.recrutar(construcao.getPosicao()));
                                     principal.setHeroiConjurado(true);
                                 }else{
                                     exibirMensagem("Voce ja possui um heroi");
@@ -237,10 +233,10 @@ public class Mapa implements Serializable {
                         if(jogador.getCidade().descontaRecursos(construcao.calculaReforma())){
                             
                             if(construcao.reformar()){
-                                jogada = new JogadaTabuleiro();
+                                jogada = new JogadaMapa();
                                 jogada.setTipoJogada(TipoJogada.REFORMA_CONSTRUCAO);
-                                jogada.setAntigo(construcao);
-                                jogada.setModificado(construcao);
+                                jogada.setAtual(construcao);
+                                jogada.setAlvo(construcao);
                             }else{
                                 exibirMensagem("Não é possível reformar uma construção destruida");
                                 jogador.setTipoClique(TipoJogada.SELECAO);
@@ -263,7 +259,7 @@ public class Mapa implements Serializable {
                 null, 
                 "Cidade: " + construcao.getCidade().getNome()
                  + "\nVida: " + construcao.getVida(), 
-                o.getClass().getSimpleName(), 
+                objeto.getClass().getSimpleName(), 
                 0
               );
         
@@ -315,9 +311,9 @@ public class Mapa implements Serializable {
     }
 
     /**************************************************************************/
-    private JogadaTabuleiro atacar(Object objeto, Jogador jogador){
+    private JogadaMapa atacar(Object objeto, Jogador jogador){
        
-        JogadaTabuleiro jogada = null;
+        JogadaMapa jogada = null;
         
         if(objeto.getClass().getSuperclass() == Construcao.class){
             Construcao alvo = (Construcao) objeto;
@@ -328,7 +324,7 @@ public class Mapa implements Serializable {
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
                 
                 alvo.recebeDano(atacante.calculaDano(alvo));
-                jogada = new JogadaTabuleiro(atacante, alvo, TipoJogada.ATACAR);
+                jogada = new JogadaMapa(atacante, alvo, TipoJogada.ATACAR);
                 
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
             
@@ -342,7 +338,7 @@ public class Mapa implements Serializable {
                 
                 alvo.recebeDano(atacante.calculaDano(alvo));
                 if(alvo.isVivo())atacante.recebeDano(alvo.calculaRetalicao(atacante));
-                jogada = new JogadaTabuleiro(atacante, alvo, TipoJogada.ATACAR);
+                jogada = new JogadaMapa(atacante, alvo, TipoJogada.ATACAR);
              
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
   
@@ -375,7 +371,7 @@ public class Mapa implements Serializable {
                         );
                         
                         if(response == 1){
-                            System.out.println("Acertou mizeravi");
+                            //System.out.println("Acertou mizeravi");
 
                             heroiSelecionado.setAcertosCharada(heroiSelecionado.getAcertosCharada()+1);
                         }else break;
@@ -385,11 +381,11 @@ public class Mapa implements Serializable {
                         exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
                         heroiSelecionado.pegaAnel(gollum.perdeAnel());
                         Mago mago = new Mago(heroiSelecionado.getPosicao(), jogador.getCidade());
-                        jogada = new JogadaTabuleiro(heroiSelecionado, mago, TipoJogada.ATACAR);
+                        jogada = new JogadaMapa(heroiSelecionado, mago, TipoJogada.ATACAR);
                     }else{
                         exibirMensagem("Você errou, agora eu vou te comer!!");
                         gollum.comer(heroiSelecionado);
-                        jogada = new JogadaTabuleiro(heroiSelecionado, gollum, TipoJogada.ATACAR);
+                        jogada = new JogadaMapa(heroiSelecionado, gollum, TipoJogada.ATACAR);
                     }
                     
                     gollum.setVisivel(false);

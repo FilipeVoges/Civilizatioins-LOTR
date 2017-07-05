@@ -11,41 +11,41 @@ import Enumeradores.TipoJogada;
  *
  * @author ASUS-DEV
  */
-public class JogadaTabuleiro implements br.ufsc.inf.leobr.cliente.Jogada {
+public class JogadaMapa implements br.ufsc.inf.leobr.cliente.Jogada {
     
-    protected Object antigo;
-    protected Object modificado;
+    protected Object atual;
+    protected Object alvo;
     protected TipoJogada tipoJogada;
     
-    public JogadaTabuleiro(){
+    public JogadaMapa(){
         super();
     }
     
-    public JogadaTabuleiro(Object velho, Object novo, TipoJogada tipo){
+    public JogadaMapa(Object atual, Object alvo, TipoJogada tipo){
         super();
-        this.antigo = velho;
-        this.modificado = novo;
+        this.atual = atual;
+        this.alvo = alvo;
         this.tipoJogada = tipo;
     }
 
-    public Object getAntigo() {
-        return antigo;
+    public Object getAtual() {
+        return atual;
     }
 
-    public Object getModificado() {
-        return modificado;
+    public Object getAlvo() {
+        return alvo;
     }
 
     public TipoJogada getTipoJogada() {
         return tipoJogada;
     }
 
-    public void setAntigo(Object antigo) {
-        this.antigo = antigo;
+    public void setAtual(Object atual) {
+        this.atual = atual;
     }
 
-    public void setModificado(Object modificado) {
-        this.modificado = modificado;
+    public void setAlvo(Object alvo) {
+        this.alvo = alvo;
     }
 
     public void setTipoJogada(TipoJogada tipoJogada) {

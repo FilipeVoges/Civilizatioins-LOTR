@@ -5,9 +5,8 @@
  */
 package Rede;
 
-import Entidades.Jogada.JogadaTabuleiro;
+import Entidades.Jogada.JogadaMapa;
 import Entidades.Jogador.Jogador;
-import Enumeradores.Raca;
 import InterfaceGrafica.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
@@ -24,8 +23,8 @@ import javax.swing.JOptionPane;
  */
 public class AtorNetGames implements OuvidorProxy{
     
-    private AtorJogador atorJogador;
-    private Proxy proxy;
+    private final AtorJogador atorJogador;
+    private final Proxy proxy;
     int qtdeJogadores;
     
     public AtorNetGames(AtorJogador atorJogador) {
@@ -36,15 +35,12 @@ public class AtorNetGames implements OuvidorProxy{
         qtdeJogadores = 0;
     }
     
-    public void conectar(String nome, String servidor) throws JahConectadoException, NaoPossivelConectarException, ArquivoMultiplayerException {
-        
+    public void conectar(String nome, String servidor) throws JahConectadoException, NaoPossivelConectarException, ArquivoMultiplayerException {    
         proxy.conectar(servidor, nome);
-       
     }
     
     public void desconectar() throws NaoConectadoException {
         proxy.desconectar();
-      
     }
     
     public void iniciarPartidaRede(int qtdeJogadores) throws NaoConectadoException, Exception {
@@ -59,28 +55,16 @@ public class AtorNetGames implements OuvidorProxy{
     public void iniciarNovaPartida(Integer posicao) {
         System.out.println(posicao);
         if(posicao == 1){
-            atorJogador.getJogadorMapa().recebeVez();
-            atorJogador.getJogadorMapa().setVezJogada(1);
-            atorJogador.posicionaJogadores(1, atorJogador.getJogadorMapa());
-            
-            atorJogador.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(2))));
-            atorJogador.getJogadorMapa().setVezJogada(2);
-            atorJogador.posicionaJogadores(2, atorJogador.getJogadorInimigo());
-            
+            atorJogador.souPrimeiroAJogar(proxy.obterNomeAdversario(2)); 
         }else if(posicao == 2){
-            atorJogador.getJogadorMapa().setVezJogada(2);
-            atorJogador.posicionaJogadores(2, atorJogador.getJogadorMapa());
-            
-            atorJogador.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(proxy.obterNomeAdversario(1))));
-            atorJogador.getJogadorMapa().setVezJogada(1);
-            atorJogador.posicionaJogadores(1, atorJogador.getJogadorInimigo());
+            atorJogador.souSegundoAJogar(proxy.obterNomeAdversario(1));
         }
     }
 
     @Override
     public void finalizarPartidaComErro(String message) {
         JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
-        atorJogador.limpar();
+        atorJogador.limparMapa();
     }
 
     @Override
@@ -88,19 +72,19 @@ public class AtorNetGames implements OuvidorProxy{
          JOptionPane.showMessageDialog(null , msg);
     }
     
-    public void enviaJogada(JogadaTabuleiro jogada) {
+    public void enviaJogada(JogadaMapa jogada) {
         try{
            Jogada jogadaEnvia = jogada;
            proxy.enviaJogada(jogadaEnvia); 
         }catch(NaoJogandoException e){
             JOptionPane.showMessageDialog(null , "Você não esta jogando");
-            atorJogador.limpar();
+            atorJogador.limparMapa();
         }
     }
 
     @Override
     public void receberJogada(Jogada jogada) {
-        JogadaTabuleiro jogadaRecebida = (JogadaTabuleiro) jogada;
+        JogadaMapa jogadaRecebida = (JogadaMapa) jogada;
         System.out.println("Jogada recebida");
         atorJogador.recebeJogada(jogadaRecebida);
     }
@@ -108,7 +92,7 @@ public class AtorNetGames implements OuvidorProxy{
     @Override
     public void tratarConexaoPerdida() {
         JOptionPane.showMessageDialog(null , "Conexão perdida");
-        atorJogador.limpar();
+        atorJogador.limparMapa();
     }
 
     @Override
@@ -116,7 +100,7 @@ public class AtorNetGames implements OuvidorProxy{
         JOptionPane.showMessageDialog(atorJogador,
 				"A partida não pode ser iniciada devido ao seguinte erro: "
 						+ message);
-        atorJogador.limpar();
+        atorJogador.limparMapa();
     }
     
     /*public String obterNomeAdversario() {

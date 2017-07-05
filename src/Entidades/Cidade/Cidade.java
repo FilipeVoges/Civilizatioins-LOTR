@@ -90,7 +90,7 @@ public class Cidade implements Serializable{
         boolean todosDestruidos = true;
         
         for(int i = 0; i < construcoes.size(); i++){
-            if(construcoes.get(i).isDestruido() == false){
+            if(!construcoes.get(i).isDestruido()){
                 todosDestruidos = false;
                 break;
             }
