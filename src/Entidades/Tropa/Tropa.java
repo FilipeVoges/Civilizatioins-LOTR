@@ -22,24 +22,11 @@ public class Tropa implements Serializable{
     protected int distanciaAtaque;
     protected int distanciaMovimento;
     protected Posicao posicaoAtual;
-    //protected Posicao posicaoDestino;
     protected int resistencia;
     protected String simbolo;
     protected Cidade cidade;
     protected boolean vivo;
-    //Diagrama de classes possui o atributo OCUPADO :boolean
-    /*
-    Faltam as seguintes funções:
-    movimentaTropa(), verificaTropaMovimentada(): boolean, mudarOcupado(),
-    movimentar(distanciaMovimentada):Posicao
-    calculaDistanciaMovimentada(distancia):int
-    isDestruido(): boolean,
-    atacar(alvo, destino), atacar(alvo:Construcao), atacar(alvo:Tropa)
-    tropaSelecionada():Tropa
-    verificaTipoTropa():Tropa
-    perdeAnel()
-    recrutarTropaBonus()
-    */
+
     public Tropa(
             int vida, 
             int distanciaMovimento, 
@@ -60,7 +47,6 @@ public class Tropa implements Serializable{
         this.cidade = cidade;
         this.vivo = true;
     }
-    //diagrama: calculaDistancia(tropaAliada, destino): int
     public int calculaDistancia(Posicao destino){
         
         int posY = Math.abs(posicaoAtual.getY() - destino.getY());
@@ -135,7 +121,7 @@ public class Tropa implements Serializable{
 
     public int getForca() {
         return forca;
-    }
+    }   
 
     public int getDistanciaAtaque() {
         return distanciaAtaque;
