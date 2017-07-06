@@ -395,7 +395,7 @@ public class Mapa implements Serializable {
                 if(heroiSelecionado.calculaDistancia(gollum.getPosicao()) - heroiSelecionado.getDistanciaAtaque() <= 0 && gollum.temAnel()){
                     exibirMensagem("Vou roubar teu precioso");
                     
-                    ArrayList<Charada> charadas = gollum.mostraCharada();
+                        ArrayList<Charada> charadas = gollum.mostraCharada();
                     
                     for( int i = 0; i < 3; i++ ){
                         System.out.println(i);

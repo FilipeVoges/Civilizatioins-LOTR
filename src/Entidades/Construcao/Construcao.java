@@ -73,6 +73,9 @@ public class Construcao implements Serializable {
         return cidade;
     }
     
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
     
     public int calculaReforma(){
        return (this.vidaMaxima - this.vida) * 10;

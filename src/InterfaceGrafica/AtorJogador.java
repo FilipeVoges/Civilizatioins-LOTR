@@ -323,6 +323,7 @@ public class AtorJogador extends JFrame{
                     setaValorPosicao(atacante.getPosicao(), atacante);
                     if(jogada.getAlvo().getClass().getSuperclass() == Construcao.class){
                         Construcao alvo = (Construcao) jogada.getAlvo();
+                        Tropa atacanteReposicao = (Tropa) jogada.getAtual();
                         setaValorPosicao(alvo.getPosicao(), alvo);
                         if(alvo.isDestruido() && mapa.getJogadorInimigo().getCidade() == alvo.getCidade()){
                             if(mapa.getJogadorInimigo().getCidade().verificaTodosDestruidos()){
@@ -331,6 +332,9 @@ public class AtorJogador extends JFrame{
                                 atorNetGames.enviaJogada(jogadaEnvia);
                                 recebeJogada(jogadaEnvia);
                             }
+                            if(atacanteReposicao.getCidade() == mapa.getJogadorMapa().getCidade()){
+                                alvo.setCidade(mapa.getJogadorInimigo().getCidade());
+                            }else alvo.setCidade(mapa.getJogadorMapa().getCidade());
                         }
 
                     }else if(jogada.getAlvo().getClass().getSuperclass() == Tropa.class){
@@ -420,7 +424,7 @@ public class AtorJogador extends JFrame{
         posicionaJogadoresNoMapa(1, mapa.getJogadorMapa());
 
         mapa.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(racaAdversario)));
-        mapa.getJogadorMapa().setVezJogada(2);
+        mapa.getJogadorInimigo().setVezJogada(2);
         posicionaJogadoresNoMapa(2, mapa.getJogadorInimigo());
         iniciaJogo();
         mapa.exibirMensagem("Você foi conectado a uma partida");
@@ -432,7 +436,7 @@ public class AtorJogador extends JFrame{
         posicionaJogadoresNoMapa(2, mapa.getJogadorMapa());
 
         mapa.setJogadorInimigo(new Jogador(Jogador.pegaRacaPeloNome(racaAdversario)));
-        mapa.getJogadorMapa().setVezJogada(1);
+        mapa.getJogadorInimigo().setVezJogada(1);
         posicionaJogadoresNoMapa(1, mapa.getJogadorInimigo());
         iniciaJogo();
         mapa.exibirMensagem("Você foi conectado a uma partida");
