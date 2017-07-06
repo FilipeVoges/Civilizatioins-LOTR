@@ -161,10 +161,14 @@ public class Mapa implements Serializable {
                             jogada = new JogadaMapa(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
                             jogador.setTipoClique(TipoJogada.SELECAO);
                             objetoSelecionado = null;
-                        }else exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
+                        }else{
+                            exibirMensagem("Sua distância máxima de movimento é " + tropaSelecionada.getDistanciaMovimento() + " campos com essa tropa.");
+                            jogador.setTipoClique(TipoJogada.SELECAO);
+                        }
                     }else{
                         exibirMensagem("Selecione uma posição disponível");
                         objetoSelecionado = null;
+                        jogador.setTipoClique(TipoJogada.SELECAO);
                     }
                 break;
             }
@@ -380,8 +384,7 @@ public class Mapa implements Serializable {
                     if(heroiSelecionado.getAcertosCharada() == 3){
                         exibirMensagem("Você venceu o duelo com o Gollum e ganhou o apoio de um mago em sua jornada");
                         heroiSelecionado.pegaAnel(gollum.perdeAnel());
-                        Mago mago = new Mago(heroiSelecionado.getPosicao(), jogador.getCidade());
-                        jogada = new JogadaMapa(heroiSelecionado, mago, TipoJogada.ATACAR);
+                        jogada = new JogadaMapa(heroiSelecionado, gollum, TipoJogada.ATACAR);
                     }else{
                         exibirMensagem("Você errou, agora eu vou te comer!!");
                         gollum.comer(heroiSelecionado);

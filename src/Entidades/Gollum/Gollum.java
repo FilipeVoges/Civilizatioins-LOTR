@@ -10,8 +10,6 @@ import Entidades.Tropa.Heroi;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -24,11 +22,7 @@ public class Gollum implements Serializable{
     protected String simbolo = "¤";
     protected Posicao posicao;
     protected int turnosInvisiveis;
-    /*Faltam atributos
-    velocidadeMovimento
-    charadasPerguntadas
-    respostas
-    */
+   
     public Gollum(Posicao posicao){
         
         this.anel = new Anel();
@@ -38,14 +32,6 @@ public class Gollum implements Serializable{
         this.turnosInvisiveis = -1;
         criaCharadas();
     
-    }
-    
-    public void agir(){
-        if(this.turnosInvisiveis >= 0){
-            turnosInvisiveis++;
-        }else if(this.turnosInvisiveis >= 4){
-            setVisivel(true);
-        }
     }
     
     

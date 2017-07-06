@@ -17,16 +17,12 @@ public class Construcao implements Serializable {
     
     protected Posicao posicao;
     protected int vida;
-    protected final String simbolo;
+    protected String simbolo;
     protected int vidaMaxima;
     protected boolean destruido;
     protected int recursoRecrutamento;
     protected Cidade cidade;
-    /*
-    Faltam esses atributos:
-    progressoReforma :int, tipoTropa: Tropa, tropaTurno :int
-    */
-    
+
     public Construcao() {
         this.simbolo = null;
     }
@@ -46,14 +42,6 @@ public class Construcao implements Serializable {
         this.destruido = false;
         this.cidade = cidade;
     }
-    /*
-    Funções que faltam:
-    verificaUltimaConstrucao(this):boolean
-    novaTropa(tropaSelecionada):Tropa
-    selecionaTropa():Tropa
-    comprarNovaTroca()
-    verificaPosicaoLivre(posicao:Posicao):Posicao
-    */
     
     //Getters and Setters
     public Posicao getPosicao() {
@@ -69,6 +57,7 @@ public class Construcao implements Serializable {
         if(vida <= 0){
             vida = 0;
             destruido = true;
+            simbolo = "▩";
         }
     }
 
@@ -84,7 +73,7 @@ public class Construcao implements Serializable {
         return cidade;
     }
     
-    // outras funções
+    
     public int calculaReforma(){
        return (this.vidaMaxima - this.vida) * 10;
     }

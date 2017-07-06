@@ -6,7 +6,6 @@
 package Rede;
 
 import Entidades.Jogada.JogadaMapa;
-import Entidades.Jogador.Jogador;
 import InterfaceGrafica.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
@@ -23,9 +22,9 @@ import javax.swing.JOptionPane;
  */
 public class AtorNetGames implements OuvidorProxy{
     
-    private final AtorJogador atorJogador;
-    private final Proxy proxy;
-    int qtdeJogadores;
+    protected final AtorJogador atorJogador;
+    protected final Proxy proxy;
+    protected int qtdeJogadores;
     
     public AtorNetGames(AtorJogador atorJogador) {
         super();
@@ -57,6 +56,18 @@ public class AtorNetGames implements OuvidorProxy{
         }else if(posicao == 2){
             atorJogador.souSegundoAJogar(proxy.obterNomeAdversario(1));
         }
+    }
+    
+    public void finalizarPartida()  {
+ 
+        try {
+            proxy.finalizarPartida();
+        } catch (NaoJogandoException ex) {
+            JOptionPane.showMessageDialog(null , "Você não esta numa partida");
+        } catch (NaoConectadoException ex) {
+            JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
+        }
+  
     }
 
     @Override

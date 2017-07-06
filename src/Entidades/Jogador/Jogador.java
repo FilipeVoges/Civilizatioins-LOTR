@@ -15,14 +15,12 @@ import java.io.Serializable;
  * @author filipe
  */
 public class Jogador implements Serializable{
-    protected String nome;
     protected Cidade cidade;
     protected boolean vencedor;
     protected boolean temVez;
     protected TipoJogada tipoClique;
     protected int vezJogada;
     protected Raca raca;
-    protected String cor; // existe apenas no diagrama de classe.
     
     public Jogador(Raca raca){
         this.raca = raca;
@@ -49,12 +47,12 @@ public class Jogador implements Serializable{
         return temVez;
     }
 
-    public void recebeVez() { //não tem no diagrama de classes
+    public void recebeVez() { 
         this.temVez = true;
         this.cidade.recebeRecursos();
     }
     
-    public void passaVez() { //não tem no diagrama de classes
+    public void passaVez() { 
         this.temVez = false;
     }
 
@@ -70,9 +68,6 @@ public class Jogador implements Serializable{
         return vezJogada;
     }
 
-    public String getNome() {
-        return nome;
-    }
 
     public Cidade getCidade() {
         return cidade;

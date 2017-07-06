@@ -192,15 +192,11 @@ public class AtorJogador extends JFrame{
                 int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
                 if(desistiu == 0){
                     
+                    atorNetGames.finalizarPartida();
                     mapa.finalizaPartida();
                     mapa.exibirMensagem("Você desistiu da partida");
                     finalizaJogo();
                     atorNetGames.enviaJogada(new JogadaMapa(mapa.getJogadorMapa(), null, TipoJogada.DESISTIR));
-                    btnIniciaJogo.setVisible(true);
-                    btnDesconectar.setVisible(true);
-                    btnPassaVez.setVisible(false);
-                    btnDesistir.setVisible(false);
-                    infoRecursos.setText("");
                 }
             }
         });
@@ -316,18 +312,13 @@ public class AtorJogador extends JFrame{
                     if(jogada.getAlvo().getClass() == Gollum.class){
                         Heroi heroi = (Heroi)jogada.getAtual();
                         Gollum gollum = (Gollum) jogada.getAlvo();
-                        
                         setaValorPosicao(heroi.getPosicao(), heroi);
                         setaValorPosicao(gollum.getPosicao(), gollum);
+                        if(!gollum.temAnel()){
+                            Mago mago = new Mago(posicaoLivreMaisProxima(heroi.getPosicao()), heroi.getCidade());
+                            setaValorPosicao(mago.getPosicao(), mago);
+                        }
                         
-                    }else if (jogada.getAlvo().getClass() == Mago.class){
-                        Mago mago = (Mago) jogada.getAlvo();
-                        Heroi heroi = (Heroi) jogada.getAtual();
-                        setaValorPosicao(heroi.getPosicao(), heroi);
-                        mago.setPosicaoAtual(posicaoLivreMaisProxima(heroi.getPosicao()));
-                        setaValorPosicao(mago.getPosicao(), mago);
-                        mapa.getGollum().perdeAnel();
-                        mapa.getGollum().setVisivel(false);
                     }
                     
                     setaValorPosicao(atacante.getPosicao(), atacante);
@@ -339,6 +330,7 @@ public class AtorJogador extends JFrame{
                                 JogadaMapa jogadaEnvia = new JogadaMapa(mapa.getJogadorInimigo(), null, TipoJogada.DERROTADO);
                                 mapa.getJogadorMapa().setVencedor(true);
                                 atorNetGames.enviaJogada(jogadaEnvia);
+                                recebeJogada(jogadaEnvia);
                             }
                         }
 
@@ -402,12 +394,13 @@ public class AtorJogador extends JFrame{
                         mapa.exibirMensagem("Voce destruiu todas as construções de seu inimigo e venceu a partida");
                     }
                     finalizaJogo();
+                    atorNetGames.finalizarPartida();
                 break;
                     
                 case DESISTIR:
                     if((Jogador)jogada.getAtual()!= mapa.getJogadorMapa()) 
                         mapa.exibirMensagem("Seu adversário desistiu da partida, Voce venceu");
-                    
+                    atorNetGames.finalizarPartida();    
                     finalizaJogo();
                 break;
 

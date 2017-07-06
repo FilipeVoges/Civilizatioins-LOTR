@@ -10,9 +10,7 @@ import Entidades.Mapa.Posicao;
 import Entidades.Tropa.Arqueiro;
 import java.io.Serializable;
 
-/**public Arqueiro recrutar(Posicao posDisponivel){
-        return new Arqueiro(posDisponivel);
-    }
+/**
  *
  * @author filipe
  */
@@ -23,7 +21,7 @@ public class Arquearia extends Construcao implements Serializable{
         //simbolo, posicao, recursoRecrutamento, vida, cidade
         super("◎", pos, 50, 100, c);
     }
-    //função não existe no diagrama de classes
+    
     public Arqueiro recrutar(Posicao posDisponivel){
         return new Arqueiro(posDisponivel, super.getCidade());
     }

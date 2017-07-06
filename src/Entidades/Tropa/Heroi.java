@@ -19,13 +19,13 @@ public class Heroi extends Tropa implements Serializable{
     protected String nome;
     protected String simboloNormal = "✩";
     protected String simboloAnel = "✮";
-    protected String nomeHeroi;//Ta duplicado? Atualizar Diagrama de classes quando definir o que é
     protected Anel anel;
     protected int acertosCharada;
     
     public Heroi(String nome, int velocidadeMovimento, int forca, int distanciaAtaque, int resistencia, Posicao posicao, Cidade cidade) {
         
         super(50, velocidadeMovimento, forca, distanciaAtaque, resistencia, "✩", posicao, cidade);
+        this.nome = nome;
         this.anel = null;
         this.acertosCharada = 0;
 
@@ -40,6 +40,11 @@ public class Heroi extends Tropa implements Serializable{
     public void pegaAnel(Anel anel) {
         this.anel = anel;
         super.setSimbolo(simboloAnel);
+    }
+    
+    public boolean temAnel(){
+        if(anel != null)return true;
+        else return false;
     }
 
     public int getAcertosCharada() {
