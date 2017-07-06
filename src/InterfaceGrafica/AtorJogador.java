@@ -335,7 +335,12 @@ public class AtorJogador extends JFrame{
 
                     }else if(jogada.getAlvo().getClass().getSuperclass() == Tropa.class){
                         Tropa alvo = (Tropa) jogada.getAlvo();
-                        setaValorPosicao(alvo.getPosicao(), alvo);  
+                        Tropa atacanteReposicao = (Tropa) jogada.getAtual();
+                        setaValorPosicao(alvo.getPosicao(), alvo);
+                        setaValorPosicao(atacanteReposicao.getPosicao(), atacanteReposicao);
+                        if(atacanteReposicao.getCidade() == mapa.getJogadorMapa().getCidade()){
+                            alvo.setCidade(mapa.getJogadorInimigo().getCidade());
+                        }else alvo.setCidade(mapa.getJogadorMapa().getCidade());
                     }
                 break;
 

@@ -101,7 +101,7 @@ public class Tropa implements Serializable{
     
     public int calculaRetalicao( Tropa alvo){
         double vantagem = alvo.calculaVantagem(this);
-        int retaliacao = (int) ((alvo.getForca()/2)*vantagem);
+        int retaliacao = (int) ((alvo.getForca()/2) * vantagem);
         return retaliacao;
     }
     
@@ -117,7 +117,10 @@ public class Tropa implements Serializable{
     public boolean isVivo() {
         return vivo;
     }
-    
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
 
     public int getForca() {
         return forca;

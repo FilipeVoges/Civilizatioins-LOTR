@@ -17,7 +17,7 @@ public class Mago extends Tropa implements Serializable{
      
     public Mago(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(50, 2000, 100, 4, 5, "♕", posicao, cidade);
+        super(50, 5, 100, 4, 5, "♕", posicao, cidade);
     }
    
     

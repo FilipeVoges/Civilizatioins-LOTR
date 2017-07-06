@@ -290,7 +290,10 @@ public class Mapa implements Serializable {
     private void cliqueTropa(Object objeto, Jogador jogador){
         Tropa tropa = (Tropa) objeto;
                  
-        if(tropa.getCidade() == jogador.getCidade() && jogador.verificaVez() && tropa.isVivo()){
+        System.out.println("Mesma cidade: " + (tropa.getCidade().equals(jogador.getCidade())));
+        System.out.println(jogador.getCidade().toString());
+        System.out.println(tropa.getCidade().toString());
+        if(tropa.getCidade().equals(jogador.getCidade()) && jogador.verificaVez() && tropa.isVivo()){
             String[] options = new String[] {"Atacar", "Movimentar", "Cancelar"};
 
             int response = JOptionPane.showOptionDialog(
@@ -323,9 +326,9 @@ public class Mapa implements Serializable {
             }
         }else JOptionPane.showMessageDialog(
                 null, 
-                "Cidade: " + tropa.getCidade().getNome()
-                 + "\nVida: " + tropa.getVida(), 
-                objeto.getClass().getSimpleName(), 
+                "Cidade: " + tropa.getCidade().getNome() +    
+                (tropa.isVivo() ? "\nVida: " + tropa.getVida(): "\nTropa morta"), 
+                objeto.getClass().getSimpleName(),
                 0
               );   
     }
@@ -341,6 +344,7 @@ public class Mapa implements Serializable {
             return null;
         }
         
+        //alvo construcao
         if(objeto.getClass().getSuperclass() == Construcao.class){
             Construcao alvo = (Construcao) objeto;
             Tropa atacante = (Tropa) objetoSelecionado;
@@ -362,7 +366,7 @@ public class Mapa implements Serializable {
                 
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
             
-            
+        //alvo tropa
         }else if(objeto.getClass().getSuperclass() == Tropa.class){
             Tropa alvo = (Tropa) objeto;
             Tropa atacante = (Tropa) objetoSelecionado;

@@ -17,6 +17,6 @@ public class Espadachim extends Tropa implements Serializable{
     private String simbolo = "♙";
     public Espadachim(Posicao posicao, Cidade cidade){
         //vida, velocidadeMovimento, forca, distanciaAtaque, resistencia, simbolo, posicao, cidade
-        super(15, 1, 10, 1, 2, "♙", posicao, cidade);
+        super(15, 2, 10, 1, 2, "♙", posicao, cidade);
     }
 }
