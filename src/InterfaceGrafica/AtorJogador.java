@@ -192,11 +192,10 @@ public class AtorJogador extends JFrame{
                 int desistiu = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja desistir da partida?");
                 if(desistiu == 0){
                     
-                    atorNetGames.finalizarPartida();
                     mapa.finalizaPartida();
-                    mapa.exibirMensagem("Você desistiu da partida");
                     finalizaJogo();
                     atorNetGames.enviaJogada(new JogadaMapa(mapa.getJogadorMapa(), null, TipoJogada.DESISTIR));
+                    atorNetGames.finalizarPartida();
                 }
             }
         });

@@ -62,6 +62,8 @@ public class AtorNetGames implements OuvidorProxy{
  
         try {
             proxy.finalizarPartida();
+            atorJogador.finalizaJogo();
+            JOptionPane.showMessageDialog(null ,"Você foi desconectado da partida");
         } catch (NaoJogandoException ex) {
             JOptionPane.showMessageDialog(null , "Você não esta numa partida");
         } catch (NaoConectadoException ex) {
@@ -72,8 +74,8 @@ public class AtorNetGames implements OuvidorProxy{
 
     @Override
     public void finalizarPartidaComErro(String message) {
-        JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
-        atorJogador.desconectar();
+        //JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
+        atorJogador.finalizaJogo();
     }
 
     @Override
