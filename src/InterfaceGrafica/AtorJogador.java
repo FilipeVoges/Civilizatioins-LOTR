@@ -373,13 +373,10 @@ public class AtorJogador extends JFrame{
                 break;
                 
                 case PASSA_VEZ:
-                     System.out.println("Passar Vez");
+                    System.out.println("Passar Vez");
+                    mapa.novoTurno();
                     Jogador passouVez = (Jogador) jogada.getAtual();
-                    //verifica se passou um turno completo
-                    /*if(passouVez.getVezJogada() == 1 ){
-                        movimentarGollum();
-                        mapa.getGollum().agir();
-                    }*/
+                   
                     //verifica se e a vez do jogador
                     if(passouVez != mapa.getJogadorMapa()){
                         mapa.getJogadorMapa().recebeVez();

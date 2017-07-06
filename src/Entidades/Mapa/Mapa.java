@@ -41,15 +41,19 @@ public class Mapa implements Serializable {
     protected boolean partidaEmAndamento;
     protected Object objetoSelecionado;
     protected Jogador jogadorMapa, jogadorInimigo;
+    protected ArrayList<Tropa> tropasMovimentadasNaRodada;
+    protected ArrayList<Tropa> tropasAtacantesNaRodada;
     
     public Mapa() {
        
         this.tamX = 25;
         this.tamY = 25;
         iniciaPosicoesMapa();
-        cidades = new ArrayList<>();
-        gollum = new Gollum(new Posicao(tamX / 2, tamY / 2));
+        this.cidades = new ArrayList<>();
+        this.gollum = new Gollum(new Posicao(tamX / 2, tamY / 2));
         this.partidaEmAndamento = false;
+        this.tropasAtacantesNaRodada = new ArrayList<>();
+        this.tropasMovimentadasNaRodada = new ArrayList<>();
     }
     
     private void iniciaPosicoesMapa(){
@@ -116,7 +120,11 @@ public class Mapa implements Serializable {
         this.jogadorInimigo = jogadorInimigo;
     }
     
-    
+    public void novoTurno(){
+        this.tropasAtacantesNaRodada.clear();
+        this.tropasMovimentadasNaRodada.clear();
+        this.objetoSelecionado = null;
+    }
     
     public JogadaMapa realizaJogada(Posicao clique, Jogador jogador, Object objeto){
         
@@ -154,11 +162,19 @@ public class Mapa implements Serializable {
 
                     if(objeto == null){
                         Tropa tropaSelecionada = (Tropa) objetoSelecionado;
+                        
+                        if(tropasMovimentadasNaRodada.contains(tropaSelecionada)){
+                            exibirMensagem("Você já movimentou essa tropa na rodada");
+                            jogador.setTipoClique(TipoJogada.SELECAO); 
+                            break;
+                        }
+                        
                         Posicao atual = new Posicao(tropaSelecionada.getPosicao().getX(), tropaSelecionada.getPosicao().getY());
                         int distancia = tropaSelecionada.calculaDistancia(clique);
                         if(distancia <= tropaSelecionada.getDistanciaMovimento()){
                             tropaSelecionada.setPosicaoAtual(new Posicao(clique.getX(), clique.getY()));
                             jogada = new JogadaMapa(atual, tropaSelecionada, TipoJogada.MOVIMENTAR);
+                            tropasMovimentadasNaRodada.add(tropaSelecionada);
                             jogador.setTipoClique(TipoJogada.SELECAO);
                             objetoSelecionado = null;
                         }else{
@@ -319,35 +335,55 @@ public class Mapa implements Serializable {
        
         JogadaMapa jogada = null;
         
+        if(tropasAtacantesNaRodada.contains((Tropa) objetoSelecionado)){
+            exibirMensagem("Você já atacou com essa tropa na rodada");
+            jogador.setTipoClique(TipoJogada.SELECAO); 
+            return null;
+        }
+        
         if(objeto.getClass().getSuperclass() == Construcao.class){
             Construcao alvo = (Construcao) objeto;
             Tropa atacante = (Tropa) objetoSelecionado;
-            //calcula distancia
+            
             System.out.println(atacante.calculaDistancia(alvo.getPosicao()));
             System.out.println(atacante.getDistanciaAtaque());
+            
+            if(atacante.getCidade() == alvo.getCidade()){
+                exibirMensagem("Você não pode atacar suas próprias construções");
+                jogador.setTipoClique(TipoJogada.SELECAO); 
+                return null;
+            }
+            
+            //calcula distancia
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
-                
                 alvo.recebeDano(atacante.calculaDano(alvo));
                 jogada = new JogadaMapa(atacante, alvo, TipoJogada.ATACAR);
+                tropasAtacantesNaRodada.add(atacante);
                 
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
             
             
-        }
-        else if(objeto.getClass().getSuperclass() == Tropa.class){
+        }else if(objeto.getClass().getSuperclass() == Tropa.class){
             Tropa alvo = (Tropa) objeto;
             Tropa atacante = (Tropa) objetoSelecionado;
+            
+            
+            if(atacante.getCidade() == alvo.getCidade()){
+                exibirMensagem("Você não pode atacar suas próprias tropas");
+                jogador.setTipoClique(TipoJogada.SELECAO); 
+                return null;
+            }
+            
             //calcula distancia
             if(atacante.calculaDistancia(alvo.getPosicao()) - atacante.getDistanciaAtaque() <= 0){
                 
                 alvo.recebeDano(atacante.calculaDano(alvo));
                 if(alvo.isVivo())atacante.recebeDano(alvo.calculaRetalicao(atacante));
                 jogada = new JogadaMapa(atacante, alvo, TipoJogada.ATACAR);
+                tropasAtacantesNaRodada.add(atacante);
              
             }else exibirMensagem("Você esta muito distante do alvo para atacar");
-  
-            
-            
+
         }
         else if(objeto.getClass() == Gollum.class){
             if(objetoSelecionado != null && objetoSelecionado.getClass() == Heroi.class){

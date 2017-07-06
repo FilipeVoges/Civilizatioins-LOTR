@@ -65,7 +65,7 @@ public class AtorNetGames implements OuvidorProxy{
         } catch (NaoJogandoException ex) {
             JOptionPane.showMessageDialog(null , "Você não esta numa partida");
         } catch (NaoConectadoException ex) {
-            JOptionPane.showMessageDialog(null , "Partida finalizada com erro");
+            JOptionPane.showMessageDialog(null , "Você não esta conectado");
         }
   
     }
